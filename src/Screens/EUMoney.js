@@ -3,40 +3,34 @@ import {
   Text,
   View,
   TextInput,
-  Picker,
   StatusBar,
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
+import Dropdown from "../components/Dropdown";
 
-const HomeScreen = () => {
+const EUMoney = () => {
   const [text, onChangeText] = useState(0);
   const [selectedValue, setSelectedValue] = useState("Withdrawal");
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#14213D" barStyle="light-content" />
       <View style={styles.inputBox}>
-        <Text style={{ fontSize: 20 }}>Amount</Text>
+        <Text style={{ fontSize: 12 }}>EU Money</Text>
         <TextInput
           style={styles.input}
           onChangeText={text}
           underlineColorAndroid="transparent"
-          placeholder="0"
+          placeholder="Enter Amount"
           placeholderTextColor="#14213D"
+          placeholderStyle={{fontSize: 20}}
+          keyboardType="numeric"
         />
 
-        <Text style={{ fontSize: 20, marginTop: 15 }}>Select Type</Text>
+        <Text style={{ fontSize: 12, marginTop: 15 }}>Select Type</Text>
         <View style={styles.picker}>
-          <Picker
-          styles={{fontSize:20}}
-            selectedValue={selectedValue}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedValue(itemValue)
-            }
-          >
-            <Picker.Item label="Withdrawal" value="withdraw" />
-            <Picker.Item label="Sending" value="send" />
-          </Picker>
+         
+          <Dropdown/>
         </View>
 
         <TouchableOpacity style={styles.button}>
@@ -47,11 +41,12 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default EUMoney;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:'#fff'
   },
   inputBox: {
     margin: 15,
@@ -61,23 +56,22 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: "#14213D",
     borderWidth: 1,
+    borderRadius:5
   },
   picker: {
-    borderWidth: 1,
-    borderColor: "#14213D",
-    height: 40,
-    marginTop: 15,
     justifyContent:'center',
-    paddingVertical: 25
+    paddingVertical: 12,
   },
   button: {
     backgroundColor: "#FFA500",
     justifyContent: "center",
     marginTop: 15,
+    borderRadius:12
   },
   buttonText: {
     color: "#000",
-    fontSize: 25,
+    fontSize: 20,
     padding: 10,
+    textAlign: 'center',
   },
 });

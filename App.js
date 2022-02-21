@@ -1,14 +1,14 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet } from "react-native";
-import HomeScreen from "./src/Screens/HomeScreen";
+import BottomTab from "./src/components/BottomTab";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      {/*<Stack.Navigator>
         <Stack.Screen
           options={{ title: "Orramo", headerStyle:{
             backgroundColor:"#14213D",
@@ -17,9 +17,10 @@ export default function App() {
           },
         headerTintColor:"#fff" }}
           name="Orramo"
-          component={HomeScreen}
+          component={OrangeMoney}
         />
-      </Stack.Navigator>
+        </Stack.Navigator>*/}
+       <BottomTab/>
     </NavigationContainer>
   );
 }
