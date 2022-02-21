@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import DropDownPicker from 'react-native-dropdown-picker';
+import { Platform } from 'react-native';
 
 function Dropdown() {
   const [open, setOpen] = useState(false);
@@ -22,7 +23,7 @@ function Dropdown() {
       setItems={setItems}
       stickyHeader={true}
       placeholder="Select Transaction Type"
-      dropDownDirection="AUTO"
+      dropDownDirection= {Platform.OS == "ios"? "TOP": "AUTO"}
       bottomOffset={100}
     />
   );
