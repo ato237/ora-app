@@ -12,6 +12,7 @@ import Dropdown from "../components/Dropdown";
 const OrangeMoney = () => {
   const [text, onChangeText] = useState(0);
   const [selectedValue, setSelectedValue] = useState("Withdrawal");
+  const [Calculated, isCalculated] = useState(false)
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#14213D" barStyle="light-content" />
@@ -19,7 +20,8 @@ const OrangeMoney = () => {
         <Text style={{ fontSize: 12 }}>Orange Money</Text>
         <TextInput
           style={styles.input}
-          onChangeText={text}
+          value={text}
+          onChangeText={text=>onChangeText(text)}
           underlineColorAndroid="transparent"
           placeholder="Enter Amount"
           placeholderTextColor="#14213D"
@@ -32,7 +34,7 @@ const OrangeMoney = () => {
           <Dropdown />
         </View>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity onPress={()=>isCalculated(true)} style={styles.button}>
           <Text style={styles.buttonText}>Calculate</Text>
         </TouchableOpacity>
       </View>
@@ -41,10 +43,12 @@ const OrangeMoney = () => {
         <View style={styles.resultHeader}>
           <Text style={styles.resultText}>Result</Text>
         </View>
-        <View style={styles.resultComponent}>
-          <Text style={styles.MainCharge}>Orange Money Charge: </Text>
-          <Text style={styles.chargreIn}>Total Amount In Balance: </Text>
-          <Text style={styles.chargreIn}>Tax: </Text>
+
+        <View style={Calculated?styles.resultComponent: null}>
+          { Calculated? ( <Text style={styles.MainCharge}>Orange Money Charge: </Text>): null}
+          { Calculated? <Text style={styles.chargreIn}>Total Amount In Balance: </Text>: null}
+          { Calculated? <Text style={styles.chargreIn}>Tax: </Text> : null}
+         
         </View>
       </View>
     </View>
@@ -77,7 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFA500",
     justifyContent: "center",
     marginTop: 15,
-    borderRadius: 12,
+    borderRadius: 7,
   },
   buttonText: {
     color: "#000",
@@ -88,25 +92,31 @@ const styles = StyleSheet.create({
   resultBox: {
     justifyContent: "center",
     marginTop: 13,
+    paddingHorizontal: 13
   },
-  resultHeader: {},
+  resultHeader: {paddingBottom:10},
   resultText: {
     textAlign: "center",
     fontSize: 15,
   },
   resultComponent: {
+    paddingHorizontal: 10,
+    paddingVertical: 10,
     justifyContent: "center",
+    flexDirection:'column',
+    borderWidth: 0.7,
+    borderRadius:5
   },
   chargreIn: {
-    textAlign:'center',
+    marginVertical: 10,
     color: "#C36FAB",
     fontSize: 15,
     fontWeight: 'bold'
   },
   MainCharge:{
-    textAlign:'center',
+    marginVertical: 10,
     fontSize: 18,
     fontWeight:'bold',
-    color: "#14213D"
+    color: "#14213D",
   }
 });
