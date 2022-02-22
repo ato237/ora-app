@@ -160,6 +160,10 @@ const styles = StyleSheet.create({
   resultText: {
     textAlign: "center",
     fontSize: 15,
+    borderBottomWidth:1,
+    paddingBottom: 15,
+    fontWeight:"bold",
+    borderBottomWidth:1,
   },
   resultComponent: {
     paddingHorizontal: 10,
