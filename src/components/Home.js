@@ -4,17 +4,19 @@ import React from "react";
 import OrangeMoney from "../Screens/OrangeMoney";
 import MobileMoney from "../Screens/MobileMoney";
 import EUMoney from "../Screens/EUMoney";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Platform,Dimensions } from "react-native";
 
 const Tab = createMaterialTopTabNavigator();
 const Home = () => {
   return (
+    
     <Tab.Navigator
       screenOptions={{
         tabBarLabelStyle: { fontSize: 12, color: "#fff" },
         tabBarIconStyle:{color: "#fff"},
         tabBarStyle: {
           backgroundColor: "#14213D",
+          paddingTop: Platform.OS == "ios"? 15: 0
         },
         tabBarIndicatorStyle: { backgroundColor: '#FFA500', height: '5%' }
       }}
