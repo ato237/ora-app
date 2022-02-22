@@ -7,50 +7,43 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { Axios } from "axios";
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker from "react-native-dropdown-picker";
+import axios from "axios";
 
 const OrangeMoney = () => {
-
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Withdrawal', value: 'withdraw'},
-    {label: 'Client Transfer', value: 'send'},
-    {label: 'non-Client Transfer', value: 'sendnone'},
-
-
+    { label: "Withdrawal", value: "withdraw" },
+    { label: "Client Transfer", value: "send" },
+    { label: "non-Client Transfer", value: "sendnone" },
   ]);
-
-
-  const [text, onChangeText] = useState(0);
-  const [selectedValue, setSelectedValue] = useState("Withdrawal");
+  const [value, setValue] = useState("withdraw");
   const [Calculated, isCalculated] = useState(false);
-  const [values, setValues] = useState(1000)
-  const [status, setStatus] = useState("withdraw")
- const [data, setData] = useState([]);
+  const [values, setValues] = useState("1000");
+  const [data, setData] = useState([]);
 
-
+ 
   const handleCalculate = (e) => {
     e.preventDefault();
 
-    Axios.post(
-      `localhost:8081/api/calculate/orange/${values}/${status}`,
-      {headers: {"Access-Control-Allow-Origin": "https://www.orramo.com/"}}
-    ).then((response)=>{
-      setData(response.data);
-    });
-
+    axios
+      .post(
+        `https://orramo-backend2.herokuapp.com/api/calculate/mtn/${values}/${value}`
+      )
+      .then((response) => {
+        setData(response.data);
+        isCalculated(true);
+      });
   };
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#14213D" barStyle="light-content" />
       <View style={styles.inputBox}>
-        <Text style={{ fontSize: 12 }}>Orange Money</Text>
+        <Text style={{ fontSize: 12 }}>MTN MOMO </Text>
         <TextInput
           style={styles.input}
           value={values}
-          onChangeText={(values) => setValues(values)}
+          onChangeText={(values) => setValues(String(values))}
           underlineColorAndroid="transparent"
           placeholder="Enter Amount"
           placeholderTextColor="#14213D"
@@ -61,23 +54,19 @@ const OrangeMoney = () => {
         <Text style={{ fontSize: 12, marginTop: 15 }}>Select Type</Text>
         <View style={styles.picker}>
           <DropDownPicker
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-      stickyHeader={true}
-      placeholder="Select Transaction Type"
-      dropDownDirection= {Platform.OS == "ios"? "TOP" : "AUTO"}
-      bottomOffset={100}
-    />
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            stickyHeader={true}
+            dropDownDirection={Platform.OS == "ios" ? "TOP" : "AUTO"}
+            bottomOffset={100}
+          />
         </View>
 
-        <TouchableOpacity
-          onPress={() => isCalculated(true)}
-          style={styles.button}
-        >
+        <TouchableOpacity onPress={handleCalculate} style={styles.button}>
           <Text style={styles.buttonText}>Calculate</Text>
         </TouchableOpacity>
       </View>
@@ -90,7 +79,7 @@ const OrangeMoney = () => {
         <View style={Calculated ? styles.resultComponent : null}>
           <View style={{ flexDirection: "row" }}>
             {Calculated ? (
-              <Text style={styles.MainCharge}>Orange Money Charge: </Text>
+              <Text style={styles.MainCharge}>MTN MOMO Charge : </Text>
             ) : null}
             <Text
               style={{
@@ -100,18 +89,27 @@ const OrangeMoney = () => {
                 color: "#14213D",
               }}
             >
-              100000000fcfa
+              {data.map((datum) => (
+                <Text style={styles.amount,{color:'#786a10',fontSize:18,marginTop: 16}}>{datum.mtnCharge}Fcfa</Text>
+              ))}
             </Text>
           </View>
           <View style={{ flexDirection: "row" }}>
             {Calculated ? (
-              <Text style={styles.chargreIn}>Total Amount In Balance: </Text>
+              <Text style={styles.chargreIn}>Total Amount To be Deduced : </Text>
             ) : null}
-            <Text style={styles.amount}>1000000</Text>
+            {data.map((datum) => (
+              <Text style={styles.amount}>{datum.mtnTotal}Fcfa</Text>
+            ))}
           </View>
           <View style={{ flexDirection: "row" }}>
-            {Calculated ? <Text style={styles.chargreIn}>Tax: </Text> : null}
-            <Text style={styles.amount}>500fcfa</Text>
+            {Calculated ? <Text style={styles.chargreIn}>Tax : </Text> : null}
+            <Text style={styles.amount}>
+              {" "}
+              {data.map((datum) => (
+                <Text style={styles.amount}>{datum.mtnTax}Fcfa</Text>
+              ))}
+            </Text>
           </View>
         </View>
       </View>
@@ -181,7 +179,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontSize: 18,
     fontWeight: "bold",
-    color: "#14213D",
+    color: "#786a10",
   },
   amount: {
     fontSize: 14,

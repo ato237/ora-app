@@ -7,42 +7,33 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker from "react-native-dropdown-picker";
 import axios from "axios";
 
-
-
-
 const OrangeMoney = () => {
-
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
-    {label: 'Withdrawal', value: 'withdraw'},
-    {label: 'Client Transfer', value: 'send'},
-    {label: 'non-Client Transfer', value: 'sendnone'},
+    { label: "Withdrawal", value: "withdraw" },
+    { label: "Client Transfer", value: "send" },
+    { label: "non-Client Transfer", value: "sendnone" },
   ]);
-  const [status, setStatus] = useState("withdraw")
-
-  const [text, onChangeText] = useState(0);
+  const [value, setValue] = useState("withdraw");
   const [Calculated, isCalculated] = useState(false);
-  const [values, setValues] = useState(1000)
- const [data, setData] = useState([]);
+  const [values, setValues] = useState("1000");
+  const [data, setData] = useState([]);
 
-
-
-const handleStatus = (e) =>{
-  setStatus(items.map((item) => item.value))
-  console.log(status)
-}
-
+ 
   const handleCalculate = (e) => {
     e.preventDefault();
 
-    axios.post(
-      `localhost:8081/api/calculate/orange/${values}/${status}`).then((response)=>{
-      setData(response.data);
-      isCalculated(true);
-    });
+    axios
+      .post(
+        `https://orramo-backend2.herokuapp.com/api/calculate/orange/${values}/${value}`
+      )
+      .then((response) => {
+        setData(response.data);
+        isCalculated(true);
+      });
   };
   return (
     <View style={styles.container}>
@@ -52,7 +43,7 @@ const handleStatus = (e) =>{
         <TextInput
           style={styles.input}
           value={values}
-          onChangeText={(values) => setValues(values)}
+          onChangeText={(values) => setValues(String(values))}
           underlineColorAndroid="transparent"
           placeholder="Enter Amount"
           placeholderTextColor="#14213D"
@@ -63,23 +54,19 @@ const handleStatus = (e) =>{
         <Text style={{ fontSize: 12, marginTop: 15 }}>Select Type</Text>
         <View style={styles.picker}>
           <DropDownPicker
-      open={open}
-      value={status}
-      items={items}
-      setOpen={setOpen}
-      setValue={handleStatus}
-      setItems={setItems}
-      stickyHeader={true}
-      placeholder="Select Transaction Type"
-      dropDownDirection= {Platform.OS == "ios"? "TOP" : "AUTO"}
-      bottomOffset={100}
-    />
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            stickyHeader={true}
+            dropDownDirection={Platform.OS == "ios" ? "TOP" : "AUTO"}
+            bottomOffset={100}
+          />
         </View>
 
-        <TouchableOpacity
-          onPress={handleCalculate}
-          style={styles.button}
-        >
+        <TouchableOpacity onPress={handleCalculate} style={styles.button}>
           <Text style={styles.buttonText}>Calculate</Text>
         </TouchableOpacity>
       </View>
@@ -92,7 +79,7 @@ const handleStatus = (e) =>{
         <View style={Calculated ? styles.resultComponent : null}>
           <View style={{ flexDirection: "row" }}>
             {Calculated ? (
-              <Text style={styles.MainCharge}>Orange Money Charge: </Text>
+              <Text style={styles.MainCharge}>Orange Money Charge : </Text>
             ) : null}
             <Text
               style={{
@@ -102,21 +89,27 @@ const handleStatus = (e) =>{
                 color: "#14213D",
               }}
             >
-              100000000fcfa
+              {data.map((datum) => (
+                <Text style={styles.amount,{color:'#a1651d',fontSize:18,marginTop: 18}}>{datum.orangeCharge}Fcfa</Text>
+              ))}
             </Text>
           </View>
           <View style={{ flexDirection: "row" }}>
             {Calculated ? (
-              <Text style={styles.chargreIn}>Total Amount In Balance: </Text>
+              <Text style={styles.chargreIn}>Total Amount To be Deduced : </Text>
             ) : null}
-            {data.map((datum) =>(
-            <Text style={styles.amount}>{datum.orangeCharge}</Text>
-
+            {data.map((datum) => (
+              <Text style={styles.amount}>{datum.orangeTotal}Fcfa</Text>
             ))}
           </View>
           <View style={{ flexDirection: "row" }}>
-            {Calculated ? <Text style={styles.chargreIn}>Tax: </Text> : null}
-            <Text style={styles.amount}>500fcfa</Text>
+            {Calculated ? <Text style={styles.chargreIn}>Tax : </Text> : null}
+            <Text style={styles.amount}>
+              {" "}
+              {data.map((datum) => (
+                <Text style={styles.amount}>{datum.orangeTax}Fcfa</Text>
+              ))}
+            </Text>
           </View>
         </View>
       </View>
@@ -186,7 +179,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontSize: 18,
     fontWeight: "bold",
-    color: "#14213D",
+    color: "#a1651d",
   },
   amount: {
     fontSize: 14,
