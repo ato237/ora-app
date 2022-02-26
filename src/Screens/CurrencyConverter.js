@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const History = () => {
+const CurrencyConverter = () => {
   return (
     <View>
-      <Text>This is the History</Text>
+      <Text>Currency</Text>
     </View>
   )
 }
 
-export default History
+export default CurrencyConverter
 
 const styles = StyleSheet.create({})

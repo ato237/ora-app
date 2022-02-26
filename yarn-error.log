@@ -1,0 +1,75 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\tonyb\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add i18n-fr
+
+PATH: 
+  C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files (x86)\dotnet\;C:\Program Files\MATLAB\R2021b\bin;C:\Users\tonyb\AppData\Local\Microsoft\WindowsApps;C:\Users\tonyb\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\Git\cmd;C:\Users\tonyb\AppData\Roaming\npm;C:\Program Files\nodejs;
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  16.13.2
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/i18n-fr: Not found
+      at Request.params.callback [as _callback] (C:\Users\tonyb\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:67029:18)
+      at Request.self.callback (C:\Users\tonyb\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140883:22)
+      at Request.emit (node:events:390:28)
+      at Request.<anonymous> (C:\Users\tonyb\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141855:10)
+      at Request.emit (node:events:390:28)
+      at IncomingMessage.<anonymous> (C:\Users\tonyb\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141777:12)
+      at Object.onceWrapper (node:events:509:28)
+      at IncomingMessage.emit (node:events:402:35)
+      at endReadableNT (node:internal/streams/readable:1343:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  {
+    "name": "ora-app",
+    "version": "1.0.0",
+    "main": "node_modules/expo/AppEntry.js",
+    "scripts": {
+      "start": "expo start",
+      "android": "expo start --android",
+      "ios": "expo start --ios",
+      "web": "expo start --web",
+      "eject": "expo eject"
+    },
+    "dependencies": {
+      "@react-native-picker/picker": "^2.3.0",
+      "@react-navigation/bottom-tabs": "^6.2.0",
+      "@react-navigation/material-bottom-tabs": "^6.1.1",
+      "@react-navigation/material-top-tabs": "^6.1.1",
+      "@react-navigation/native": "^6.0.8",
+      "@react-navigation/native-stack": "^6.5.0",
+      "axios": "^0.26.0",
+      "expo": "~44.0.0",
+      "expo-status-bar": "~1.2.0",
+      "react": "17.0.1",
+      "react-dom": "17.0.1",
+      "react-native": "0.64.3",
+      "react-native-dropdown-picker": "^5.3.0",
+      "react-native-pager-view": "5.4.9",
+      "react-native-paper": "^4.11.2",
+      "react-native-safe-area-context": "3.3.2",
+      "react-native-screens": "~3.10.1",
+      "react-native-tab-view": "^3.1.1",
+      "react-native-vector-icons": "^9.1.0",
+      "react-native-web": "0.17.1",
+      "sharingan-rn-modal-dropdown": "^1.4.0",
+      "expo-localization": "~12.0.0"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.12.9"
+    },
+    "private": true
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

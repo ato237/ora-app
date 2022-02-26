@@ -1,7 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import i18n from 'i18n-js';
 import { StyleSheet } from "react-native";
 import BottomTab from "./src/components/BottomTab";
+
+
 
 export default function App() {
   const Stack = createNativeStackNavigator();

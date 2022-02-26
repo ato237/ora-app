@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import Home from "./Home";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import History from "../Screens/History";
-import Share from "../Screens/Share";
+import HomeCalculator from "../Screens/HomeCalculator";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Currency from "../Screens/CurrencyConverter";
+import i18n from "../Data/translation";
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const BottomTab = () => {
   return (
@@ -16,11 +16,11 @@ const BottomTab = () => {
           let iconName;
 
 
-          if (route.name === "Home") {
-            iconName = focused ? "home" : "home-outline";
+          if (route.name === "Charges Calculator") {
+            iconName = focused ? "calculator" : "calculator-outline";
             color = focused ? "#fff" : "gray"
-          } else if (route.name === "History") {
-            iconName = focused ? "list" : "list-outline";
+          } else if (route.name === "Currency Converter") {
+            iconName = focused ? "cash" : "cash-outline";
             color = focused ? "#fff" : "gray"
           } else if (route.name === "Share") {
             iconName = focused ? "share-social" : "share-social-outline";
@@ -31,17 +31,25 @@ const BottomTab = () => {
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={20} color={color}/>;
         },
-      
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          backgroundColor: "#14213D",
+        },
+        headerStyle:{
+          backgroundColor:'#14213D',
+        },
+        headerTitleStyle:{
+          color: "white"
+        },
+        headerShown:false
+       
+
       })}
 
-      initialRouteName="Home"
-      activeColor="#fff"
-      inactiveColor="gray"
-      barStyle={{ backgroundColor: '#14213D' }}
     >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="History" component={History} />
-      <Tab.Screen name="Share" component={Share} />
+      <Tab.Screen name={i18n.t('tittle')} component={HomeCalculator} />
+      <Tab.Screen name={i18n.t('con')} component={Currency} />
     </Tab.Navigator>
   );
 };
