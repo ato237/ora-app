@@ -17,16 +17,27 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-7148038859151468~4633361491"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-7148038859151468~445224671"
+      },
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "onesignal-expo-plugin"
+      
+    ]
   }
 }

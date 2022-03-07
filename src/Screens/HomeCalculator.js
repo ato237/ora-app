@@ -3,20 +3,24 @@ import {
   Text,
   View,
   StatusBar,
-  Platfrom,
+  Platform,
   TouchableOpacity,
   Keyboard,
   Alert,
   LogBox,
   ActivityIndicator,
   AppRegistry,
+  Dimensions,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { TextInput } from "react-native-paper";
 import { Dropdown } from "sharingan-rn-modal-dropdown";
 import axios from "axios";
 import * as Haptics from "expo-haptics";
 import i18n from "../Data/translation";
+import { AdMobBanner, AdMobInterstitial } from "expo-ads-admob";
+import { GlobalContext } from "../context/reducers/Provider";
+import numbro from "numbro";
 
 //This array contains the different service names along with their images
 export const services = [
@@ -93,13 +97,42 @@ export const chargeEuType = [
 const HomeCalculator = () => {
   LogBox.ignoreAllLogs(true);
   const [values, setValues] = useState("10000"); //The amount entered by the user
-  const [service, setSevirce] = useState("orange"); //Handles the services 
+  const [service, setSevirce] = useState("orange"); //Handles the services
   const [type, setType] = useState("withdraw"); //Handles the operation
   const [data, setData] = useState([]); //Handles the data gotten from the apo
   const [error, setError] = useState(false); //miscellaneous
   const [changed, isChanged] = useState(false); //I used this variable to check if a new service is selected
   const [loading, isLoading] = useState(false); //This is a boolean used to tell whether the api has given out a response
-  const [pressed, isPressed] = useState(false)
+  const [pressed, isPressed] = useState(false);
+  const [androidAppId, setandroidAppId] = useState(
+    "ca-app-pub-3940256099942544/6300978111"
+
+    //Android banner: ca-app-pub-7148038859151468/4290279394
+    //ios banner:  ca-app-pub-7148038859151468/3128708138
+  );
+  const [iosAppId, setIosAppId] = useState(
+    "ca-app-pub-3940256099942544/6300978111"
+
+    //Android banner: ca-app-pub-7148038859151468/4290279394
+    //ios banner:  ca-app-pub-7148038859151468/3128708138
+  );
+
+  const [count, setCount] = useState(1);
+  const datas = useContext(GlobalContext);
+
+  let AppId = Platform.select({
+    ios: "ca-app-pub-3940256099942544/8691691433", //ca-app-pub-7148038859151468/2619719471
+    android: "ca-app-pub-3940256099942544/8691691433", //ca-app-pub-7148038859151468/2236576097
+  });
+
+  let loadAd = async () => {
+    await AdMobInterstitial.setAdUnitID(AppId);
+    await AdMobInterstitial.requestAdAsync();
+  };
+
+  AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => {
+    loadAd();
+  });
 
   //Handles the service dropdown
   const onChangeService = (value) => {
@@ -107,6 +140,7 @@ const HomeCalculator = () => {
     isLoading(false);
     isChanged(true);
     setSevirce(value);
+    Keyboard.dismiss();
   };
 
   //Handles the operation dropdown
@@ -115,61 +149,88 @@ const HomeCalculator = () => {
     isLoading(false);
     isChanged(true);
     setType(value);
+    Keyboard.dismiss();
   };
 
   //Handles the calculate operation
   const handleCalculate = () => {
-      isPressed(true)
+    isPressed(true);
     isLoading(true);
     isChanged(false);
     if (!values.trim()) {
-      alert(i18n.t('enter'));
+      alert(i18n.t("enter"));
+      isLoading(false);
+      isPressed(true);
       return;
     }
 
-    if(values%1 != 0){
-        alert(i18n.t('dec'))
+    if (values % 1 != 0) {
+      alert(i18n.t("dec"));
     }
-    
+
     axios
-      .post(`http://10.0.0.225:8081/api/calculate/${service}/${values}/${type}`)
+      .post(`https://orramo-backend2.herokuapp.com/api/calculate/${service}/${values}/${type}`)
       .catch((error) => setError(true))
       .then((response) => {
         setData(response.data);
         isLoading(false);
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        setCount(count + 1);
+        count % 5 == 0 ? AdMobInterstitial.showAdAsync() : null;
+
         // setError(false)
         //console.log(service)
         //console.log(type)
         //console.log(error)
       });
   };
+  loadAd();
 
   return (
     <View style={styles.container}>
-        {/**Status Bar */}
+      {/**Status Bar */}
       <StatusBar backgroundColor="#14213D" barStyle="light-content" />
 
       <View style={styles.amountBox}>
         <Text style={styles.amountStyle}>
-          {i18n.t("charge")} {values}
-         {!values.trim() ? null : " XAF ="} 
+          {i18n.t("charge")}{" "}
+          {!values.trim()
+            ? null
+            : numbro(values).format({
+                thousandSeparated: true,
+                mantissa: 0, // number of decimals displayed
+              })}
+          {!values.trim() ? null : " XAF ="}
         </Text>
         {/** Calculation Results */}
         <View style={styles.resultBox}>
-            {!pressed? <Text style={{ color: "grey" }}>{i18n.t("press")}</Text>: null}
+          {!pressed ? (
+            <Text style={{ color: "grey" }}>{i18n.t("press")}</Text>
+          ) : null}
           {data.map((datum) =>
             service == "orange" && !changed ? (
               <Text key={1} style={styles.result}>
-                {datum.orangeCharge} <Text style={{fontSize:14}}>XAF</Text>
+                {numbro(datum.orangeCharge).format({
+                  thousandSeparated: true,
+                  mantissa: 0, // number of decimals displayed
+                })}{" "}
+                <Text style={{ fontSize: 14 }}>XAF</Text>
               </Text>
             ) : service == "mtn" && !changed ? (
               <Text key={3} style={styles.result}>
-                 {datum.mtnCharge} <Text style={{fontSize:14}}>XAF</Text>
+                {numbro(datum.mtnCharge).format({
+                  thousandSeparated: true,
+                  mantissa: 0, // number of decimals displayed
+                })}{" "}
+                <Text style={{ fontSize: 14 }}>XAF</Text>
               </Text>
             ) : service == "eumoney" && !changed ? (
               <Text key={2} style={styles.result}>
-                 {datum.euCharge} <Text style={{fontSize:14}}>XAF</Text>
+                {numbro(datum.euCharge).format({
+                  thousandSeparated: true,
+                  mantissa: 0, // number of decimals displayed
+                })}{" "}
+                <Text style={{ fontSize: 14 }}>XAF</Text>
               </Text>
             ) : (
               <Text style={{ color: "grey" }}>{i18n.t("press")}</Text>
@@ -178,8 +239,7 @@ const HomeCalculator = () => {
         </View>
       </View>
       <View style={styles.values}>
-
-          {/**Amount Input */}
+        {/**Amount Input */}
         <Text style={{ color: "black", opacity: 0.9 }}>{i18n.t("amnt")}</Text>
         <TextInput
           style={styles.input}
@@ -190,9 +250,9 @@ const HomeCalculator = () => {
           keyboardType="numeric"
           clearButtonMode="while-editing"
           enablesReturnKeyAutomatically={true}
-          keyboardAppearance="dark"
           returnKeyType="done"
           onEndEditing={handleCalculate}
+          underlineColor="transparent"
         />
         <View
           style={{
@@ -201,9 +261,10 @@ const HomeCalculator = () => {
             backgroundColor: "#fff",
           }}
         >
-            {/**First Dropdown option */}
+          {/**First Dropdown option */}
           <View style={styles.options}>
             <Dropdown
+              key={5}
               label={i18n.t("ser")}
               data={services}
               value={service}
@@ -215,7 +276,7 @@ const HomeCalculator = () => {
             />
           </View>
           <View style={styles.options}>
-              {/**Second DropDown Option */}
+            {/**Second DropDown Option */}
             <Dropdown
               key={5}
               label={i18n.t("opr")}
@@ -239,11 +300,16 @@ const HomeCalculator = () => {
           <TouchableOpacity onPress={handleCalculate} style={styles.button}>
             <Text style={styles.buttonText}>
               {loading ? (
-                <ActivityIndicator
-                  style={{ fontSize: 18 }}
-                  size="small"
-                  color="#fff"
-                />
+                <View>
+                  <ActivityIndicator
+                    style={
+                      Platform.OS == "ios" ? { top: 10, left: 10 } : { top: 0 }
+                    }
+                    size="small"
+                    color="#fff"
+                    animating={true}
+                  />
+                </View>
               ) : (
                 i18n.t("calc")
               )}
@@ -252,8 +318,28 @@ const HomeCalculator = () => {
           <Text style={{ color: "grey", textAlign: "center" }}>
             {i18n.t("instr")}
           </Text>
+          {Platform.OS == "ios" ? (
+            <AdMobBanner
+              style={
+                Platform.OS == "ios" && Dimensions.get("window").height > 895
+                  ? { top: 200 }
+                  : { top: 45 }
+              }
+              bannerSize="banner"
+              adUnitID={androidAppId}
+              serverPersonalizedAds={false}
+            />
+          ) : (
+            <AdMobBanner
+              style={{ top: 180 }}
+              bannerSize="banner"
+              adUnitID={iosAppId}
+              serverPersonalizedAds={false}
+            />
+          )}
         </View>
       </View>
+      {/**Adds goes here */}
     </View>
   );
 };
@@ -268,21 +354,20 @@ const styles = StyleSheet.create({
   amountBox: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#14213D", 
-    paddingTop :50
-
+    backgroundColor: "#14213D",
+    paddingTop:
+      Platform.OS == "ios" && Dimensions.get("window").height > 895 ? 80 : 50,
   },
   amountStyle: {
     fontSize: 15,
     color: "#fff",
     fontWeight: "bold",
-    backgroundColor: "#14213D", 
-
+    backgroundColor: "#14213D",
   },
   resultBox: {
     marginTop: 15,
     height: 85,
-    backgroundColor: "#14213D", 
+    backgroundColor: "#14213D",
     marginBottom: 5,
     paddingTop: 15,
     paddingBottom: 15,
@@ -298,16 +383,16 @@ const styles = StyleSheet.create({
     //elevation: 5,
   },
   result: {
-    fontSize: 36,
+    fontSize: 45,
     fontWeight: "bold",
     color: "#fff",
-    bottom:15,
-    left:10
+    bottom: 15,
+    left: 10,
   },
   input: {
     marginTop: 8,
     height: 50,
-    borderWidth: 0.4,
+    borderWidth: 0.5,
     padding: 2,
     backgroundColor: "#fff",
     color: "white",
@@ -317,15 +402,15 @@ const styles = StyleSheet.create({
   },
   options: {
     flexDirection: "row",
-    borderWidth:0.6,
-    marginTop:20
+    borderWidth: 0.6,
+    marginTop: 20,
   },
   button: {
     backgroundColor: "#FFA500",
     alignItems: "center",
     alignContent: "center",
     marginTop: 15,
-    borderRadius: 7,
+    borderRadius: 4,
   },
   buttonText: {
     color: "#000",
@@ -333,7 +418,6 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: "center",
     alignContent: "center",
-    fontFamily:'OpenSans'
   },
 });
-AppRegistry.registerComponent('AndroidFonts', () => AndroidFonts);
+AppRegistry.registerComponent("AndroidFonts", () => AndroidFonts);

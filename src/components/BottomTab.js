@@ -16,13 +16,13 @@ const BottomTab = () => {
           let iconName;
 
 
-          if (route.name === "Charges Calculator") {
+          if (route.name === "Charges Calculator"||route.name === "Calculatrice de frais") {
             iconName = focused ? "calculator" : "calculator-outline";
             color = focused ? "#fff" : "gray"
-          } else if (route.name === "Currency Converter") {
+          } else if (route.name === "Currency Converter"||route.name === "Convertisseur de Devise") {
             iconName = focused ? "cash" : "cash-outline";
             color = focused ? "#fff" : "gray"
-          } else if (route.name === "Share") {
+          } else if (route.name === "Share"||route.name === "Charges Calculator") {
             iconName = focused ? "share-social" : "share-social-outline";
             color = focused ? "#fff" : "gray"
 
