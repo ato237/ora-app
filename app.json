@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "ora-app",
-    "slug": "ora-app",
+    "name": "Orramo",
+    "slug": "Orramo-apk",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#14213D"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,15 +17,19 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.atoproduction.orramo",
+      "buildNumber": "1.0.0",
       "supportsTablet": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-7148038859151468~4633361491"
       }
     },
     "android": {
+      "versionCode": 1,
+      "package": "com.atoproduction.orramo",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#14213D"
       },
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-7148038859151468~445224671"

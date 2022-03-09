@@ -39,12 +39,12 @@ const CurrencyConverter = ({ navigation }) => {
   const [count, setCount] = useState(1);
 
   const [androidAppId, setandroidAppId] = useState(
-    "ca-app-pub-3940256099942544/6300978111"
+    "ca-app-pub-7148038859151468/4290279394"
     //Android banner: ca-app-pub-7148038859151468/4290279394
     //ios banner:  ca-app-pub-7148038859151468/3128708138
   );
-  const [iosAppId, setIosAppId] = useState(
-    "ca-app-pub-3940256099942544/6300978111"
+  const [iosAppId, setIosAppId] = useState(//ca-app-pub-3940256099942544/6300978111
+    "ca-app-pub-7148038859151468/3128708138"
 
     //Android banner: ca-app-pub-7148038859151468/4290279394
     //ios banner:  ca-app-pub-7148038859151468/3128708138
@@ -67,9 +67,7 @@ const CurrencyConverter = ({ navigation }) => {
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+      Notifications.addNotificationResponseReceivedListener((response) => {});
 
     return () => {
       Notifications.removeNotificationSubscription(
@@ -79,14 +77,15 @@ const CurrencyConverter = ({ navigation }) => {
     };
   }, []);
 
-  let AppId = Platform.select({
-    ios: "ca-app-pub-3940256099942544/8691691433", //ca-app-pub-7148038859151468/2619719471
-    android: "ca-app-pub-3940256099942544/8691691433", //ca-app-pub-7148038859151468/2236576097
+  let AppId = Platform.select({//ca-app-pub-3940256099942544/8691691433
+    ios: "ca-app-pub-7148038859151468/2619719471", //ca-app-pub-7148038859151468/2619719471
+    android: "ca-app-pub-7148038859151468/2236576097", //ca-app-pub-7148038859151468/2236576097
   });
 
   let loadAd = async () => {
     await AdMobInterstitial.setAdUnitID(AppId);
     await AdMobInterstitial.requestAdAsync();
+   
   };
 
   AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => {
@@ -137,38 +136,6 @@ const CurrencyConverter = ({ navigation }) => {
   };
 
   loadAd();
-  function CommaFormatted(amount) {
-    var delimiter = ","; // replace comma if desired
-    var a = amount.split(".", 2);
-    var d = a[1];
-    var i = parseInt(a[0]);
-    if (isNaN(i)) {
-      return "";
-    }
-    var minus = "";
-    if (i < 0) {
-      minus = "-";
-    }
-    i = Math.abs(i);
-    var n = new String(i);
-    var a = [];
-    while (n.length > 3) {
-      var nn = n.substr(n.length - 3);
-      a.unshift(nn);
-      n = n.substr(0, n.length - 3);
-    }
-    if (n.length > 0) {
-      a.unshift(n);
-    }
-    n = a.join(delimiter);
-    if (d.length < 1) {
-      amount = n;
-    } else {
-      amount = n + "." + d;
-    }
-    amount = minus + amount;
-    return amount;
-  }
 
   return (
     <View style={styles.container}>
@@ -413,7 +380,7 @@ const styles = StyleSheet.create({
   },
   resultBox: {
     marginTop: 15,
-    minHeight:85,
+    minHeight: 85,
     maxHeight: 250,
     backgroundColor: "#14213D",
     marginBottom: 5,

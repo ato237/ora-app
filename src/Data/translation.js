@@ -22,7 +22,7 @@ i18n.translations = {
       nonTrans2: "Non-Orange Client Transfer Fee",
       trans3: "EuMoney client Transfer Fee",
       nonTrans3: "non-EUMoney Client Transfer Fee",
-      press: "Press Calcualte Button",
+      press: "Press Calculate Button",
       tittle:"Charges Calculator",
         con: "Currency Converter",
         enter:"Please Enter Amount",

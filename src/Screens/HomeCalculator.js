@@ -6,13 +6,11 @@ import {
   Platform,
   TouchableOpacity,
   Keyboard,
-  Alert,
   LogBox,
   ActivityIndicator,
-  AppRegistry,
   Dimensions,
 } from "react-native";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { TextInput } from "react-native-paper";
 import { Dropdown } from "sharingan-rn-modal-dropdown";
 import axios from "axios";
@@ -104,14 +102,14 @@ const HomeCalculator = () => {
   const [changed, isChanged] = useState(false); //I used this variable to check if a new service is selected
   const [loading, isLoading] = useState(false); //This is a boolean used to tell whether the api has given out a response
   const [pressed, isPressed] = useState(false);
-  const [androidAppId, setandroidAppId] = useState(
-    "ca-app-pub-3940256099942544/6300978111"
+  const [androidAppId, setandroidAppId] = useState(//ca-app-pub-3940256099942544/6300978111
+    "ca-app-pub-7148038859151468/4290279394"
 
     //Android banner: ca-app-pub-7148038859151468/4290279394
     //ios banner:  ca-app-pub-7148038859151468/3128708138
   );
   const [iosAppId, setIosAppId] = useState(
-    "ca-app-pub-3940256099942544/6300978111"
+    "ca-app-pub-7148038859151468/3128708138"
 
     //Android banner: ca-app-pub-7148038859151468/4290279394
     //ios banner:  ca-app-pub-7148038859151468/3128708138
@@ -121,8 +119,8 @@ const HomeCalculator = () => {
   const datas = useContext(GlobalContext);
 
   let AppId = Platform.select({
-    ios: "ca-app-pub-3940256099942544/8691691433", //ca-app-pub-7148038859151468/2619719471
-    android: "ca-app-pub-3940256099942544/8691691433", //ca-app-pub-7148038859151468/2236576097
+    ios: "ca-app-pub-7148038859151468/2619719471", //ca-app-pub-7148038859151468/2619719471
+    android: "ca-app-pub-7148038859151468/2236576097", //ca-app-pub-7148038859151468/2236576097
   });
 
   let loadAd = async () => {
@@ -420,4 +418,3 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
 });
-AppRegistry.registerComponent("AndroidFonts", () => AndroidFonts);

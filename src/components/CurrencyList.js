@@ -4,13 +4,11 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image,
   TextInput,
 } from "react-native";
-import React, { memo, createContext, useState, useContext } from "react";
+import React, { memo, useState, useContext } from "react";
 import data from "./countries";
 import { Avatar } from "react-native-elements";
-import mtn from "../images/orange.png";
 import { GlobalContext } from "../context/reducers/Provider";
 import { useNavigation } from "@react-navigation/native";
 import i18n from "../Data/translation";

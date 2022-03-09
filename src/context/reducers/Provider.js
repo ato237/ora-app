@@ -1,11 +1,4 @@
-import React, { createContext, useReducer, useState } from "react";
-import authStates from "../initialStates/authStates";
-import contactStates from "../initialStates/contactStates";
-import dataStates from "../initialStates/dataStates";
-import { auth } from "./auth";
-import { contacts } from "./contacts";
-import { data } from "./data";
-
+import React, { createContext, useState } from "react";
 export const GlobalContext = createContext({});
 
 const GlobalProvider = ({ children }) => {
@@ -24,12 +17,7 @@ const GlobalProvider = ({ children }) => {
   });
 
   const [tempCode, setTempCode] = useState({});
-
   const [from, setFrom] = useState(true);
-
-  const [authState, authDispatch] = useReducer(auth, authStates);
-  const [contactState, contactDispatch] = useReducer(contacts, contactStates);
-  const [dataState, dataDispatch] = useReducer(data, dataStates);
   const [udatedCount, setUpdatedCount] = useState(0);
   const [update, setUpdate] = useState(false);
 
@@ -40,10 +28,6 @@ const GlobalProvider = ({ children }) => {
         setUpdatedCount,
         update,
         setUpdate,
-        authState,
-        contactState,
-        authDispatch,
-        contactDispatch,
         fromCurrency,
         setFromCurrency,
         toCurrency,
