@@ -31,24 +31,20 @@ Notifications.setNotificationHandler({
 
 const CurrencyConverter = ({ navigation }) => {
   const datas = useContext(GlobalContext);
-  const [amount, setAmount] = useState("10000.0");
+  const [amount, setAmount] = useState("1.0");
   const [pressed, isPressed] = useState(false);
   const [data, setData] = useState([]);
   const [loading, isLoading] = useState(false);
   const [cal, isCalc] = useState(false);
   const [count, setCount] = useState(1);
 
-  const [androidAppId, setandroidAppId] = useState(
-    "ca-app-pub-7148038859151468/4290279394"
-    //Android banner: ca-app-pub-7148038859151468/4290279394
-    //ios banner:  ca-app-pub-7148038859151468/3128708138
-  );
-  const [iosAppId, setIosAppId] = useState(//ca-app-pub-3940256099942544/6300978111
-    "ca-app-pub-7148038859151468/3128708138"
+  let testId = 'ca-app-pub-3940256099942544/6300978111'
+  let testIdIn = 'ca-app-pub-3940256099942544/8691691433'
 
-    //Android banner: ca-app-pub-7148038859151468/4290279394
-    //ios banner:  ca-app-pub-7148038859151468/3128708138
-  );
+  let BannerAppId = Platform.select({
+    ios: "ca-app-pub-7148038859151468/3128708138", //ca-app-pub-7148038859151468/2619719471
+    android: "ca-app-pub-7148038859151468/4290279394", //ca-app-pub-7148038859151468/2236576097
+  });
 
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
@@ -92,6 +88,10 @@ const CurrencyConverter = ({ navigation }) => {
     loadAd();
   });
 
+  
+ 
+  loadAd()
+
   //Handles the calculate operation
   const handleConvert = () => {
     isLoading(true);
@@ -102,7 +102,6 @@ const CurrencyConverter = ({ navigation }) => {
       isPressed(true);
       return;
     }
-
     axios
       .post(
         `https://orramo-backend2.herokuapp.com/api/converter/convert/${amount}/${datas.fromCurrency.code}/${datas.toCurrency.code}`
@@ -113,7 +112,7 @@ const CurrencyConverter = ({ navigation }) => {
         isCalc(true);
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setCount(count + 1);
-        count % 6 == 0 ? AdMobInterstitial.showAdAsync() : null;
+        count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
         //setError(false)
         data.map((item) => datas.setUpdate(item.update));
         //console.log(error)
@@ -135,7 +134,6 @@ const CurrencyConverter = ({ navigation }) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
-  loadAd();
 
   return (
     <View style={styles.container}>
@@ -313,25 +311,11 @@ const CurrencyConverter = ({ navigation }) => {
         <Text style={{ color: "grey", textAlign: "center" }}>
           {i18n.t("instr2")}
         </Text>
-        {Platform.OS == "ios" ? (
           <AdMobBanner
-            style={
-              Platform.OS == "ios" && Dimensions.get("window").height > 895
-                ? { top: 220 }
-                : { top: 60 }
-            }
             bannerSize="banner"
-            adUnitID={androidAppId}
+            adUnitID={BannerAppId}
             serverPersonalizedAds={false}
           />
-        ) : (
-          <AdMobBanner
-            style={{ top: 200 }}
-            bannerSize="banner"
-            adUnitID={iosAppId}
-            serverPersonalizedAds={false}
-          />
-        )}
       </View>
     </View>
   );

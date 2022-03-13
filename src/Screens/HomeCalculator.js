@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   Dimensions,
 } from "react-native";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,useEffect } from "react";
 import { TextInput } from "react-native-paper";
 import { Dropdown } from "sharingan-rn-modal-dropdown";
 import axios from "axios";
@@ -19,6 +19,7 @@ import i18n from "../Data/translation";
 import { AdMobBanner, AdMobInterstitial } from "expo-ads-admob";
 import { GlobalContext } from "../context/reducers/Provider";
 import numbro from "numbro";
+import { BannerAd } from "expo-ads-facebook";
 
 //This array contains the different service names along with their images
 export const services = [
@@ -102,22 +103,17 @@ const HomeCalculator = () => {
   const [changed, isChanged] = useState(false); //I used this variable to check if a new service is selected
   const [loading, isLoading] = useState(false); //This is a boolean used to tell whether the api has given out a response
   const [pressed, isPressed] = useState(false);
-  const [androidAppId, setandroidAppId] = useState(//ca-app-pub-3940256099942544/6300978111
-    "ca-app-pub-7148038859151468/4290279394"
-
-    //Android banner: ca-app-pub-7148038859151468/4290279394
-    //ios banner:  ca-app-pub-7148038859151468/3128708138
-  );
-  const [iosAppId, setIosAppId] = useState(
-    "ca-app-pub-7148038859151468/3128708138"
-
-    //Android banner: ca-app-pub-7148038859151468/4290279394
-    //ios banner:  ca-app-pub-7148038859151468/3128708138
-  );
+ 
 
   const [count, setCount] = useState(1);
   const datas = useContext(GlobalContext);
+  let testId = 'ca-app-pub-3940256099942544/6300978111'
+  let testIdIn = 'ca-app-pub-3940256099942544/1033173712'
 
+  let BannerAppId = Platform.select({
+    ios: "ca-app-pub-7148038859151468/3128708138", //ca-app-pub-7148038859151468/2619719471
+    android: "ca-app-pub-7148038859151468/4290279394", //ca-app-pub-7148038859151468/2236576097
+  });
   let AppId = Platform.select({
     ios: "ca-app-pub-7148038859151468/2619719471", //ca-app-pub-7148038859151468/2619719471
     android: "ca-app-pub-7148038859151468/2236576097", //ca-app-pub-7148038859151468/2236576097
@@ -149,6 +145,7 @@ const HomeCalculator = () => {
     setType(value);
     Keyboard.dismiss();
   };
+  loadAd()
 
   //Handles the calculate operation
   const handleCalculate = () => {
@@ -161,7 +158,6 @@ const HomeCalculator = () => {
       isPressed(true);
       return;
     }
-
     if (values % 1 != 0) {
       alert(i18n.t("dec"));
     }
@@ -174,7 +170,7 @@ const HomeCalculator = () => {
         isLoading(false);
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setCount(count + 1);
-        count % 5 == 0 ? AdMobInterstitial.showAdAsync() : null;
+        count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
 
         // setError(false)
         //console.log(service)
@@ -182,8 +178,9 @@ const HomeCalculator = () => {
         //console.log(error)
       });
   };
-  loadAd();
 
+ 
+  
   return (
     <View style={styles.container}>
       {/**Status Bar */}
@@ -316,25 +313,11 @@ const HomeCalculator = () => {
           <Text style={{ color: "grey", textAlign: "center" }}>
             {i18n.t("instr")}
           </Text>
-          {Platform.OS == "ios" ? (
             <AdMobBanner
-              style={
-                Platform.OS == "ios" && Dimensions.get("window").height > 895
-                  ? { top: 200 }
-                  : { top: 45 }
-              }
               bannerSize="banner"
-              adUnitID={androidAppId}
+              adUnitID={BannerAppId}
               serverPersonalizedAds={false}
             />
-          ) : (
-            <AdMobBanner
-              style={{ top: 180 }}
-              bannerSize="banner"
-              adUnitID={iosAppId}
-              serverPersonalizedAds={false}
-            />
-          )}
         </View>
       </View>
       {/**Adds goes here */}

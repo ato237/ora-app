@@ -2,13 +2,14 @@
   "expo": {
     "name": "Orramo",
     "slug": "Orramo-apk",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#14213D"
+      "backgroundColor": "#14213D",
+      "userInterfaceStyle": "automatic"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -18,30 +19,33 @@
     ],
     "ios": {
       "bundleIdentifier": "com.atoproduction.orramo",
-      "buildNumber": "1.0.0",
+      "buildNumber": "1.0.5",
       "supportsTablet": true,
+      "userInterfaceStyle": "light",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-7148038859151468~4633361491"
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app uses localization to check the users country and device language in order to give the proper available translations in-app.",
+        "NSUserTrackingUsageDescription": "This app uses tracking inorder to set the language either authomatically or manually and to serve ads"
       }
+      
     },
     "android": {
-      "versionCode": 1,
+      "versionCode": 4,
       "package": "com.atoproduction.orramo",
+      "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#14213D"
       },
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-7148038859151468~445224671"
+        "googleMobileAdsAppId": "ca-app-pub-7148038859151468~4452246712"
       },
       "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "onesignal-expo-plugin"
-      
-    ]
+    }
   }
 }

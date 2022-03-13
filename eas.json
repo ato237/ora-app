@@ -13,6 +13,15 @@
     "production": {}
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId":"tonybradpit@gmail.com",
+        "ascAppId":"1613760471",
+        "appleTeamId":"34W34PZWK5"
+      },
+      "android":{
+        "serviceAccountKeyPath": "./303206162105-aa97985db623.json"
+      }
+    }
   }
 }
