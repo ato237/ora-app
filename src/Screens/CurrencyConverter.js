@@ -18,16 +18,8 @@ import { Avatar } from "react-native-elements";
 import i18n from "../Data/translation";
 import { AdMobBanner, AdMobInterstitial } from "expo-ads-admob";
 import * as Device from "expo-device";
-import * as Notifications from "expo-notifications";
 import numbro from "numbro";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
 
 const CurrencyConverter = ({ navigation }) => {
   const datas = useContext(GlobalContext);
@@ -38,42 +30,17 @@ const CurrencyConverter = ({ navigation }) => {
   const [cal, isCalc] = useState(false);
   const [count, setCount] = useState(1);
 
-  let testId = 'ca-app-pub-3940256099942544/6300978111'
-  let testIdIn = 'ca-app-pub-3940256099942544/8691691433'
+  let testId = "ca-app-pub-3940256099942544/6300978111";
+  let testIdIn = "ca-app-pub-3940256099942544/8691691433";
 
   let BannerAppId = Platform.select({
     ios: "ca-app-pub-7148038859151468/3128708138", //ca-app-pub-7148038859151468/2619719471
     android: "ca-app-pub-7148038859151468/4290279394", //ca-app-pub-7148038859151468/2236576097
   });
 
-  const [expoPushToken, setExpoPushToken] = useState("");
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
-
-  useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
-    // This listener is fired whenever a notification is received while the app is foregrounded
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
-
-    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {});
-
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
-
-  let AppId = Platform.select({//ca-app-pub-3940256099942544/8691691433
+  
+  let AppId = Platform.select({
+    //ca-app-pub-3940256099942544/8691691433
     ios: "ca-app-pub-7148038859151468/2619719471", //ca-app-pub-7148038859151468/2619719471
     android: "ca-app-pub-7148038859151468/2236576097", //ca-app-pub-7148038859151468/2236576097
   });
@@ -81,16 +48,11 @@ const CurrencyConverter = ({ navigation }) => {
   let loadAd = async () => {
     await AdMobInterstitial.setAdUnitID(AppId);
     await AdMobInterstitial.requestAdAsync();
-   
   };
 
   AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => {
     loadAd();
   });
-
-  
- 
-  loadAd()
 
   //Handles the calculate operation
   const handleConvert = () => {
@@ -134,7 +96,16 @@ const CurrencyConverter = ({ navigation }) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
-
+  const decimalCount = num => {
+    // Convert to String
+    const numStr = String(num);
+    // String Contains Decimal
+    if (numStr.includes('.')) {
+       return numStr.split('.')[1].length;
+    };
+    // String Does Not Contain Decimal
+    return 0;
+ }
   return (
     <View style={styles.container}>
       <View style={styles.calculatorArea}>
@@ -158,7 +129,7 @@ const CurrencyConverter = ({ navigation }) => {
               <Text key={id} style={styles.result}>
                 {numbro(item.results).format({
                   thousandSeparated: true,
-                  mantissa: 2, // number of decimals displayed
+                  mantissa: decimalCount(item.results) > 3 ? 4 : 2, // number of decimals displayed
                 })}{" "}
                 <Text style={{ fontSize: 18 }}>{datas.toCurrency.code}</Text>
               </Text>
@@ -224,7 +195,7 @@ const CurrencyConverter = ({ navigation }) => {
                 style={{
                   fontSize: 18,
                   fontWeight: "bold",
-                  top: 2,
+                  top: Platform.OS == "ios"? 5: 2,
                   paddingLeft: 15,
                 }}
               >
@@ -271,7 +242,7 @@ const CurrencyConverter = ({ navigation }) => {
                 style={{
                   fontSize: 18,
                   fontWeight: "bold",
-                  top: 2,
+                  top: Platform.OS == "ios"? 5: 2,
                   paddingLeft: 15,
                 }}
               >
@@ -311,11 +282,11 @@ const CurrencyConverter = ({ navigation }) => {
         <Text style={{ color: "grey", textAlign: "center" }}>
           {i18n.t("instr2")}
         </Text>
-          <AdMobBanner
-            bannerSize="banner"
-            adUnitID={BannerAppId}
-            serverPersonalizedAds={false}
-          />
+        <AdMobBanner
+          bannerSize="banner"
+          adUnitID={BannerAppId}
+          serverPersonalizedAds={false}
+        />
       </View>
     </View>
   );
@@ -425,33 +396,3 @@ async function sendPushNotification(expoPushToken) {
   });
 }
 
-async function registerForPushNotificationsAsync() {
-  let token;
-  if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-  } else {
-    alert("Must use physical device for Push Notifications");
-  }
-
-  if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
-  }
-
-  return token;
-}

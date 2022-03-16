@@ -19,7 +19,6 @@ import i18n from "../Data/translation";
 import { AdMobBanner, AdMobInterstitial } from "expo-ads-admob";
 import { GlobalContext } from "../context/reducers/Provider";
 import numbro from "numbro";
-import { BannerAd } from "expo-ads-facebook";
 
 //This array contains the different service names along with their images
 export const services = [
@@ -145,7 +144,6 @@ const HomeCalculator = () => {
     setType(value);
     Keyboard.dismiss();
   };
-  loadAd()
 
   //Handles the calculate operation
   const handleCalculate = () => {
@@ -179,7 +177,6 @@ const HomeCalculator = () => {
       });
   };
 
- 
   
   return (
     <View style={styles.container}>
@@ -266,8 +263,7 @@ const HomeCalculator = () => {
               onChange={onChangeService}
               enableAvatar
               underlineColor
-              outlined
-              textInputStyle={{ backgroundColor: "white" }}
+              selectedItemTextStyle={{color:'red'}}
             />
           </View>
           <View style={styles.options}>
@@ -286,9 +282,8 @@ const HomeCalculator = () => {
               }
               value={type}
               onChange={onChangeType}
+              selectedItemTextStyle={{color:'red'}}
               underlineColor
-              outlined
-              textInputStyle={{ backgroundColor: "#fff" }}
             />
           </View>
           {/** Calculate Button */}
