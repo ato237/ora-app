@@ -13,21 +13,20 @@ import { FontAwesome } from "react-native-vector-icons";
 import { Ionicons } from "react-native-vector-icons";
 import * as Haptics from "expo-haptics";
 import axios from "axios";
-import { GlobalContext } from "../context/reducers/Provider";
+import { GlobalContext } from "../../context/reducers/Provider";
 import { Avatar } from "react-native-elements";
-import i18n from "../Data/translation";
+import i18n from "../../Data/translation";
 import { AdMobBanner, AdMobInterstitial } from "expo-ads-admob";
 import * as Device from "expo-device";
 import numbro from "numbro";
-
+import DetailsCurrency from "./Modals/DetailsCurrency";
 
 const CurrencyConverter = ({ navigation }) => {
   const datas = useContext(GlobalContext);
   const [amount, setAmount] = useState("1.0");
-  const [pressed, isPressed] = useState(false);
   const [data, setData] = useState([]);
-  const [loading, isLoading] = useState(false);
-  const [cal, isCalc] = useState(false);
+  const [change, setChange] = useState(false);
+
   const [count, setCount] = useState(1);
 
   let testId = "ca-app-pub-3940256099942544/6300978111";
@@ -38,7 +37,6 @@ const CurrencyConverter = ({ navigation }) => {
     android: "ca-app-pub-7148038859151468/4290279394", //ca-app-pub-7148038859151468/2236576097
   });
 
-  
   let AppId = Platform.select({
     //ca-app-pub-3940256099942544/8691691433
     ios: "ca-app-pub-7148038859151468/2619719471", //ca-app-pub-7148038859151468/2619719471
@@ -56,12 +54,12 @@ const CurrencyConverter = ({ navigation }) => {
 
   //Handles the calculate operation
   const handleConvert = () => {
-    isLoading(true);
-    isPressed(true);
+    datas.isLoading(true);
+    datas.isPressed(true);
     if (!amount.trim()) {
       alert(i18n.t("enter"));
-      isLoading(false);
-      isPressed(true);
+      datas.isLoading(false);
+      datas.isPressed(true);
       return;
     }
     axios
@@ -70,42 +68,43 @@ const CurrencyConverter = ({ navigation }) => {
       )
       .then((response) => {
         setData(response.data);
-        isLoading(false);
-        isCalc(true);
+        datas.isLoading(false);
+        datas.isCalc(true);
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setCount(count + 1);
         count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
         //setError(false)
         data.map((item) => datas.setUpdate(item.update));
         //console.log(error)
+        count % 4 == 0 ? setChange(!change) : null;
       });
 
-    count == 3 ? datas.setUpdatedCount(1) : null;
 
-    datas.update && datas.udatedCount == 0
-      ? sendPushNotification(expoPushToken)
-      : null;
   };
 
   const swapCurrent = () => {
-    isCalc(false);
-    isLoading(false);
-    isPressed(false);
+    datas.isCalc(false);
+    datas.isLoading(false);
+    datas.isPressed(false);
     datas.setFromCurrency(datas.toCurrency);
     datas.setToCurrency(datas.fromCurrency);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
-  const decimalCount = num => {
+  const decimalCount = (num) => {
     // Convert to String
     const numStr = String(num);
     // String Contains Decimal
-    if (numStr.includes('.')) {
-       return numStr.split('.')[1].length;
-    };
+    if (numStr.includes(".")) {
+      return numStr.split(".")[1].length;
+    }
     // String Does Not Contain Decimal
     return 0;
- }
+  };
+
+  useEffect(() => {
+    loadAd();
+  }, [change]);
   return (
     <View style={styles.container}>
       <View style={styles.calculatorArea}>
@@ -121,20 +120,27 @@ const CurrencyConverter = ({ navigation }) => {
             : datas.fromCurrency.code + " ="}
         </Text>
         <View style={styles.resultBox}>
-          {pressed == false ? (
+          {datas.pressed == false ? (
             <Text style={{ color: "grey" }}>{i18n.t("pressCalc")}</Text>
           ) : null}
-          {data.map((item, id) =>
-            cal && !loading ? (
-              <Text key={id} style={styles.result}>
-                {numbro(item.results).format({
-                  thousandSeparated: true,
-                  mantissa: decimalCount(item.results) > 3 ? 4 : 2, // number of decimals displayed
-                })}{" "}
-                <Text style={{ fontSize: 18 }}>{datas.toCurrency.code}</Text>
-              </Text>
-            ) : null
-          )}
+          <TouchableOpacity onPress={() => datas.setModalVisible2(true)}>
+            {data.map((item, id) =>
+              datas.cal && !datas.loading ? (
+                <Text key={id} style={styles.result}>
+                  <Ionicons
+                    name="information-circle-outline"
+                    size={15}
+                    color="white"
+                  />
+                  {numbro(item.results).format({
+                    thousandSeparated: true,
+                    mantissa: decimalCount(item.results) > 3 ? 4 : 2, // number of decimals displayed
+                  })}{" "}
+                  <Text style={{ fontSize: 18 }}>{datas.toCurrency.code}</Text>
+                </Text>
+              ) : null
+            )}
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.inputArea}>
@@ -195,7 +201,7 @@ const CurrencyConverter = ({ navigation }) => {
                 style={{
                   fontSize: 18,
                   fontWeight: "bold",
-                  top: Platform.OS == "ios"? 5: 2,
+                  top: Platform.OS == "ios" ? 5 : 2,
                   paddingLeft: 15,
                 }}
               >
@@ -242,7 +248,7 @@ const CurrencyConverter = ({ navigation }) => {
                 style={{
                   fontSize: 18,
                   fontWeight: "bold",
-                  top: Platform.OS == "ios"? 5: 2,
+                  top: Platform.OS == "ios" ? 5 : 2,
                   paddingLeft: 15,
                 }}
               >
@@ -262,7 +268,7 @@ const CurrencyConverter = ({ navigation }) => {
         {/**Convert Button */}
         <TouchableOpacity style={styles.button} onPress={handleConvert}>
           <Text style={styles.buttonText}>
-            {loading ? (
+            {datas.loading ? (
               <View>
                 <ActivityIndicator
                   style={
@@ -288,6 +294,7 @@ const CurrencyConverter = ({ navigation }) => {
           serverPersonalizedAds={false}
         />
       </View>
+      <DetailsCurrency />
     </View>
   );
 };
@@ -375,24 +382,4 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
 });
-
-async function sendPushNotification(expoPushToken) {
-  const message = {
-    to: expoPushToken,
-    sound: "default",
-    title: "Update Available",
-    body: "Update Orramo from the appstore!",
-    data: { someData: "goes here" },
-  };
-
-  await fetch("https://exp.host/--/api/v2/push/send", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Accept-encoding": "gzip, deflate",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(message),
-  });
-}
 

@@ -30,7 +30,12 @@ i18n.translations = {
         conve:"Convert",
         pressCalc:"Press Convert Button",
         currency:"Currencies",
-        settings:"Settings"
+        settings:"Settings",
+        orangeWithdrawal: "Orange Charge: ",
+        mtnWithdrawal: "MTN Momo Charge: ",
+        eumoneyWithdrawal: "EUMoney Charge: ",
+        totalToHave: "Total Amount To Have In Balance: ",
+        tax: "Tax"
 
     },
     fr: {
@@ -60,7 +65,13 @@ i18n.translations = {
       instr2: "Appuyer pour convertir",
       search:"Recherche devise",
       currency: 'Devises',
-      settings:"Réglages"
+      settings:"Réglages",
+      orangeWithdrawal: "Frais Orange Money: ",
+      mtnWithdrawal: "Frais MTN Momo: ",
+      eumoneyWithdrawal: "Frais EUMoney: ",
+      totalToHave: "Montant a avoir en total: ",
+      tax: "Taxe"
+
 
 
 

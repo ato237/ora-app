@@ -7,7 +7,7 @@ import {
   TextInput,
 } from "react-native";
 import React, { memo, useState, useContext } from "react";
-import AppLoading from 'expo-app-loading';
+import AppLoading from "expo-app-loading";
 import data from "./countries";
 import { Avatar } from "react-native-elements";
 import { GlobalContext } from "../context/reducers/Provider";
@@ -27,6 +27,9 @@ const Item = ({ name, code, currencyName, flag }) => {
       : datas.setToCurrency({ name, code, currencyName, flag });
 
     navigation.navigate(i18n.t("con"));
+    datas.isPressed(false);
+    datas.isCalc(false);
+    datas.isLoading(false);
   };
   return (
     <TouchableOpacity style={styles.entity} onPress={handleCurrency}>
@@ -62,9 +65,9 @@ const CurrencyList = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [filterData, setFilterData] = useState(data);
   const [masterData, setMasterData] = useState(data);
-  const[ready, isReady] = useState(false)
+  const [ready, isReady] = useState(false);
   const datas = useContext(GlobalContext);
-  const[Search,setSearch] = useState("")
+  const [Search, setSearch] = useState("");
 
   const renderItem = ({ item }) => {
     if (searchPhrase === "") {
@@ -121,40 +124,45 @@ const CurrencyList = () => {
     }
   };
 
-
   const searchFilter = (text) => {
     if (text) {
       const newData = masterData.filter((item) => {
-        if(item.currency.code
-          .toUpperCase()
-          .includes(text.toUpperCase().trim().replace(/\s/g, ""))){
-        const itemData = item.currency.code
-          ? item.currency.code.toUpperCase()
-          : "".toUpperCase();
-
-        const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1;
-        }
-          if( item.name
-          .toUpperCase()
-          .includes(text.toUpperCase().trim().replace(/\s/g, ""))){
-            const itemData = item.name
-            ? item.name.toUpperCase()
+        if (
+          item.currency.code
+            .toUpperCase()
+            .includes(text.toUpperCase().trim().replace(/\s/g, ""))
+        ) {
+          const itemData = item.currency.code
+            ? item.currency.code.toUpperCase()
             : "".toUpperCase();
-  
+
           const textData = text.toUpperCase();
           return itemData.indexOf(textData) > -1;
-          }
-          if( item.currency.name
+        }
+        if (
+          item.name
             .toUpperCase()
-            .includes(text.toUpperCase().trim().replace(/\s/g, ""))){
-              const itemData = item.name
-              ? item.currency.name.toUpperCase()
-              : "".toUpperCase();
-    
-            const textData = text.toUpperCase();
-            return itemData.indexOf(textData) > -1;
-            }
+            .includes(text.toUpperCase().trim().replace(/\s/g, ""))
+        ) {
+          const itemData = item.name
+            ? item.name.toUpperCase()
+            : "".toUpperCase();
+
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        }
+        if (
+          item.currency.name
+            .toUpperCase()
+            .includes(text.toUpperCase().trim().replace(/\s/g, ""))
+        ) {
+          const itemData = item.name
+            ? item.currency.name.toUpperCase()
+            : "".toUpperCase();
+
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        }
       });
       setFilterData(newData);
       setSearch(text);
@@ -164,11 +172,10 @@ const CurrencyList = () => {
     }
   };
 
-  const _loadAssetsAsync = async()=>{
-    const imageAssets = cacheImages(data.flag)
+  const _loadAssetsAsync = async () => {
+    const imageAssets = cacheImages(data.flag);
     await Promise.all([...imageAssets]);
-
-  }
+  };
 
   return (
     <View
@@ -176,14 +183,14 @@ const CurrencyList = () => {
         setClicked(false);
       }}
     >
-       <TextInput
+      <TextInput
         style={styles.TextInputStyle}
-        placeholder={i18n.t('search')}
+        placeholder={i18n.t("search")}
         value={Search}
         underlineColorAndroid="transparent"
         onChangeText={(text) => searchFilter(text)}
-  />
-  {/*
+      />
+      {/*
       <SearchBar
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
@@ -199,15 +206,14 @@ const CurrencyList = () => {
         updateCellsBatchingPeriod={20}
         initialNumToRender={15}
       />
-      {!ready?  <AppLoading
+      {!ready ? (
+        <AppLoading
           startAsync={_loadAssetsAsync}
           onFinish={() => isReady(true)}
           onError={console.warn}
         />
-      : null}
- 
+      ) : null}
     </View>
-    
   );
 };
 

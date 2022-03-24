@@ -2,7 +2,7 @@
   "expo": {
     "name": "Orramo",
     "slug": "Orramo-apk",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,7 +19,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.atoproduction.orramo",
-      "buildNumber": "1.0.6",
+      "buildNumber": "1.0.7",
       "supportsTablet": true,
       "userInterfaceStyle": "light",
       "config": {
@@ -32,7 +32,7 @@
       
     },
     "android": {
-      "versionCode": 6,
+      "versionCode": 7,
       "package": "com.atoproduction.orramo",
       "userInterfaceStyle": "light",
       "adaptiveIcon": {
