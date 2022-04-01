@@ -6,15 +6,20 @@ import {
   StatusBar,
   Platform,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TextInput } from "react-native";
 import icon from "../../images/adaptive-icon.png";
 import { TouchableOpacity } from "react-native";
 import { Feather } from "react-native-vector-icons";
 import * as Animatable from "react-native-animatable";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GlobalContext } from "../../context/reducers/Provider";
 
 const Login = ({navigation}) => {
+  const datas = useContext(GlobalContext);
+
   const [data, setData] = React.useState({
     email: "",
     password: "",
@@ -50,6 +55,23 @@ const Login = ({navigation}) => {
       secureTextEntry: !data.secureTextEntry,
     });
   };
+
+  const auth = getAuth();
+
+
+  const handleSignIn =()=>{
+      signInWithEmailAndPassword(auth,data.email, data.password)
+        .then((userCredentials) => {
+          const user = userCredentials.user;
+          console.log(user.email);
+          datas.storeData(userCredentials);
+          navigation.navigate('BottomTab');
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -108,7 +130,7 @@ const Login = ({navigation}) => {
           </Text>
         </TouchableOpacity>
         <View style={styles.bottomContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleSignIn}>
             <View>
               <Text
                 style={{ textAlign: "center", fontSize: 17, color: "white" }}

@@ -18,18 +18,42 @@ import VirtualCards from "../Screens/Utility/VirtualCards";
 import AccountHistory from "../Screens/Utility/AccountHistory";
 import CurrencyConverter from "../Screens/Calculators/CurrencyConverter";
 import HomeCalculator from "../Screens/Calculators/HomeCalculator";
+import { useContext } from "react";
+import { GlobalContext } from "../context/reducers/Provider";
+import ChatRoom from "../Screens/Main/Components/ChatRoom";
+import { isReadyRef, navigationRef } from "../RootNavigation";
 
-export default function Navigaton() {
+export default function Navigaton(ref) {
   const Stack = createNativeStackNavigator();
+  const datas = useContext(GlobalContext);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+    >
       <Stack.Navigator>
         <Stack.Screen
           options={{ headerShown: false }}
           name="welcome"
           component={WelcomeScreen}
         />
+
+        <Stack.Screen
+          name="BottomTab"
+          component={BottomTab}
+          options={{
+            title: "Orramo",
+            headerBackVisible: false,
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#14213D",
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            headerTintColor: "#EEB40A",
+          }}
+        />
+
         <Stack.Screen
           options={{ headerShown: false }}
           name="login"
@@ -76,6 +100,25 @@ export default function Navigaton() {
           component={Transfer}
         />
         <Stack.Screen
+          options={({ route }) => ({
+            title: datas.title,
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#14213D",
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            headerTitleStyle: {
+              color: "#fff",
+              fontSize: 20,
+            },
+            headerTintColor: "#fff",
+          })}
+          name="chatRoom"
+          component={ChatRoom}
+        />
+
+        <Stack.Screen
           options={{ headerShown: false }}
           name="virtualCards"
           component={VirtualCards}
@@ -87,14 +130,12 @@ export default function Navigaton() {
               backgroundColor: "#14213D",
               justifyContent: "center",
               alignItems: "center",
-              fontSize:15
-
             },
             headerTitleStyle: {
               color: "#B0B5BE",
+              fontSize: 15,
             },
             headerTintColor: "#fff",
-
           }}
           name="Currency Converter"
           component={CurrencyConverter}
@@ -109,10 +150,9 @@ export default function Navigaton() {
             },
             headerTitleStyle: {
               color: "#B0B5BE",
-              fontSize:15
+              fontSize: 15,
             },
             headerTintColor: "#fff",
-
           }}
           name="Charges Calculator"
           component={HomeCalculator}
@@ -134,22 +174,6 @@ export default function Navigaton() {
         />
 
         <Stack.Screen
-          name="BottomTab"
-  
-          component={BottomTab}
-          options={{
-            headerBackVisible:false,
-            headerShown: true,
-            headerStyle: {
-              backgroundColor: "#14213D",
-              justifyContent: "center",
-              alignItems: "center",
-            },
-            headerTintColor: "#fff",
-            title: "Orramo"
-          }}
-        />
-        <Stack.Screen
           options={{
             title: i18n.t("currency"),
 
@@ -159,9 +183,8 @@ export default function Navigaton() {
               alignItems: "center",
             },
             headerTintColor: "#fff",
-
           }}
-          name="currency"
+          name={"currency"}
           component={CurrencyList}
         />
       </Stack.Navigator>

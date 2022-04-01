@@ -13,13 +13,30 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Avatar } from "react-native-elements";
 import { GlobalContext } from "../../context/reducers/Provider";
 import { Ionicons } from "react-native-vector-icons";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const PhoneSignup = ({ navigation }) => {
   const [phoneNumber, setphoneNumber] = useState("");
   const datas = useContext(GlobalContext);
 
   const handlePhoneNumber = () => {
-    setFirstName(phoneNumber);
+    setphoneNumber(phoneNumber);
+  };
+  const auth = getAuth();
+
+  const addNumber = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (user != null) {
+        const userRef = doc(db, "users", user.uid);
+        return updateDoc(userRef, {
+          phoneNumber: phoneNumber,
+        });
+      }
+    });
+    navigation.navigate("BottomTab");
+
   };
 
   return (
@@ -60,15 +77,13 @@ const PhoneSignup = ({ navigation }) => {
             returnKeyType="done"
             clearButtonMode="while-editing"
             autoCapitalize="none"
-            onChangeText={handlePhoneNumber}
+            onChangeText={(value) => setphoneNumber(value)}
+            value={phoneNumber}
           />
         </View>
 
         <View style={styles.bottomContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate("BottomTab")}
-          >
+          <TouchableOpacity style={styles.button} onPress={addNumber}>
             <View>
               <Text
                 style={{ textAlign: "center", fontSize: 17, color: "white" }}
@@ -78,7 +93,7 @@ const PhoneSignup = ({ navigation }) => {
             </View>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("BottomTab")}>
+        <TouchableOpacity>
           <Text
             style={{
               textAlign: "center",

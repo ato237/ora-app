@@ -72,14 +72,12 @@ const CurrencyConverter = ({ navigation }) => {
         datas.isCalc(true);
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setCount(count + 1);
-        count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
+        //count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
         //setError(false)
         data.map((item) => datas.setUpdate(item.update));
         //console.log(error)
         count % 4 == 0 ? setChange(!change) : null;
       });
-
-
   };
 
   const swapCurrent = () => {
@@ -320,7 +318,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#14213D",
     paddingTop:
-      Platform.OS == "ios" && Dimensions.get("window").height > 895 ? 80 : 50,
+      Platform.OS == "ios" && Dimensions.get("window").height > 895 ? 5 : 5,
   },
   inputArea: {
     marginTop: 5,
@@ -367,7 +365,7 @@ const styles = StyleSheet.create({
     left: 10,
   },
   buttonText: {
-    color: "#000",
+    color: "#fff",
     fontSize: 20,
     padding: 10,
     textAlign: "center",
@@ -375,11 +373,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button: {
-    backgroundColor: "#FFA500",
+    backgroundColor: "#0053C5",
     alignItems: "center",
     alignContent: "center",
     marginTop: 30,
     borderRadius: 4,
   },
 });
-

@@ -5,16 +5,24 @@ import {
   Image,
   StatusBar,
   Platform,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TextInput } from "react-native";
 import icon from "../../images/adaptive-icon.png";
 import { TouchableOpacity } from "react-native";
 import { Feather } from "react-native-vector-icons";
 import * as Animatable from "react-native-animatable";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GlobalContext } from "../../context/reducers/Provider";
+import { db } from "../../firebase";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const Signup = ({navigation}) => {
+  const datas = useContext(GlobalContext);
+
   const [data, setData] = React.useState({
     email: "",
     password: "",
@@ -64,6 +72,40 @@ const Signup = ({navigation}) => {
       confirmSecureTextEntry: !data.confirmSecureTextEntry,
     });
   };
+
+  const auth = getAuth();
+
+
+  const handleSignUp =()=>{
+
+    if (data.confirmPassword != data.password) {
+      return Alert.alert("Passwords don't match");
+    } else {
+      createUserWithEmailAndPassword(auth,data.email, data.password)
+        .then((userCredentials) => {
+          createUser(userCredentials.user.uid)
+          const user = userCredentials.user;
+          console.log(user.email);
+          navigation.navigate('usernamesignup');
+        })
+        .catch((error) => {
+          Alert(error.message);
+        });
+    }
+}
+
+const createUser = (id) => {
+  const userRef = doc(db, "users", id);
+  return setDoc(userRef, {
+    created: serverTimestamp(),
+    name: userName,
+    picture: photo,
+    email: email,
+    gender:gender,
+    AccountBalance: 0
+  });
+};
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -119,7 +161,7 @@ const Signup = ({navigation}) => {
         </View>
 
         <View style={styles.bottomContainer}>
-          <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate("usernamesignup")}>
+          <TouchableOpacity style={styles.button} onPress={handleSignUp}>
             <View>
               <Text
                 style={{ textAlign: "center", fontSize: 17, color: "white" }}

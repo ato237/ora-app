@@ -172,7 +172,7 @@ const HomeCalculator = ({ navigation }) => {
         isLoading(false);
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setCount(count + 1);
-        count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
+       // count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
         datas.setSevirce(service);
         datas.setValues(values);
         datas.setType(type);
@@ -413,14 +413,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: "#FFA500",
+    backgroundColor: "#0053C5",
     alignItems: "center",
     alignContent: "center",
     marginTop: 15,
     borderRadius: 4,
   },
   buttonText: {
-    color: "#000",
+    color: "#fff",
     fontSize: 20,
     padding: 10,
     textAlign: "center",

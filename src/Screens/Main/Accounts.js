@@ -8,28 +8,60 @@ import {
   Text,
   View,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
 import picture from "../../images/ATO.jpg";
 import pic3 from "../../images/Ker.jpg";
 import pic2 from "../../images/Oli.jpg";
-
 import Feature from "./Components/Feature";
-import { Ionicons } from "react-native-vector-icons";
-import { MaterialIcons } from "react-native-vector-icons";
-import HomeContactsSection from "./Components/HomeContactsSection";
+import { GlobalContext } from "../../context/reducers/Provider";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import numbro from "numbro";
 
 const Accounts = ({ navigation }) => {
-  return (
-    <SafeAreaView>
-      <StatusBar backgroundColor="#14213D" barStyle="light-content" />
+  const datas = useContext(GlobalContext);
 
-      <ScrollView>
+  return (
+    <View>
+     <View
+        style={{
+          backgroundColor: "#14213D",
+          padding: Platform.OS == "ios" ? 25 : 15,
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection:'row'
+        }}
+      >
+        <Text
+          style={{
+            color: "white",
+            fontSize: 20,
+            top: Platform.OS == "ios" ? 10 : 0,
+          }}
+        >
+          Orramo
+        </Text>
+        <TouchableOpacity
+          style={{
+            borderRadius: 1000,
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            zIndex: 999,
+            top: Platform.OS == "ios" ? 10 : -8,
+            right: 0,
+            margin: 20,
+          }}
+        >
+          <Ionicons name="add-circle-outline" size={30} color="#fff" />
+        </TouchableOpacity>
+      </View>
+      <ScrollView style={{marginBottom:50}}>
         <View style={styles.container}>
           <View style={styles.amountContainer}>
             <View style={styles.amountTitle}>
-              <Text style={{ color: "white", fontSize: 22 }}>Account</Text>
+              <Text style={{ color: "white", fontSize: 22 }}>Overview</Text>
             </View>
             <Text style={{ color: "grey", paddingHorizontal: 10, top: 10 }}>
               Current Balance:
@@ -37,7 +69,10 @@ const Accounts = ({ navigation }) => {
 
             <View style={styles.amountContent}>
               <Text style={{ fontSize: 25, fontWeight: "bold", width: "75%" }}>
-                XAF 5,000,000
+                {numbro(datas.userData.AccountBalance).format({
+                thousandSeparated: true,
+                mantissa: 0, // number of decimals displayed
+              })} XAF
               </Text>
               <TouchableOpacity
                 style={styles.viewStyle}
@@ -139,7 +174,7 @@ const Accounts = ({ navigation }) => {
                     containerStyle={{ right: 59 }}
                     size="medium"
                     rounded
-                    source={pic3}
+                    source={{ uri: datas.userData.picture }}
                   />
                   <Text
                     style={{
@@ -150,11 +185,11 @@ const Accounts = ({ navigation }) => {
                       position: "absolute",
                     }}
                   >
-                    KerryAnne
+                    {datas.userData.firstName}
                   </Text>
                 </View>
                 <Text
-                  style={{ fontWeight: "bold", color: "#31A351", bottom: 38 }}
+                  style={{ fontWeight: "bold", color: "#0053C5", bottom: 38 }}
                 >
                   <Text style={{ color: "#B0B5BE" }}>Recent: </Text>
                   XAF 15,000,000
@@ -213,19 +248,21 @@ const Accounts = ({ navigation }) => {
                     Oliver
                   </Text>
                 </View>
-                <Text style={{ fontWeight: "bold", color: "blue", bottom: 38 }}>
+                <Text
+                  style={{ fontWeight: "bold", color: "#0053C5", bottom: 38 }}
+                >
                   <Text style={{ color: "#B0B5BE" }}>Recent: </Text>
-                  XAF 5,000
+                  XAF 10,000,000
                 </Text>
               </View>
               <Text style={{ left: 70, bottom: 12 }}>
-                Yo bro I've sent the money for market...
+                Yo ATO you are the best thanks for the ...
               </Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

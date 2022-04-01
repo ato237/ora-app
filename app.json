@@ -2,8 +2,23 @@
   "expo": {
     "name": "Orramo",
     "slug": "Orramo-apk",
+    "scheme": "exp",
+    "facebookScheme":"fb1213603305321250",
     "version": "1.0.2",
     "orientation": "portrait",
+    "plugins": [
+      [
+        "expo-facebook",
+        {
+          "userTrackingPermission": false
+        }
+      ],[
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",

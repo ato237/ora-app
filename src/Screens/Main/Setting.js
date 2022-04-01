@@ -1,16 +1,146 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Platform, PlatformColor, StyleSheet, Text, View } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { Avatar } from "react-native-elements";
+import { GlobalContext } from "../../context/reducers/Provider";
+import { TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { db, storage } from "../../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { setUserDataAsync } from "expo-facebook";
+import { LogBox } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  uploadBytes,
+} from "firebase/storage";
+import { async } from "@firebase/util";
 
-const Settingss = () => {
+LogBox.ignoreLogs(["Setting a timer"]);
+
+const Settingss = ({ navigation }) => {
+  const [file, setFile] = useState("");
+  const [uid, setUid] = useState("");
+  const metadata = {
+    contentType: "image/jpeg",
+  };
+  const PickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.1,
+    });
+
+    if (!result.cancelled) {
+      uploadFile(result.uri);
+    }
+  };
+  const uploadFile = async (file) => {
+    const name = datas.userData.created;
+    const storageRef = ref(storage, "profilepic.jpg" + name);
+    const img = await fetch(file);
+    const bytes = await img.blob();
+
+    uploadBytes(storageRef, bytes);
+
+    getDownloadURL(storageRef).then((downloadURL) => {
+      console.log(downloadURL);
+      onAuthStateChanged(auth, (user) => {
+        if (user != null) {
+          const userRef = doc(db, "users", user.uid);
+           updateDoc(userRef, {
+            picture: downloadURL,
+          });
+          getDoc(userRef).then((docSnap) => {
+            datas.setUserData(docSnap.data());
+          });
+          console.log(datas.userData)
+        }
+       
+      });
+    });
+  };
+  // file && uploadFile();
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry we need camera roll permissions to make this work");
+        }
+      }
+    })();
+  }, []);
+  const datas = useContext(GlobalContext);
+  const auth = getAuth();
+  const [userData, setUserData] = useState([{}]);
+
+  const logout = async () => {
+    auth
+      .signOut()
+      .then(() => {
+        console.log("signed out");
+      })
+      .catch((error) => alert(error.message));
+    AsyncStorage.getAllKeys().then((keys) => AsyncStorage.multiRemove(keys));
+    navigation.navigate("welcome");
+  };
+
+  // Get a reference to the storage service, which is used to create references in your storage bucket
+
+  // Create a storage reference from our storage service
+
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={{ color: "white", marginHorizontal: 20 }}>
-          Settings
-        </Text>
+      <View
+        style={{
+          backgroundColor: "#14213D",
+          padding: Platform.OS == "ios" ? 20 : 10,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        
       </View>
       <View style={styles.options}>
-        <Text style={{fontSize:20}}>Select Language </Text>
+        <TouchableOpacity
+          style={{ justifyContent: "center", alignItems: "center" }}
+        >
+          <Avatar
+            containerStyle={{ width: 250, height: 250 }}
+            size="large"
+            rounded
+            source={{ uri: datas.userData.picture }}
+          />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 25, textAlign: "center" }}>
+          {datas.userData.name == null
+            ? datas.userData.firstName + " " + datas.userData.lastName
+            : datas.userData.name}
+        </Text>
+        <TouchableOpacity
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "blue",
+          }}
+          onPress={PickImage}
+        >
+          <Text style={{ color: "white", padding: 20 }}>Edit Image</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={{ backgroundColor: "#0053C5", padding: 20 }}
+          onPress={logout}
+        >
+          <Text style={{ textAlign: "center", color: "#fff" }}>Sign Out</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -26,7 +156,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#14213D",
     padding: 15,
   },
-  options:{
-    padding: 20
-  }
+  options: {
+    padding: 20,
+    
+  },
 });
