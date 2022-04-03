@@ -8,17 +8,18 @@ import {
   Keyboard,
   LogBox,
   ActivityIndicator,
-  Dimensions,
 } from "react-native";
-import React, { useState, useContext,useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { TextInput } from "react-native-paper";
 import { Dropdown } from "sharingan-rn-modal-dropdown";
 import axios from "axios";
 import * as Haptics from "expo-haptics";
-import i18n from "../Data/translation";
+import i18n from "../Data/translation"
 import { AdMobBanner, AdMobInterstitial } from "expo-ads-admob";
-import { GlobalContext } from "../context/reducers/Provider";
+import { GlobalContext } from "../context/reducers/Provider"
 import numbro from "numbro";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import Details from "./Modals/Details";
 
 //This array contains the different service names along with their images
 export const services = [
@@ -92,22 +93,20 @@ export const chargeEuType = [
   },
 ];
 
-const HomeCalculator = () => {
+const HomeCalculator = ({ navigation }) => {
   LogBox.ignoreAllLogs(true);
   const [values, setValues] = useState("10000"); //The amount entered by the user
   const [service, setSevirce] = useState("orange"); //Handles the services
   const [type, setType] = useState("withdraw"); //Handles the operation
-  const [data, setData] = useState([]); //Handles the data gotten from the apo
   const [error, setError] = useState(false); //miscellaneous
   const [changed, isChanged] = useState(false); //I used this variable to check if a new service is selected
   const [loading, isLoading] = useState(false); //This is a boolean used to tell whether the api has given out a response
   const [pressed, isPressed] = useState(false);
- 
-
   const [count, setCount] = useState(1);
+  const [change, setChange] = useState(false);
   const datas = useContext(GlobalContext);
-  let testId = 'ca-app-pub-3940256099942544/6300978111'
-  let testIdIn = 'ca-app-pub-3940256099942544/1033173712'
+  let testId = "ca-app-pub-3940256099942544/6300978111";
+  let testIdIn = "ca-app-pub-3940256099942544/1033173712";
 
   let BannerAppId = Platform.select({
     ios: "ca-app-pub-7148038859151468/3128708138", //ca-app-pub-7148038859151468/2619719471
@@ -150,6 +149,8 @@ const HomeCalculator = () => {
     isPressed(true);
     isLoading(true);
     isChanged(false);
+    Keyboard.dismiss();
+
     if (!values.trim()) {
       alert(i18n.t("enter"));
       isLoading(false);
@@ -161,15 +162,21 @@ const HomeCalculator = () => {
     }
 
     axios
-      .post(`https://orramo-backend2.herokuapp.com/api/calculate/${service}/${values}/${type}`)
+      .post(
+        `https://orramo-backend2.herokuapp.com/api/calculate/${service}/${values}/${type}`
+      )
       .catch((error) => setError(true))
       .then((response) => {
-        setData(response.data);
+        datas.setData(response.data);
         isLoading(false);
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setCount(count + 1);
         count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
+        datas.setSevirce(service);
+        datas.setValues(values);
+        datas.setType(type);
 
+        count % 4 == 0 ? setChange(!change) : null;
         // setError(false)
         //console.log(service)
         //console.log(type)
@@ -177,7 +184,9 @@ const HomeCalculator = () => {
       });
   };
 
-  
+  useEffect(() => {
+    loadAd();
+  }, [change]);
   return (
     <View style={styles.container}>
       {/**Status Bar */}
@@ -195,39 +204,57 @@ const HomeCalculator = () => {
           {!values.trim() ? null : " XAF ="}
         </Text>
         {/** Calculation Results */}
+
         <View style={styles.resultBox}>
           {!pressed ? (
             <Text style={{ color: "grey" }}>{i18n.t("press")}</Text>
           ) : null}
-          {data.map((datum) =>
-            service == "orange" && !changed ? (
-              <Text key={1} style={styles.result}>
-                {numbro(datum.orangeCharge).format({
-                  thousandSeparated: true,
-                  mantissa: 0, // number of decimals displayed
-                })}{" "}
-                <Text style={{ fontSize: 14 }}>XAF</Text>
-              </Text>
-            ) : service == "mtn" && !changed ? (
-              <Text key={3} style={styles.result}>
-                {numbro(datum.mtnCharge).format({
-                  thousandSeparated: true,
-                  mantissa: 0, // number of decimals displayed
-                })}{" "}
-                <Text style={{ fontSize: 14 }}>XAF</Text>
-              </Text>
-            ) : service == "eumoney" && !changed ? (
-              <Text key={2} style={styles.result}>
-                {numbro(datum.euCharge).format({
-                  thousandSeparated: true,
-                  mantissa: 0, // number of decimals displayed
-                })}{" "}
-                <Text style={{ fontSize: 14 }}>XAF</Text>
-              </Text>
-            ) : (
-              <Text style={{ color: "grey" }}>{i18n.t("press")}</Text>
-            )
-          )}
+          <TouchableOpacity onPress={() => datas.setModalVisible(true)}>
+            {datas.data.map((datum) =>
+              service == "orange" && !changed ? (
+                <Text key={1} style={styles.result}>
+                  <Ionicons
+                    name="information-circle-outline"
+                    size={15}
+                    color="white"
+                  />
+                  {numbro(datum.orangeCharge).format({
+                    thousandSeparated: true,
+                    mantissa: 0, // number of decimals displayed
+                  })}{" "}
+                  <Text style={{ fontSize: 14 }}>XAF</Text>
+                </Text>
+              ) : service == "mtn" && !changed ? (
+                <Text key={3} style={styles.result}>
+                  <Ionicons
+                    name="information-circle-outline"
+                    size={15}
+                    color="white"
+                  />
+                  {numbro(datum.mtnCharge).format({
+                    thousandSeparated: true,
+                    mantissa: 0, // number of decimals displayed
+                  })}{" "}
+                  <Text style={{ fontSize: 14 }}>XAF</Text>
+                </Text>
+              ) : service == "eumoney" && !changed ? (
+                <Text key={2} style={styles.result}>
+                  <Ionicons
+                    name="information-circle-outline"
+                    size={15}
+                    color="white"
+                  />
+                  {numbro(datum.euCharge).format({
+                    thousandSeparated: true,
+                    mantissa: 0, // number of decimals displayed
+                  })}{" "}
+                  <Text style={{ fontSize: 14 }}>XAF</Text>
+                </Text>
+              ) : (
+                <Text style={{ color: "grey" }}>{i18n.t("press")}</Text>
+              )
+            )}
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.values}>
@@ -236,7 +263,14 @@ const HomeCalculator = () => {
         <TextInput
           style={styles.input}
           value={values}
-          onChangeText={(values) => setValues(String(values))}
+          onChangeText={(values) => {
+            const validated = values.match(/^(\d*\.{0,1}\d{0,2}$)/)
+    if (validated) {
+      setValues(String(values));
+      datas.setValues(values);
+    }
+           
+          }}
           placeholder={i18n.t("enter")}
           placeholderStyle={{ fontSize: 20 }}
           keyboardType="numeric"
@@ -263,7 +297,7 @@ const HomeCalculator = () => {
               onChange={onChangeService}
               enableAvatar
               underlineColor
-              selectedItemTextStyle={{color:'red'}}
+              selectedItemTextStyle={{ color: "red" }}
             />
           </View>
           <View style={styles.options}>
@@ -282,7 +316,7 @@ const HomeCalculator = () => {
               }
               value={type}
               onChange={onChangeType}
-              selectedItemTextStyle={{color:'red'}}
+              selectedItemTextStyle={{ color: "red" }}
               underlineColor
             />
           </View>
@@ -308,13 +342,14 @@ const HomeCalculator = () => {
           <Text style={{ color: "grey", textAlign: "center" }}>
             {i18n.t("instr")}
           </Text>
-            <AdMobBanner
-              bannerSize="banner"
-              adUnitID={BannerAppId}
-              serverPersonalizedAds={false}
-            />
+          <AdMobBanner
+            bannerSize="banner"
+            adUnitID={BannerAppId}
+            serverPersonalizedAds={false}
+          />
         </View>
       </View>
+      <Details />
       {/**Adds goes here */}
     </View>
   );
@@ -331,8 +366,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#14213D",
-    paddingTop:
-      Platform.OS == "ios" && Dimensions.get("window").height > 895 ? 80 : 50,
+    paddingTop:50
+   
   },
   amountStyle: {
     fontSize: 15,
@@ -382,14 +417,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: "#FFA500",
+    backgroundColor: "#0053C5",
     alignItems: "center",
     alignContent: "center",
     marginTop: 15,
     borderRadius: 4,
   },
   buttonText: {
-    color: "#000",
+    color: "#fff",
     fontSize: 20,
     padding: 10,
     textAlign: "center",
