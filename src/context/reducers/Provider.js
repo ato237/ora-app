@@ -39,6 +39,7 @@ const GlobalProvider = ({ children }) => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [title, setTitle] = useState("Orramo");
   const [dataChat, setDataChat] = useState(chatData);
+  const[chatDatas,setChatDatas] = useState([]);
   const [chatId, setChatId] = useState();
   const [balance, setBalance] = useState("1,000,000");
   const [receivedAmount, setReceivedAmount] = useState("0");
@@ -131,7 +132,7 @@ const GlobalProvider = ({ children }) => {
         setStoredCredentials,
         storeData,
         logged,
-        isLogged,
+        isLogged,chatDatas,setChatDatas
       }}
     >
       {children}

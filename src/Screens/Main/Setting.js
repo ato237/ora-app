@@ -48,7 +48,6 @@ const Settingss = ({ navigation }) => {
     uploadBytes(storageRef, bytes);
 
     getDownloadURL(storageRef).then((downloadURL) => {
-      console.log(downloadURL);
       onAuthStateChanged(auth, (user) => {
         if (user != null) {
           const userRef = doc(db, "users", user.uid);
@@ -58,7 +57,6 @@ const Settingss = ({ navigation }) => {
           getDoc(userRef).then((docSnap) => {
             datas.setUserData(docSnap.data());
           });
-          console.log(datas.userData)
         }
        
       });

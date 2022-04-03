@@ -5,7 +5,7 @@ import { Ionicons } from "react-native-vector-icons";
 import { MaterialIcons } from "react-native-vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-const Feature = ({ title, icon, sizes, link, top }) => {
+const Feature = ({ title, icon, sizes, link, top,color }) => {
   navigation = useNavigation();
   return (
     <View style={{ justifyContent: "center", bottom: top }}>
@@ -17,7 +17,7 @@ const Feature = ({ title, icon, sizes, link, top }) => {
           style={styles.iconStyle}
           name={icon}
           size={35}
-          color="#14213D"
+          color={color}
         />
       </TouchableOpacity>
       <View style={{justifyContent:'center',alignItems:'center'}}>

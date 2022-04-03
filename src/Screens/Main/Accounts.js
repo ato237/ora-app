@@ -117,12 +117,15 @@ const Accounts = ({ navigation }) => {
                 icon="calculator"
                 sizes={70}
                 link="Charges Calculator"
+                color ="#5662F6"
               />
               <Feature
                 title="Currency Converter"
                 icon="cash"
                 sizes={70}
                 link="Currency Converter"
+                color ="#FFA500"
+
               />
 
               <Feature
@@ -130,12 +133,16 @@ const Accounts = ({ navigation }) => {
                 icon="receipt"
                 sizes={65}
                 link="airtime"
+                color ="#0053C5"
+
               />
               <Feature
                 title="Virtual Cards"
                 icon="card"
                 sizes={65}
                 link="virtualCards"
+                color ="#FF0101"
+
               />
               {/**Send Money Button */}
             </View>

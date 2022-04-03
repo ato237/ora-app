@@ -1,18 +1,20 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { MaterialIcons } from "react-native-vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const ChatTexts = ({ id, name, chat, seen, time, photo }) => {
+const ChatTexts = ({ id, name, chat, seen, time, photo,currentUser }) => {
+
+  const [curreesgntUser, setCurrentUser] = useState("false");
   return (
     <View style={styles.container}>
-      <View key={id} style={name == "me" ? styles.chatArea : styles.chatArea2}>
-        <View style={name == "me" ? styles.senderArea : styles.recieverArea}>
-          <Text style={name == "me" ? { color: "white" } : { color: "black" }}>
-            {chat}
+      <View key={id} style={currentUser ? styles.chatArea : styles.chatArea2}>
+        <View style={currentUser ? styles.senderArea : styles.recieverArea}>
+          <Text style={currentUser ? { color: "white" } : { color: "black" }}>
+            {currentUser? chat: chat}
           </Text>
           <View style={{ flexDirection: "row", marginTop: 8 }}>
-            {name == "me" ? (
+            {currentUser ? (
               <MaterialIcons
                 name={seen ? "done-all" : "done"}
                 size={15}

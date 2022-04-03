@@ -101,7 +101,6 @@ export default function Navigaton(ref) {
         />
         <Stack.Screen
           options={({ route }) => ({
-            title: datas.title,
             headerShown: false,
             headerStyle: {
               backgroundColor: "#14213D",

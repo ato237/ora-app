@@ -35,8 +35,9 @@ const Chats = ({
           onPressOut={() => setPressed(false)}
           onPressIn={() => setPressed(true)}
           onPress={() => {
-            datas.setTitle(name);
+            datas.setChatDatas([{ names: name, photos: photo }]);
             navigation.navigate("chatRoom");
+            console.log(datas.chatDatas)
           }}
         >
           <View style={{ backgroundColor: pressed ? "#CDDCF1" : "#fff" }}>
@@ -122,7 +123,9 @@ const Chats = ({
                     position: "absolute",
                   }}
                 >
-                  <Text style={{ color: "white",fontSize:11 }}>{unreadMessages}</Text>
+                  <Text style={{ color: "white", fontSize: 11 }}>
+                    {unreadMessages}
+                  </Text>
                 </View>
               ) : null}
             </View>
@@ -136,7 +139,7 @@ const Chats = ({
 export default Chats;
 
 const styles = StyleSheet.create({
-  contain: { flex: 1,backgroundColor:'white' },
+  contain: { flex: 1, backgroundColor: "white" },
   chatContainer: {
     padding: 20,
     flexDirection: "row",
