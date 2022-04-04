@@ -171,7 +171,6 @@ const HomeCalculator = ({ navigation }) => {
         isLoading(false);
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setCount(count + 1);
-        count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
         datas.setSevirce(service);
         datas.setValues(values);
         datas.setType(type);
@@ -183,10 +182,12 @@ const HomeCalculator = ({ navigation }) => {
         //console.log(error)
       });
   };
+  //loadAd();
 
   useEffect(() => {
-    loadAd();
-  }, [change]);
+   // AdMobInterstitial.showAdAsync() 
+
+  }, []);
   return (
     <View style={styles.container}>
       {/**Status Bar */}

@@ -72,7 +72,7 @@ const CurrencyConverter = ({ navigation }) => {
         datas.isCalc(true);
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setCount(count + 1);
-        count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
+        //count % 4 == 0 ? AdMobInterstitial.showAdAsync() : null;
         //setError(false)
         data.map((item) => datas.setUpdate(item.update));
         //console.log(error)
@@ -101,7 +101,7 @@ const CurrencyConverter = ({ navigation }) => {
   };
 
   useEffect(() => {
-    loadAd();
+   // loadAd();
   }, [change]);
   return (
     <View style={styles.container}>
