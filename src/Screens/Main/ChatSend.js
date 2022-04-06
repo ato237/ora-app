@@ -55,7 +55,6 @@ const ChatSend = () => {
           Chat & Send
         </Text>
         <TouchableOpacity
-        onPress={()=>datas.setdataChat()}
           style={{
             borderRadius: 1000,
             justifyContent: "center",

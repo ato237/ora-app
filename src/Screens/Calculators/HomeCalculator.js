@@ -118,14 +118,14 @@ const HomeCalculator = ({ navigation }) => {
     android: "ca-app-pub-7148038859151468/2236576097", //ca-app-pub-7148038859151468/2236576097
   });
 
-  let loadAd = async () => {
+ /* let loadAd = async () => {
     await AdMobInterstitial.setAdUnitID(AppId);
     await AdMobInterstitial.requestAdAsync();
-  };
+  };*/
 
-  AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => {
+ /* AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => {
     loadAd();
-  });
+  });*/
 
   //Handles the service dropdown
   const onChangeService = (value) => {
@@ -186,7 +186,7 @@ const HomeCalculator = ({ navigation }) => {
   };
 
   useEffect(() => {
-    loadAd();
+    //loadAd();
   }, [change]);
   return (
     <View style={styles.container}>

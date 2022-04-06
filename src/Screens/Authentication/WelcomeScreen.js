@@ -67,6 +67,7 @@ useEffect(()=>{
  
 
   async function loginWithFacebook() {
+
     await Facebook.initializeAsync({ appId: "253829146651147" });
 
     const { type, token } = await Facebook.logInWithReadPermissionsAsync({
@@ -77,11 +78,14 @@ useEffect(()=>{
       const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500),gender`)
       const profile = await response.json();
       setImage(profile.picture.data.url)
+      navigation.navigate('BottomTab')
+
       //setGender(profile.gender)
       // Build Firebase credential with the Facebook access token.
       const credential = FacebookAuthProvider.credential(token);
+      console.log(credential);
+
       datas.storeData(credential);
-      navigation.navigate('BottomTab')
       // Sign in with credential from the Facebook user.
       signInWithCredential(auth, credential).catch((error) => {
         // Handle Errors here.

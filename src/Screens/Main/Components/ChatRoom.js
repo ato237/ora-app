@@ -7,7 +7,13 @@ import {
   Keyboard,
   Dimensions,
 } from "react-native";
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import { FlatList } from "react-native";
 import ChatTexts from "./ChatTexts";
 import { MaterialIcons } from "react-native-vector-icons";
@@ -26,8 +32,14 @@ import {
   SystemMessage,
 } from "react-native-gifted-chat";
 
-const ChatRoom = ({ navigation }) => {
+const ChatRoom = ({ route, navigation }) => {
+  const { idP, nameP, photoP } = route.params;
+
   const datas = useContext(GlobalContext);
+  const flatlistRef = useRef();
+  const onPressFunction = () => {
+    flatlistRef.current.scrollToEnd({ animating: true });
+  };
   const renderItem = ({ item }) => {
     return (
       <ChatTexts
@@ -40,55 +52,49 @@ const ChatRoom = ({ navigation }) => {
       />
     );
   };
-  const [message, setMessage] = useState([
-    { currentUser: true, id: 1, message: "Yo bro how are you" },
-    { currentUser: false, id: 2, message: "I am fine bro yesailo" },
-  ]);
-  const customtInputToolbar = (props) => {
-    return (
-      <InputToolbar
-        {...props}
-        containerStyle={{
-          backgroundColor: "white",
-          borderTopColor: "#E8E8E8",
-          borderTopWidth: 0,
-          padding: 0,
-        }}
-      />
-    );
-  };
-  const customSystemMessage = (props) => {
-    return (
-      <View style={styles.ChatMessageSytemMessageContainer}>
-        <Icon name="lock" color="#9d9d9d" size={16} />
-        <Text style={styles.ChatMessageSystemMessageText}>
-          Your chat is secured. Remember to be cautious about what you share
-          with others.
-        </Text>
-      </View>
-    );
-  };
-  const [messages, setMessages] = useState([]);
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: "https://placeimg.com/140/140/any",
-        },
-      },
-    ]);
+    onPressFunction();
   }, []);
+  const [newMessage, setNewMessage] = useState([
+    {
+      currentUser: true,
+      id: 1,
+      message: "Yo bro how are you",
+      time: "10:30Am",
+    },
+    {
+      currentUser: true,
+      id: 3,
+      message: "Yo bro how are you",
+      time: "08:30Am",
+    },
 
-  const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages)
-    );
-  }, []);
+    {
+      currentUser: false,
+      id: 2,
+      message: "I am fine bro yesailo",
+      time: "09:30Am",
+    },
+  ]);
+  const [message, setMessage] = useState(newMessage);
+  const [id, setId] = useState(4);
+  const handleMessageSend = () => {
+    setText("");
+    setId(id + 1);
+    var newArr = [
+      ...newMessage,
+      {
+        currentUser: true,
+        id: id,
+        message: text,
+        time: "09:30Am",
+      },
+    ];
+    setMessage(newArr);
+    setNewMessage(newArr);
+  };
+
+  const [text, setText] = useState("");
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
       <View
@@ -109,53 +115,24 @@ const ChatRoom = ({ navigation }) => {
         </TouchableOpacity>
         <Avatar
           containerStyle={{ marginHorizontal: 10 }}
-          size="small"
+          size="medium"
           rounded
-          source={datas.chatDatas.photos}
+          source={photoP}
         />
-        {datas.chatDatas.map((item) => {
-          <Text style={{ fontSize: 18, color: "white", top: 5 }}>
-            {item.names}
-          </Text>
-        })}
-      </View>
-      <GiftedChat
-        messages={messages}
-        onSend={(messages) => onSend(messages)}
-        user={{
-          _id: 1,
-        }}
-        renderInputToolbar={(props) => customtInputToolbar(props)}
-      />
-      {/*<View
-        style={{
-          backgroundColor: "#14213D",
-          padding: 15,
-          flexDirection: "row",
-          paddingTop: Platform.OS == "ios" ? 31 : 11,
-        }}
-      >
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <MaterialIcons
-            name="arrow-back"
-            size={20}
-            color="#fff"
-            style={{ top: 8 }}
-          />
+        <TouchableOpacity style={{ width: 300 }}>
+          <View style={{ flexDirection: "column" }}>
+            <Text style={{ fontSize: 18, color: "white" }}>{nameP}</Text>
+            <Text style={{ color: "#EEEEEE", top: 1, fontSize: 15 }}>
+              Online
+            </Text>
+          </View>
         </TouchableOpacity>
-        <Avatar
-          containerStyle={{ marginHorizontal: 10 }}
-          size="small"
-          rounded
-          source={require("../../../images/Ker.jpg")}
-        />
-        <Text style={{ fontSize: 18, color: "white", top: 5 }}>
-          {datas.title}
-        </Text>
       </View>
+
       <View style={{ marginBottom: Platform.OS == "ios" ? 150 : 130 }}>
         <FlatList
-          inverted
+          onContentSizeChange={() => flatlistRef.current.scrollToEnd()}
+          ref={flatlistRef}
           data={message}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
@@ -178,7 +155,7 @@ const ChatRoom = ({ navigation }) => {
             <TextInput
               style={styles.textInput}
               value={text}
-              onChangeText={(text) => setMessage(text)}
+              onChangeText={(text) => setText(text)}
               multiline
               placeholder={"Type a message"}
             />
@@ -199,8 +176,12 @@ const ChatRoom = ({ navigation }) => {
           </View>
 
           <TouchableOpacity
+            onPress={() => {
+              text !== "" ? handleMessageSend() : null;
+              onPressFunction();
+            }}
             style={{
-              backgroundColor: "#0053C5",
+              backgroundColor: "#14213D",
               borderRadius: 50,
               justifyContent: "center",
               width: 50,
@@ -210,7 +191,7 @@ const ChatRoom = ({ navigation }) => {
             <MaterialIcons name="send" size={25} color="#fff" />
           </TouchableOpacity>
         </View>
-          </KeyboardAvoidingView>*/}
+      </KeyboardAvoidingView>
     </View>
   );
 };

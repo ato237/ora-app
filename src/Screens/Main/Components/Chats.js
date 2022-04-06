@@ -35,9 +35,11 @@ const Chats = ({
           onPressOut={() => setPressed(false)}
           onPressIn={() => setPressed(true)}
           onPress={() => {
-            datas.setChatDatas([{ names: name, photos: photo }]);
-            navigation.navigate("chatRoom");
-            console.log(datas.chatDatas)
+            navigation.navigate("chatRoom", {
+              idP:id,
+              nameP: name,
+              photoP: photo,
+            });
           }}
         >
           <View style={{ backgroundColor: pressed ? "#CDDCF1" : "#fff" }}>

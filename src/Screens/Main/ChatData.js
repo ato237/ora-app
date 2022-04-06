@@ -1,16 +1,5 @@
 export const chatData = [
   {
-    id: 1,
-    name: "KerryAnne",
-    chat: "I've recieved the money I am happy I love you",
-    unreadMessages: 3,
-    recentAmount: "15,000,000,000",
-    recentCurrency: "XAF",
-    time: "10:30AM",
-    photo: require("../../images/Ker.jpg"),
-    seen:true
-  },
-  {
     id: 2,
     name: "Oliver",
     chat: "Yesai Bro thanks for the dos. Je voulais te joss ",

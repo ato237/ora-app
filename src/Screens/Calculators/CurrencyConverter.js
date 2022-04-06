@@ -20,6 +20,7 @@ import { AdMobBanner, AdMobInterstitial } from "expo-ads-admob";
 import * as Device from "expo-device";
 import numbro from "numbro";
 import DetailsCurrency from "./Modals/DetailsCurrency";
+import { ScrollView } from "react-native-web";
 
 const CurrencyConverter = ({ navigation }) => {
   const datas = useContext(GlobalContext);
@@ -43,14 +44,14 @@ const CurrencyConverter = ({ navigation }) => {
     android: "ca-app-pub-7148038859151468/2236576097", //ca-app-pub-7148038859151468/2236576097
   });
 
-  let loadAd = async () => {
+ /* let loadAd = async () => {
     await AdMobInterstitial.setAdUnitID(AppId);
     await AdMobInterstitial.requestAdAsync();
-  };
+  };*/
 
-  AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => {
+  /*AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => {
     loadAd();
-  });
+  });*/
 
   //Handles the calculate operation
   const handleConvert = () => {
@@ -101,7 +102,7 @@ const CurrencyConverter = ({ navigation }) => {
   };
 
   useEffect(() => {
-    loadAd();
+   // loadAd();
   }, [change]);
   return (
     <View style={styles.container}>
@@ -293,6 +294,7 @@ const CurrencyConverter = ({ navigation }) => {
         />
       </View>
       <DetailsCurrency />
+
     </View>
   );
 };
