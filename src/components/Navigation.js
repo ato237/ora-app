@@ -22,6 +22,7 @@ import { useContext } from "react";
 import { GlobalContext } from "../context/reducers/Provider";
 import ChatRoom from "../Screens/Main/Components/ChatRoom";
 import { isReadyRef, navigationRef } from "../RootNavigation";
+import AddImage from "../Screens/Main/AddImage";
 
 export default function Navigaton(ref) {
   const Stack = createNativeStackNavigator();
@@ -78,6 +79,11 @@ export default function Navigaton(ref) {
           options={{ headerShown: false }}
           name="account"
           component={Accounts}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="AddImage"
+          component={AddImage}
         />
         <Stack.Screen
           options={{ headerShown: false }}

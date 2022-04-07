@@ -6,7 +6,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
 import pic3 from "../../images/Ker.jpg";
@@ -15,25 +15,48 @@ import { FlatList } from "react-native";
 import Chats from "./Components/Chats";
 import { GlobalContext } from "../../context/reducers/Provider";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { db } from "../../firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { async } from "@firebase/util";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const ChatSend = () => {
   const datas = useContext(GlobalContext);
-
   const renderItem = ({ item }) => {
     return (
       <Chats
         id={item.id}
-        name={item.name}
-        chat={item.chat}
+        name={item.firstName}
+        chat={item.id}
         unreadMessages={item.unreadMessages}
-        recentAmount={item.recentAmount}
+        recentAmount={item.AccountBalance}
         recentCurrency={item.recentCurrency}
         time={item.time}
-        photo={item.photo}
+        photo={item.picture}
       />
     );
   };
+  const data = [];
+  const [contactList, setContactList] = useState([])
+  const[user, setUser] = useState("")
 
+  
+  useEffect(()=>{
+    const getUsers =async()=>{
+  
+    const q = query(collection(db, "users"), where("id", "!=", datas.loggedUser));
+  
+    const querySnapshot = await getDocs(q)
+    querySnapshot.forEach((doc)=>{
+     // console.log(doc.id, "=>", doc.data())
+      data.push(doc.data())
+    })
+    datas.setContactList(data)
+
+  }
+  getUsers();
+   // console.log("Contact List =>",contactList)
+  },[2])
   return (
     <View style={styles.contain}>
       <View
@@ -72,7 +95,7 @@ const ChatSend = () => {
 
       <View style={{ marginBottom: Platform.OS =="ios"? 150:120 }}>
         <FlatList
-          data={datas.dataChat}
+          data={datas.contactList}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
         />
@@ -84,5 +107,5 @@ const ChatSend = () => {
 export default ChatSend;
 
 const styles = StyleSheet.create({
-  contain: {},
+  contain: {backgroundColor:'white', flex:1},
 });

@@ -31,6 +31,7 @@ import {
   InputToolbar,
   SystemMessage,
 } from "react-native-gifted-chat";
+import { push, set } from "firebase/database";
 
 const ChatRoom = ({ route, navigation }) => {
   const { idP, nameP, photoP } = route.params;
@@ -94,6 +95,7 @@ const ChatRoom = ({ route, navigation }) => {
     setNewMessage(newArr);
   };
 
+
   const [text, setText] = useState("");
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
@@ -117,7 +119,7 @@ const ChatRoom = ({ route, navigation }) => {
           containerStyle={{ marginHorizontal: 10 }}
           size="medium"
           rounded
-          source={photoP}
+          source={{uri:photoP}}
         />
         <TouchableOpacity style={{ width: 300 }}>
           <View style={{ flexDirection: "column" }}>
@@ -128,6 +130,7 @@ const ChatRoom = ({ route, navigation }) => {
           </View>
         </TouchableOpacity>
       </View>
+
 
       <View style={{ marginBottom: Platform.OS == "ios" ? 150 : 130 }}>
         <FlatList

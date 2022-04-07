@@ -7,7 +7,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 export const GlobalContext = createContext({});
 
-
 const GlobalProvider = ({ children }) => {
   const [fromCurrency, setFromCurrency] = useState({
     name: "United States",
@@ -39,7 +38,7 @@ const GlobalProvider = ({ children }) => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [title, setTitle] = useState("Orramo");
   const [dataChat, setDataChat] = useState(chatData);
-  const[chatDatas,setChatDatas] = useState([]);
+  const [chatDatas, setChatDatas] = useState([]);
   const [chatId, setChatId] = useState();
   const [balance, setBalance] = useState("1,000,000");
   const [receivedAmount, setReceivedAmount] = useState("0");
@@ -49,9 +48,10 @@ const GlobalProvider = ({ children }) => {
   const [lastName, setLastName] = useState("");
   const [signed, isSigned] = useState(false);
   const [logged, isLogged] = useState(false);
-
+  const [loggedUser, setLoggedUser] = useState("");
   const [userData, setUserData] = useState([]);
   const [isImageLoading, setImageLoading] = useState(false);
+  const [contactList, setContactList] = useState([])
 
   const handleFirstName = () => {
     setFirstName(firstName);
@@ -66,10 +66,9 @@ const GlobalProvider = ({ children }) => {
     try {
       await AsyncStorage.setItem("userToken", JSON.stringify(token));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
-
 
   return (
     <GlobalContext.Provider
@@ -132,7 +131,12 @@ const GlobalProvider = ({ children }) => {
         setStoredCredentials,
         storeData,
         logged,
-        isLogged,chatDatas,setChatDatas
+        isLogged,
+        chatDatas,
+        setChatDatas,
+        loggedUser,
+        setLoggedUser,
+        contactList, setContactList
       }}
     >
       {children}

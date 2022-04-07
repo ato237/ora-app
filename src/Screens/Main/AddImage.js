@@ -21,7 +21,7 @@ import { async } from "@firebase/util";
 
 LogBox.ignoreLogs(["Setting a timer"]);
 
-const Settingss = ({ navigation }) => {
+const AddImage = ({ navigation }) => {
   const [file, setFile] = useState("");
   const [uid, setUid] = useState("");
   const metadata = {
@@ -37,6 +37,7 @@ const Settingss = ({ navigation }) => {
 
     if (!result.cancelled) {
       uploadFile(result.uri);
+      navigation.navigate("BottomTab");
     }
   };
   const uploadFile = async (file) => {
@@ -51,14 +52,13 @@ const Settingss = ({ navigation }) => {
       onAuthStateChanged(auth, (user) => {
         if (user != null) {
           const userRef = doc(db, "users", user.uid);
-           updateDoc(userRef, {
+          updateDoc(userRef, {
             picture: downloadURL,
           });
           getDoc(userRef).then((docSnap) => {
             datas.setUserData(docSnap.data());
           });
         }
-       
       });
     });
   };
@@ -77,18 +77,6 @@ const Settingss = ({ navigation }) => {
   }, []);
   const datas = useContext(GlobalContext);
   const auth = getAuth();
-  const [userData, setUserData] = useState([{}]);
-
-  const logout = async () => {
-    auth
-      .signOut()
-      .then(() => {
-        console.log("signed out");
-      })
-      .catch((error) => alert(error.message));
-    AsyncStorage.getAllKeys().then((keys) => AsyncStorage.multiRemove(keys));
-    navigation.navigate("welcome");
-  };
 
   // Get a reference to the storage service, which is used to create references in your storage bucket
 
@@ -103,9 +91,7 @@ const Settingss = ({ navigation }) => {
           justifyContent: "center",
           alignItems: "center",
         }}
-      >
-        
-      </View>
+      ></View>
       <View style={styles.options}>
         <TouchableOpacity
           style={{ justifyContent: "center", alignItems: "center" }}
@@ -114,17 +100,11 @@ const Settingss = ({ navigation }) => {
             containerStyle={{ width: 250, height: 250 }}
             size="large"
             rounded
-            source={{ uri: datas.userData.picture }}
+            // source={{ uri: datas.userData.picture == null? null: datas.userData.picture  }}
           />
         </TouchableOpacity>
         <Text style={{ fontSize: 25, textAlign: "center" }}>
-          {datas.userData.name == null
-            ? datas.userData.firstName + " " + datas.userData.lastName
-            : datas.userData.name}
-        </Text>
-        <Text>
-        {datas.userData.email}
-
+          {/*datas.userData.firstName + " " + datas.userData.lastName*/}
         </Text>
         <TouchableOpacity
           style={{
@@ -134,21 +114,14 @@ const Settingss = ({ navigation }) => {
           }}
           onPress={PickImage}
         >
-          <Text style={{ color: "white", padding: 20 }}>Edit Image</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={{ backgroundColor: "#0053C5", padding: 20 }}
-          onPress={logout}
-        >
-          <Text style={{ textAlign: "center", color: "#fff" }}>Sign Out</Text>
+          <Text style={{ color: "white", padding: 20 }}>Add Image</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-export default Settingss;
+export default AddImage;
 
 const styles = StyleSheet.create({
   container: {
@@ -160,6 +133,5 @@ const styles = StyleSheet.create({
   },
   options: {
     padding: 20,
-    
   },
 });

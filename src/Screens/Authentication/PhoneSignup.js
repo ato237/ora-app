@@ -35,7 +35,7 @@ const PhoneSignup = ({ navigation }) => {
         });
       }
     });
-    navigation.navigate("BottomTab");
+    navigation.navigate("AddImage");
 
   };
 

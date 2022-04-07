@@ -49,12 +49,12 @@ useEffect(()=>{
   onAuthStateChanged(auth, (user) => {
     if (user != null) {
       const userRef = doc(db, "users", user.uid);
-
+      datas.setLoggedUser(user.uid)
       getDoc(userRef).then((docSnap) => {
         datas.setUserData(docSnap.data());
         if (docSnap.exists() && docSnap.data().phoneNumber != "") {
         } else {
-          createUser(user.displayName, image, user.uid, user.email,gender);
+          createUser(user.displayName, image, user.uid, user.email,gender,user.uid);
           navigation.navigate("usernamesignup");
         }
       });
@@ -126,7 +126,7 @@ useEffect(()=>{
     
   }
 
-  const createUser = (userName, photo, uid, email,gender) => {
+  const createUser = (userName, photo, uid, email,gender,uuid) => {
     const userRef = doc(db, "users", uid);
     return setDoc(userRef, {
       created: serverTimestamp(),
@@ -134,7 +134,7 @@ useEffect(()=>{
       picture: photo,
       email: email,
       gender:gender,
-      AccountBalance: 0
+      AccountBalance: 0, id: uuid
     });
   };
 

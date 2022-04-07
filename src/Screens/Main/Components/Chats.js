@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { GlobalContext } from "../../../context/reducers/Provider";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fonts } from "react-native-elements/dist/config";
+import { push,ref } from "firebase/database";
+import { database } from "../../../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Chats = ({
   id,
@@ -18,9 +21,25 @@ const Chats = ({
   photo,
 }) => {
   navigation = useNavigation();
+  const auth = getAuth();
 
   const [pressed, setPressed] = useState(false);
   const datas = useContext(GlobalContext);
+
+  const newChatRoomRef =() =>{
+    push(ref(database, 'chatRooms' ),{
+        sendersuid: id,
+        receiveruid: datas.loggedUser,
+    })
+
+  }
+
+const newChatRoomId = newChatRoomRef.key;
+
+
+useEffect(()=>{
+
+},[])
   return (
     <View style={styles.contain}>
       <View
@@ -40,6 +59,8 @@ const Chats = ({
               nameP: name,
               photoP: photo,
             });
+
+            newChatRoomRef();
           }}
         >
           <View style={{ backgroundColor: pressed ? "#CDDCF1" : "#fff" }}>
@@ -68,7 +89,7 @@ const Chats = ({
                   containerStyle={{ right: 105, bottom: 12 }}
                   size="medium"
                   rounded
-                  source={photo}
+                  source={{uri: photo}}
                 />
                 <Text
                   style={{
