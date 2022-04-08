@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Dimensions, ScrollView, Image } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
@@ -6,9 +6,10 @@ import { useNavigation } from "@react-navigation/native";
 import { GlobalContext } from "../../../context/reducers/Provider";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fonts } from "react-native-elements/dist/config";
-import { push,ref } from "firebase/database";
-import { database } from "../../../firebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { child, push,ref, set } from "firebase/database";
+import { database, db } from "../../../firebase";
+import { getAuth } from "firebase/auth";
+import { collection, doc, getDoc, getDocs, query, setDoc } from "firebase/firestore";
 
 const Chats = ({
   id,
@@ -26,18 +27,11 @@ const Chats = ({
   const [pressed, setPressed] = useState(false);
   const datas = useContext(GlobalContext);
 
-  const newChatRoomRef =() =>{
-    push(ref(database, 'chatRooms' ),{
-        sendersuid: id,
-        receiveruid: datas.loggedUser,
-    })
-
-  }
-
-const newChatRoomId = newChatRoomRef.key;
+  
 
 
 useEffect(()=>{
+
 
 },[])
   return (
@@ -54,13 +48,11 @@ useEffect(()=>{
           onPressOut={() => setPressed(false)}
           onPressIn={() => setPressed(true)}
           onPress={() => {
-            navigation.navigate("chatRoom", {
+            navigation.navigate("ChatSendGifted", {
               idP:id,
               nameP: name,
               photoP: photo,
             });
-
-            newChatRoomRef();
           }}
         >
           <View style={{ backgroundColor: pressed ? "#CDDCF1" : "#fff" }}>
@@ -85,19 +77,19 @@ useEffect(()=>{
                   top: 10,
                 }}
               >
-                <Avatar
-                  containerStyle={{ right: 105, bottom: 12 }}
-                  size="medium"
-                  rounded
+                <Image
+                 style={{ right: 95, bottom: 15,width: 60, height: 60, borderRadius: 60/ 2 }}
+                
                   source={{uri: photo}}
                 />
                 <Text
                   style={{
-                    fontSize: 16,
+                    fontSize: 17,
                     paddingHorizontal: 10,
-                    left: -45,
+                    left: -35,
                     position: "absolute",
                     color: "#000",
+                    top:-2
                   }}
                 >
                   {name}

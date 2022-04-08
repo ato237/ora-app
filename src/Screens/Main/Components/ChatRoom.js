@@ -32,6 +32,8 @@ import {
   SystemMessage,
 } from "react-native-gifted-chat";
 import { push, set } from "firebase/database";
+import { collection, doc } from "firebase/firestore";
+import { database, db } from "../../../firebase";
 
 const ChatRoom = ({ route, navigation }) => {
   const { idP, nameP, photoP } = route.params;
@@ -53,9 +55,7 @@ const ChatRoom = ({ route, navigation }) => {
       />
     );
   };
-  useEffect(() => {
-    onPressFunction();
-  }, []);
+ 
   const [newMessage, setNewMessage] = useState([
     {
       currentUser: true,
@@ -79,24 +79,73 @@ const ChatRoom = ({ route, navigation }) => {
   ]);
   const [message, setMessage] = useState(newMessage);
   const [id, setId] = useState(4);
-  const handleMessageSend = () => {
+  const [users, setUsers] = useState([]);
+
+  const [text, setText] = useState("");
+  const [roomId,setRoomID] = useState()
+
+  const newChatRoomRef = doc(collection(db, "privateChatRooms"));
+
+  const newChatRoom = async () => {
+    // const query1 = query(collection(db, "privateChatRooms"), where("chatRoomID", "==", datas.loggedUser));
+    //const query2 = query(collection(db, "privateChatRooms"), where("chatRoomID", "==", id));
+
+    const messageID = push(ref(database, "messageArray/")).key;
+    const chatRoomSnapshot = await getDocs(newChatRoomRef);
+
+    await setDoc(newChatRoomRef, {
+      chatRoomID: newChatRoomRef.id,
+      user1: datas.loggedUser,
+      user2: id,
+      messageArray: messageID,
+      created: true,
+    });
+
+    const chatQuery = query(collection(db, "privateChatRooms"));
+    const querySnapshot = await getDocs(chatQuery);
+    querySnapshot.forEach((doc) => {
+      // console.log(doc.id, "=>", doc.data())
+      if (doc.data().messageArray != null) {
+        push(ref(database, "messageArray/"), {
+          chatID: newChatRoomRef.id,
+        });
+      }
+    });
+  };
+
+  useEffect(()=>{
+    
+  })
+
+  const handleMessageSend = async() => {
     setText("");
-    setId(id + 1);
     var newArr = [
       ...newMessage,
       {
-        currentUser: true,
-        id: id,
+        chatId:newChatRoomRef.id,
+        user: { id: datas.loggedUser, name: datas.userData.firstName },
+        id: idP,
         message: text,
         time: "09:30Am",
       },
     ];
+    const querySnapshot = await getDocs(newChatRoomRef);
+      // console.log(doc.id, "=>", doc.data())
+          querySnapshot.forEach((doc) => {
+            if (doc.data().user1 != datas.loggedUser && doc.data().user2 != idP) {
+              newChatRoom();
+              push(ref(database, "messageArray/"), {
+                chatID: newChatRoomRef.id,
+              });
+            }
+          });
+       
+    
+    push(ref(database, `chatRoom${datas.loggedUser + idP}`), newMessage)
     setMessage(newArr);
     setNewMessage(newArr);
   };
 
-
-  const [text, setText] = useState("");
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
       <View
@@ -119,7 +168,7 @@ const ChatRoom = ({ route, navigation }) => {
           containerStyle={{ marginHorizontal: 10 }}
           size="medium"
           rounded
-          source={{uri:photoP}}
+          source={{ uri: photoP }}
         />
         <TouchableOpacity style={{ width: 300 }}>
           <View style={{ flexDirection: "column" }}>
@@ -130,7 +179,6 @@ const ChatRoom = ({ route, navigation }) => {
           </View>
         </TouchableOpacity>
       </View>
-
 
       <View style={{ marginBottom: Platform.OS == "ios" ? 150 : 130 }}>
         <FlatList

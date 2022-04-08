@@ -35,7 +35,7 @@ i18n.translations = {
         mtnWithdrawal: "MTN Momo Charge: ",
         eumoneyWithdrawal: "EUMoney Charge: ",
         totalToHave: "Total Amount To Have In Balance: ",
-        tax: "Tax"
+      tax: "Tax"
 
     },
     fr: {

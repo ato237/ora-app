@@ -23,15 +23,14 @@ import { GlobalContext } from "../context/reducers/Provider";
 import ChatRoom from "../Screens/Main/Components/ChatRoom";
 import { isReadyRef, navigationRef } from "../RootNavigation";
 import AddImage from "../Screens/Main/AddImage";
+import GiftedChatRoom from "../Screens/Main/Components/GiftedChatRoom";
 
 export default function Navigaton(ref) {
   const Stack = createNativeStackNavigator();
   const datas = useContext(GlobalContext);
 
   return (
-    <NavigationContainer
-      ref={navigationRef}
-    >
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>
         <Stack.Screen
           options={{ headerShown: false }}
@@ -89,6 +88,24 @@ export default function Navigaton(ref) {
           options={{ headerShown: false }}
           name="ChatSend"
           component={ChatSend}
+        />
+        <Stack.Screen
+          options={ ({ route }) =>({
+            title:"",
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: "#14213D",
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            headerTitleStyle: {
+              color: "#fff",
+              fontSize: 20,
+            },
+            headerTintColor: "#fff",
+          })}
+          name="ChatSendGifted"
+          component={GiftedChatRoom}
         />
         <Stack.Screen
           options={{ headerShown: false }}

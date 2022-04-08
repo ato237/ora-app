@@ -58,7 +58,6 @@ const Settingss = ({ navigation }) => {
             datas.setUserData(docSnap.data());
           });
         }
-       
       });
     });
   };

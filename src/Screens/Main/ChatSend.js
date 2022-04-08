@@ -40,11 +40,13 @@ const ChatSend = () => {
   const [contactList, setContactList] = useState([])
   const[user, setUser] = useState("")
 
+  const q = query(collection(db, "users"), where("id", "!=", datas.loggedUser));
+
   
   useEffect(()=>{
+
     const getUsers =async()=>{
   
-    const q = query(collection(db, "users"), where("id", "!=", datas.loggedUser));
   
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach((doc)=>{
