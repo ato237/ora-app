@@ -1,7 +1,14 @@
 import React, { createContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { theme } from "../../utils";
+
 export const GlobalContext = createContext({
+  theme,
+  rooms:[],
+  setRooms:() =>{
+
+  }
 });
 
 const GlobalProvider = ({ children }) => {
@@ -28,43 +35,16 @@ const GlobalProvider = ({ children }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [data, setData] = useState([]); //Handles the data gotten from the apo
   const [data2, setData2] = useState([]); //Handles the data gotten from the apo
-
   const [loading, isLoading] = useState(false);
   const [cal, isCalc] = useState(false);
   const [pressed, isPressed] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
-  const [title, setTitle] = useState("Orramo");
-  const [chatId, setChatId] = useState();
-  const [balance, setBalance] = useState("1,000,000");
-  const [receivedAmount, setReceivedAmount] = useState("0");
-  const [headerShown, setHeaderShown] = useState(true);
-  const [sentAmount, setSentAmount] = useState("0");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [signed, isSigned] = useState(false);
-  const [logged, isLogged] = useState(false);
-
+  const [apploading, setAppLoading] = useState(true);
   const [userData, setUserData] = useState([]);
   const [isImageLoading, setImageLoading] = useState(false);
-
-  const handleFirstName = () => {
-    setFirstName(firstName);
-  };
-
-  const handleLastName = () => {
-    setLastName(lastName);
-  };
-  const [storedCredentials, setStoredCredentials] = useState({});
-
-  const storeData = async (token) => {
-    try {
-      await AsyncStorage.setItem("userToken", JSON.stringify(token));
-    } catch (error) {
-      console.log(error)
-    }
-  };
-
-
+  const [currentUser, setCurrentUser] = useState(null);
+  const [rooms,setRooms] = useState([])
+ 
   return (
     <GlobalContext.Provider
       value={{
@@ -100,31 +80,16 @@ const GlobalProvider = ({ children }) => {
         setModalVisible2,
         data2,
         setData2,
-        title,
-        setTitle,
-        chatId,
-        setChatId,
-        firstName,
-        setFirstName,
-        balance,
-        setBalance,
-        receivedAmount,
-        setReceivedAmount,
-        sentAmount,
-        setSentAmount,
-        handleFirstName,
-        handleLastName,
-        signed,
-        isSigned,
         userData,
         setUserData,
         isImageLoading,
         setImageLoading,
-        storedCredentials,
-        setStoredCredentials,
-        storeData,
-        logged,
-        isLogged,
+        currentUser,
+        setCurrentUser,
+        apploading,
+        setAppLoading,
+        theme,
+        rooms, setRooms
       }}
     >
       {children}

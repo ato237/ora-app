@@ -1,11 +1,10 @@
 import { Settings, StyleSheet } from "react-native";
 import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import HomeCalculator from "../Screens/HomeCalculator";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Currency from "../Screens/CurrencyConverter";
 import i18n from "../Data/translation";
-import Setting from "../Screens/Setting";
+import HomeCalculator from "../Screens/Calculator/HomeCalculator";
+import CurrencyConverter from "../Screens/Calculator/CurrencyConverter";
 
 const Tab = createBottomTabNavigator();
 
@@ -50,7 +49,7 @@ const BottomTab = () => {
 
     >
       <Tab.Screen name={i18n.t('tittle')} component={HomeCalculator} />
-      <Tab.Screen name={i18n.t('con')} component={Currency} />
+      <Tab.Screen name={i18n.t('con')} component={CurrencyConverter} />
      {/* <Tab.Screen name={i18n.t('settings')} component={Setting} />*/}
 
     </Tab.Navigator>

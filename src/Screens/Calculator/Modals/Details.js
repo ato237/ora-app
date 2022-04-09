@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { GlobalContext } from "../../context/reducers/Provider";
+import { GlobalContext } from "../../../context/reducers/Provider";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import i18n from "../../Data/translation";
+import i18n from "../../../Data/translation";
 
 const Details = () => {
   const [data, setData] = useState([]);

@@ -14,9 +14,9 @@ import { TextInput } from "react-native-paper";
 import { Dropdown } from "sharingan-rn-modal-dropdown";
 import axios from "axios";
 import * as Haptics from "expo-haptics";
-import i18n from "../Data/translation"
+import i18n from "../../Data/translation"
 import { AdMobBanner, AdMobInterstitial } from "expo-ads-admob";
-import { GlobalContext } from "../context/reducers/Provider"
+import { GlobalContext } from "../../context/reducers/Provider"
 import numbro from "numbro";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Details from "./Modals/Details";
@@ -26,17 +26,17 @@ export const services = [
   {
     value: "orange",
     label: "Orange Money",
-    avatarSource: require("../images/orange.png"),
+    avatarSource: require("../../images/orange.png"),
   },
   {
     value: "mtn",
     label: "MTN Momo",
-    avatarSource: require("../images/mtn.png"),
+    avatarSource: require("../../images/mtn.png"),
   },
   {
     value: "eumoney",
     label: "EU Money",
-    avatarSource: require("../images/eu.png"),
+    avatarSource: require("../../images/eu.png"),
   },
 ];
 
