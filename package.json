@@ -1,4 +1,6 @@
 {
+  "build": "react-scripts --max_old_space_size=8192 build",
+
   "name": "ora-app",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
@@ -10,12 +12,32 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "expo-document-picker": "~10.1.3",
+    "expo-file-system": "~13.1.4",
+    "expo-image-manipulator": "~10.2.0",
+    "expo-media-library": "~14.0.0",
+    "expo-sharing": "~10.1.0",
+    "react-native-document-picker": "^8.1.0",
+    "react-native-fs": "^2.19.0",
+    "react-native-gesture-handler": "~2.1.0",
+    "react-native-haptic-feedback": "^1.13.1",
+    "react-native-image-crop-picker": "^0.37.3",
+    "react-native-image-resizer": "^1.4.5",
+    "react-native-reanimated": "~2.3.1",
+    "react-native-share": "^7.3.7",
+    "react-native-svg": "12.1.1",
+    "stream-chat": "^6.4.0",
+    "stream-chat-expo": "^4.3.0",
+    "@react-native-community/cameraroll": "^4.1.2",
+    "@react-native-community/netinfo": "7.1.3",
+    "@react-navigation/native": "^6.0.10",
+    "@react-navigation/stack": "^6.2.1",
+    "@stream-io/flat-list-mvcp": "^0.10.1",
     "@react-native-async-storage/async-storage": "^1.17.1",
     "@react-native-picker/picker": "2.2.1",
     "@react-navigation/bottom-tabs": "^6.2.0",
     "@react-navigation/material-bottom-tabs": "^6.1.1",
     "@react-navigation/material-top-tabs": "^6.1.1",
-    "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.0",
     "axios": "^0.26.0",
     "expo": "~44.0.0",
@@ -60,9 +82,7 @@
     "react-native-web": "0.17.1",
     "react-redux": "^7.2.6",
     "redux": "^4.1.2",
-    "sharingan-rn-modal-dropdown": "^1.4.0",
-    "sockjs-client": "^1.6.0",
-    "stompjs": "^2.3.3"
+    "sharingan-rn-modal-dropdown": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
