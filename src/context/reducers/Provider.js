@@ -1,17 +1,17 @@
 import React, { createContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { theme } from "../../utils";
+import { theme } from "../../../utils";
 
 export const GlobalContext = createContext({
   theme,
-  rooms:[],
-  setRooms:() =>{
-
-  }
+  rooms: [],
+  setRooms: () => {},
+  unfilteredRooms: [],
+  setUnfilteredRooms: () => {},
 });
 
-const GlobalProvider = ({ children }) => {
+const GlobalProvider = (props) => {
   const [fromCurrency, setFromCurrency] = useState({
     name: "United States",
     code: "USD",
@@ -43,8 +43,9 @@ const GlobalProvider = ({ children }) => {
   const [userData, setUserData] = useState([]);
   const [isImageLoading, setImageLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [rooms,setRooms] = useState([])
- 
+  const [rooms, setRooms] = useState([]);
+  const [unfilteredRooms, setUnfilteredRooms] = useState([]);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -89,10 +90,13 @@ const GlobalProvider = ({ children }) => {
         apploading,
         setAppLoading,
         theme,
-        rooms, setRooms
+        rooms,
+        setRooms,
+        unfilteredRooms,
+        setUnfilteredRooms,
       }}
     >
-      {children}
+      {props.children}
     </GlobalContext.Provider>
   );
 };

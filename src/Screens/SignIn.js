@@ -1,11 +1,9 @@
-import { Button, Image, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useState } from "react";
-import { GlobalContext } from "../../context/reducers/Provider";
-import { TextInput } from "react-native";
-import { siginIn, signup } from "../../firebase";
-import { TouchableOpacity } from "react-native";
-
-const SignIn = () => {
+import { View, Text, Image, TextInput, Button } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { GlobalContext } from "../context/reducers/Provider";
+import { signIn, signUp } from "../../firebase";
+export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState("signUp");
@@ -13,14 +11,14 @@ const SignIn = () => {
     theme: { colors },
   } = useContext(GlobalContext);
 
-  const handlePress = async () => {
+  async function handlePress() {
     if (mode === "signUp") {
-      await signup(email, password);
+      await signUp(email, password);
     }
     if (mode === "signIn") {
-      await siginIn(email, password);
+      await signIn(email, password);
     }
-  };
+  }
   return (
     <View
       style={{
@@ -33,18 +31,18 @@ const SignIn = () => {
       <Text
         style={{ color: colors.foreground, fontSize: 24, marginBottom: 20 }}
       >
-        Welcome to Orramo
+        Welcome to Whatsapp
       </Text>
       <Image
-        source={require("../../../assets/adaptive-icon.png")}
-        style={{ width: 300, height: 200 }}
+        source={require("../../assets/icon.png")}
+        style={{ width: 180, height: 180 }}
         resizeMode="cover"
       />
       <View style={{ marginTop: 20 }}>
         <TextInput
+          placeholder="Email"
           value={email}
           onChangeText={setEmail}
-          placeholder="email"
           style={{
             borderBottomColor: colors.primary,
             borderBottomWidth: 2,
@@ -65,30 +63,25 @@ const SignIn = () => {
         />
         <View style={{ marginTop: 20 }}>
           <Button
-            title={mode === "signUp" ? "Sign Up" : "Sign In"}
+            title={mode === "signUp" ? "Sign Up" : "Sign in"}
             disabled={!password || !email}
             color={colors.secondary}
             onPress={handlePress}
           />
         </View>
-      
-      </View>
-      <TouchableOpacity
+        <TouchableOpacity
           style={{ marginTop: 15 }}
-          onPress={
-            () => mode == "signUp" ? setMode("signIn") : setMode("signUp")
+          onPress={() =>
+            mode === "signUp" ? setMode("signIn") : setMode("signUp")
           }
         >
-          <Text style={{color: colors.secondaryText}}>
+          <Text style={{ color: colors.secondaryText }}>
             {mode === "signUp"
-              ? "Already have an Account? Sign In"
-              : "Don't have an account SignUp"}
+              ? "Already have an account? Sign in"
+              : "Don't have an account? Sign Up"}
           </Text>
         </TouchableOpacity>
+      </View>
     </View>
   );
-};
-
-export default SignIn;
-
-const styles = StyleSheet.create({});
+}

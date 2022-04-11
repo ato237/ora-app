@@ -1,12 +1,13 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
-import useContacts from "../../../hooks/useHooks";
-import { GlobalContext } from "../../context/reducers/Provider";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import ListItem from "../../components/ListItem";
+import { collection, onSnapshot, query, where } from "@firebase/firestore";
 import { useRoute } from "@react-navigation/native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, FlatList } from "react-native";
+import ListItem from "../components/ListItem";
 import { db } from "../../firebase";
-const Contacts = () => {
+import useContacts from "../../hooks/useHooks";
+import { GlobalContext } from "../context/reducers/Provider";
+
+export default function Contacts() {
   const contacts = useContacts();
   const route = useRoute();
   const image = route.params && route.params.image;
@@ -15,13 +16,13 @@ const Contacts = () => {
       style={{ flex: 1, padding: 10 }}
       data={contacts}
       keyExtractor={(_, i) => i}
-      renderItem={({ item }) => <ContactPreview contact={item} image ={image}/>}
+      renderItem={({ item }) => <ContactPreview contact={item} image={image} />}
     />
   );
-};
+}
 
 function ContactPreview({ contact, image }) {
-  const { rooms } = useContext(GlobalContext);
+  const { unfilteredRooms, rooms } = useContext(GlobalContext);
   const [user, setUser] = useState(contact);
 
   useEffect(() => {
@@ -29,9 +30,9 @@ function ContactPreview({ contact, image }) {
       collection(db, "users"),
       where("email", "==", contact.email)
     );
-    const unsubscribe = onSnapshot(q, (snaphshot) => {
-      if (snaphshot.docs.length) {
-        const userDoc = snaphshot.docs[0].data();
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (snapshot.docs.length) {
+        const userDoc = snapshot.docs[0].data();
         setUser((prevUser) => ({ ...prevUser, userDoc }));
       }
     });
@@ -43,13 +44,9 @@ function ContactPreview({ contact, image }) {
       type="contacts"
       user={user}
       image={image}
-      room={rooms.find((room) =>
+      room={unfilteredRooms.find((room) =>
         room.participantsArray.includes(contact.email)
       )}
     />
   );
 }
-
-export default Contacts;
-
-const styles = StyleSheet.create({});

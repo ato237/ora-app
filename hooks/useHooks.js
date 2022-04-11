@@ -6,7 +6,7 @@ export default function useContacts() {
   useEffect(() => {
     (async () => {
       const { status } = await Contacts.requestPermissionsAsync();
-      if (status == "granted") {
+      if (status === "granted") {
         const { data } = await Contacts.getContactsAsync({
           fields: [Contacts.Fields.Emails],
         });
@@ -22,16 +22,15 @@ export default function useContacts() {
         }
       }
     })();
-  },[]);
+  }, []);
   return contacts
 }
-
 function mapContactToUser(contact) {
   return {
     contactName:
       contact.firstName && contact.lastName
-        ? `${contact.firstName} ${contact.lastName} `
+        ? `${contact.firstName} ${contact.lastName}`
         : contact.firstName,
-        email: contact.emails[0].email
+    email: contact.emails[0].email,
   };
 }

@@ -1,41 +1,46 @@
-import { Button, Image, StyleSheet, Text, View } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Button,
+} from "react-native";
 import Constants from "expo-constants";
-import { GlobalContext } from "../../context/reducers/Provider";
-import { TouchableOpacity } from "react-native";
-import { MaterialIcons } from "react-native-vector-icons";
-import { TextInput } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { pickImage, askForPermission, uploadImage } from "../../utils";
 import { auth, db } from "../../firebase";
-import { updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { async } from "@firebase/util";
+import { updateProfile } from "@firebase/auth";
+import { doc, setDoc } from "@firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
-const Profile = () => {
+import { GlobalContext } from "../context/reducers/Provider";
+
+export default function Profile() {
   const [displayName, setDisplayName] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [permissionStatus, setPermissionStatus] = useState(null);
   const navigation = useNavigation();
-
   useEffect(() => {
     (async () => {
       const status = await askForPermission();
       setPermissionStatus(status);
     })();
   }, []);
+
   const {
     theme: { colors },
   } = useContext(GlobalContext);
 
-  const handlePress = async () => {
+  async function handlePress() {
     const user = auth.currentUser;
     let photoURL;
     if (selectedImage) {
       const { url } = await uploadImage(
         selectedImage,
         `images/${user.uid}`,
-        "ProfilePicture"
+        "profilePicture"
       );
       photoURL = url;
     }
@@ -49,25 +54,22 @@ const Profile = () => {
 
     await Promise.all([
       updateProfile(user, userData),
-      setDoc(doc(db, "users", user.uid), {
-        ...userData,
-        uid: user.uid,
-      }),
+      setDoc(doc(db, "users", user.uid), { ...userData, uid: user.uid }),
     ]);
     navigation.navigate("home");
-  };
+  }
 
-  const handleProfilePicture = async () => {
+  async function handleProfilePicture() {
     const result = await pickImage();
     if (!result.cancelled) {
       setSelectedImage(result.uri);
     }
-  };
+  }
 
   if (!permissionStatus) {
     return <Text>Loading</Text>;
   }
-  if (permissionStatus != "granted") {
+  if (permissionStatus !== "granted") {
     return <Text>You need to allow this permission</Text>;
   }
   return (
@@ -86,7 +88,7 @@ const Profile = () => {
           Profile Info
         </Text>
         <Text style={{ fontSize: 14, color: colors.text, marginTop: 20 }}>
-          Please Provide your name and an optional profile
+          Please provide your name and an optional profile photo
         </Text>
         <TouchableOpacity
           onPress={handleProfilePicture}
@@ -96,15 +98,15 @@ const Profile = () => {
             width: 120,
             height: 120,
             backgroundColor: colors.background,
-            justifyContent: "center",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
           {!selectedImage ? (
-            <MaterialIcons
-              name="add-a-photo"
-              size={45}
+            <MaterialCommunityIcons
+              name="camera-plus"
               color={colors.iconGray}
+              size={45}
             />
           ) : (
             <Image
@@ -114,7 +116,7 @@ const Profile = () => {
           )}
         </TouchableOpacity>
         <TextInput
-          placeholder="Enter Your Name"
+          placeholder="Type your name"
           value={displayName}
           onChangeText={setDisplayName}
           style={{
@@ -135,8 +137,4 @@ const Profile = () => {
       </View>
     </React.Fragment>
   );
-};
-
-export default Profile;
-
-const styles = StyleSheet.create({});
+}

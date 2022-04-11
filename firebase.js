@@ -27,10 +27,10 @@ export const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
 });
 
-export function siginIn(email,password) {
+export function signIn(email,password) {
     return signInWithEmailAndPassword(auth, email, password)
 }
 
-export function signup(email,password) {
+export function signUp(email,password) {
     return createUserWithEmailAndPassword(auth, email, password)
 }

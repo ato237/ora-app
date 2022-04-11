@@ -1,20 +1,20 @@
-import { StyleSheet, Text, Image } from "react-native";
 import React from "react";
+import { Image } from "react-native";
 
-const Avatar = ({ size, user }) => {
+export default function Avatar({ size, user }) {
   return (
     <Image
-      style={{ width: size, height: size, borderRadius: size }}
+      style={{
+        width: size,
+        height: size,
+        borderRadius: size,
+      }}
       source={
         user.photoURL
           ? { uri: user.photoURL }
-          : require("../../assets/person.webp")
+          : require("../../assets/icon-square.png")
       }
       resizeMode="cover"
     />
   );
-};
-
-export default Avatar;
-
-const styles = StyleSheet.create({});
+}
