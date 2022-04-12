@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, View, LogBox } from "react-native";
+import { Text, View, LogBox, ActivityIndicator } from "react-native";
 import { useAssets } from "expo-asset";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
@@ -8,15 +8,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import Profile from './src/Screens/Profile'
-import Contacts from './src/Screens/Contacts'
-
-import Photo from './src/Screens/Photo'
-
-import Chats from './src/Screens/Chats'
-import Chat from './src/Screens/Chat'
-import ChatHeader from "./src/components/ChatHeader";
 import GlobalProvider, { GlobalContext } from "./src/context/reducers/Provider";
 import SignIn from "./src/Screens/SignIn";
+import { Chat, OverlayProvider } from "stream-chat-expo";
+import { ChannelScreen } from "./src/Screens/ChannelScreen";
+import { ChannelListScreen } from "./src/Screens/ChannelListScreen";
+import {StreamChat} from 'stream-chat'
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -25,6 +22,8 @@ LogBox.ignoreLogs([
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
+const API_KEY = "n7duuv99yqcx"
+const client = StreamChat.getInstance(API_KEY);
 
 function App() {
   const [currUser, setCurrUser] = useState(null);
@@ -32,8 +31,13 @@ function App() {
   const {
     theme: { colors },
   } = useContext(GlobalContext);
+  useEffect( () => {
+    
+    //return ()  => client.disconnectUser();
+  },[]);
 
   useEffect(() => {
+ 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setLoading(false);
       if (user) {
@@ -44,7 +48,9 @@ function App() {
   }, []);
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return <View style={{justifyContent:'center',alignItems:'center'}}>
+      <ActivityIndicator size="large" color="#00ff00"/>
+    </View>;
   }
 
   return (
@@ -73,16 +79,14 @@ function App() {
           )}
           <Stack.Screen
             name="home"
-            options={{ title: "Whatsapp" }}
+            options={{ title: "Orramo" }}
             component={Home}
           />
           <Stack.Screen
-            name="contacts"
-            options={{ title: "Select Contacts" }}
-            component={Contacts}
-          />
-          <Stack.Screen name="chat" component={Chat} options={{headerTitle: (props) => <ChatHeader {...props} />}}/>
-         
+            name="Channel"
+            options={{ title: "Brodai" }}
+            component={ChannelScreen}
+          />         
         </Stack.Navigator>
       )}
     </NavigationContainer>
@@ -92,6 +96,23 @@ function Home() {
   const {
     theme: { colors },
   } = useContext(GlobalContext);
+
+  useEffect(()=>{
+    const connectUser = async (username,fullname) =>{
+      await client.connectUser({
+          id: username,
+          name: fullname,
+          AccountBalance: 500000,
+           image:'https://scontent.fatl1-2.fna.fbcdn.net/v/t1.6435-9/93803824_2688316481388052_6414058165041627136_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=9sPn15HwOd8AX8iM-T_&_nc_ht=scontent.fatl1-2.fna&oh=00_AT99d0tB2a4TyXr7c0llid2yD1m0WQ5wR3lsEes6VXmtCw&oe=6279576B'
+      }, client.devToken(username) );
+      console.log('user connected')
+  
+      const channel =  client.channel("messaging", "global", {name: 'Global Room'})
+      await channel.watch()
+    }
+    connectUser("Bradley","Ade")
+  },[])
+  
   return (
     <Tab.Navigator
       screenOptions={({ route }) => {
@@ -121,8 +142,7 @@ function Home() {
       }}
       initialRouteName="chats"
     >
-      <Tab.Screen name="photo" component={Photo} />
-      <Tab.Screen name="chats" component={Chats} />
+      <Tab.Screen name="chats" component={ChannelListScreen} />
     </Tab.Navigator>
   );
 }
@@ -139,7 +159,11 @@ function Main() {
   }
   return (
     <GlobalProvider>
+      <OverlayProvider>
+        <Chat client={client}>
       <App />
+      </Chat>
+      </OverlayProvider>
     </GlobalProvider>
   );
 }
