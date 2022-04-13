@@ -3,6 +3,7 @@ import { ChannelList, Chat, Streami18n,  } from "stream-chat-expo";
 import {StreamChat} from 'stream-chat'
 import { GlobalContext } from "../context/reducers/Provider";
 import { View } from "react-native";
+import { useRoute } from "@react-navigation/native";
 
 const filters = {
   example: 'example-apps',
@@ -28,7 +29,6 @@ export const ChannelListScreen = ({ navigation }) => {
   };
   
     const memoizedFilters = useMemo(() => filters, []);
-  
     return (
       <Chat client={client} i18nInstance={streami18n}>
         <View style={{ height: '100%' }}>
@@ -36,7 +36,7 @@ export const ChannelListScreen = ({ navigation }) => {
            // filters={memoizedFilters}
             onSelect={(channel) => {
               setChannel(channel);
-              navigation.navigate('Channel', {channel});
+              navigation.navigate('Channel');
             }}
             options={options}
             sort={sort}

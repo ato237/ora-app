@@ -12,7 +12,7 @@ import Constants from "expo-constants";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { pickImage, askForPermission, uploadImage } from "../../utils";
 import { auth, db } from "../../firebase";
-import { updateProfile } from "@firebase/auth";
+import { updateProfile,signOut } from "@firebase/auth";
 import { doc, setDoc } from "@firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { GlobalContext } from "../context/reducers/Provider";
@@ -22,11 +22,16 @@ export default function Profile() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [permissionStatus, setPermissionStatus] = useState(null);
   const navigation = useNavigation();
+  const {
+
+   userData,setUserData,
+  } = useContext(GlobalContext);
   useEffect(() => {
     (async () => {
       const status = await askForPermission();
       setPermissionStatus(status);
     })();
+    
   }, []);
 
   const {
