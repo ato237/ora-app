@@ -1,25 +1,33 @@
 import React, { useContext, useState } from "react";
-import { View, Text, Image, TextInput, Button, Alert, KeyboardAvoidingView } from "react-native";
+import { View, Text, Image, TextInput, Button, Alert, KeyboardAvoidingView, ActivityIndicator } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { GlobalContext } from "../context/reducers/Provider";
-import { signIn, signUp } from "../../firebase";
-export default function SignIn() {
+import { auth, signIn, signUp } from "../../firebase";
+import { onAuthStateChanged } from "firebase/auth";
+export default function SignIn({navigation}) {
+
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
-
+  const[loading, setLoading] = useState(false)
   const [mode, setMode] = useState("signUp");
+
   const {
     theme: { colors },
+
   } = useContext(GlobalContext);
 
   async function handlePress() {
+    setLoading(true)
     if (mode === "signUp") {
       if(password!== rePassword){
         Alert.alert('Passwords do not Match')
       }
       else{
       await signUp(email, password);
+      navigation.navigate('profile')
+      
       }
     }
     if (mode === "signIn") {
@@ -39,7 +47,7 @@ export default function SignIn() {
       <Text
         style={{ color: colors.foreground, fontSize: 24, marginBottom: 20 }}
       >
-        {mode == "signUp"?"Get Started on Orramo": "Log In To Your Account"}
+        {mode == "signUp" ? "Get Started on Orramo": "Log In To Your Account"}
       </Text>
 
       <View style={{ marginTop: 20 }}>
@@ -83,7 +91,7 @@ export default function SignIn() {
         <View style={{ marginTop: 20 }}>
           <Button
             title={mode === "signUp" ? "Sign Up" : "Sign in"}
-            disabled={!password || !email}
+            disabled={!password || !email || loading == true}
             color={colors.secondary}
             onPress={handlePress}
           />
@@ -108,7 +116,23 @@ export default function SignIn() {
           </Text>
         </TouchableOpacity>
         </View>
+        
       </View>
+      {loading == true? (
+           <View
+           style={{
+             justifyContent: "center",
+             alignItems: "center",
+             backgroundColor: "#fff",
+             borderRadius: 30,
+             marginTop: 10,
+             width: 50,
+             height: 50,
+           }}
+         >
+           <ActivityIndicator size="large" color="#FFA500" />
+         </View>
+        ): null}
     </View>
   );
 }

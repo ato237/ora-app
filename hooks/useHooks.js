@@ -8,15 +8,18 @@ export default function useContacts() {
       const { status } = await Contacts.requestPermissionsAsync();
       if (status === "granted") {
         const { data } = await Contacts.getContactsAsync({
-          fields: [Contacts.Fields.Emails],
+          fields: [
+      
+            Contacts.Fields.PhoneNumbers,
+          ],
         });
         if (data.length > 0) {
           setContacts(
             data
               .filter(
                 (c) =>
-                  c.firstName && c.emails && c.emails[0] && c.emails[0].email
-              )
+                c.firstName && c.phoneNumbers && c.phoneNumbers[0] && c.phoneNumbers[0].number
+                )
               .map(mapContactToUser)
           );
         }
@@ -31,6 +34,6 @@ function mapContactToUser(contact) {
       contact.firstName && contact.lastName
         ? `${contact.firstName} ${contact.lastName}`
         : contact.firstName,
-    email: contact.emails[0].email,
-  };
+        phoneNumber: contact.phoneNumbers[0].number,
+      };
 }

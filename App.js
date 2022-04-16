@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, Suspense } from "react";
 import {
   Text,
   View,
@@ -7,10 +7,11 @@ import {
   Platform,
   TouchableOpacity,
   Settings,
+  StatusBar,
 } from "react-native";
 import { useAssets } from "expo-asset";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth, db } from "./firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -27,12 +28,22 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeCalculator from "./src/Screens/Calculator/HomeCalculator";
 import CurrencyConverter from "./src/Screens/Calculator/CurrencyConverter";
 import History from "./src/Screens/History";
-import { StatusBar } from "expo-status-bar";
 import { Avatar } from "react-native-elements";
 import Setting from "./src/Screens/Setting";
 import Header from "./src/components/Header";
 import WelcomeScreen from "./src/Screens/WelcomeScreen";
 import PhoneVerification from "./src/Screens/PhoneVerification";
+import { doc, getDoc } from "firebase/firestore";
+import OptionModal from "./src/components/OptionModal";
+import Contactss from "./src/Screens/Contacts";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoadingScreen from "./src/Screens/LoadingScreen";
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import ConnectedContacts from "./src/Screens/ConnectedContacts";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -49,21 +60,37 @@ const client = StreamChat.getInstance(API_KEY);
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const {
     theme: { colors },
-    setId,
     userData,
     setUserData,
+    setLoadingData,
+    loadContacts,
+    channel,
+    setContacts,
+    setMemoryContacts,
   } = useContext(GlobalContext);
   useEffect(() => {
     //return ()  => client.disconnectUser();
   }, []);
+  useEffect(async () => {
+    const value = await AsyncStorage.getItem("userData");
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setUserData(JSON.stringify(value));
       setLoading(false);
       if (user) {
-        setUserData(user);
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          setUserData(userSnap.data());
+          await AsyncStorage.setItem(
+            "userData",
+            JSON.stringify(userSnap.data())
+          );
+          setLoadingData(true);
+        }
       } else {
         setUserData(null);
       }
@@ -71,6 +98,13 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  useEffect(async () => {
+    loadContacts();
+    const value = await AsyncStorage.getItem("userContacts");
+    setContacts(JSON.parse(value));
+    setMemoryContacts(JSON.parse(value));
+
+  }, []);
   if (loading) {
     return (
       <View
@@ -91,11 +125,6 @@ function App() {
       {!userData ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen
-            name="verification"
-            screenOptions={{ headerShown: false }}
-            component={PhoneVerification}
-          />
-          <Stack.Screen
             name="welcome"
             screenOptions={{ headerShown: false }}
             component={WelcomeScreen}
@@ -109,6 +138,7 @@ function App() {
       ) : (
         <Stack.Navigator
           screenOptions={{
+            //animationEnabled: false,
             headerStyle: {
               backgroundColor:
                 Platform.OS == "ios" ? colors.white : colors.white,
@@ -119,49 +149,87 @@ function App() {
               Platform.OS == "ios" ? colors.foreground : colors.foreground,
           }}
         >
-          {!userData.displayName && (
+          {userData.displayName == null ? (
+            <>
+              <Stack.Screen
+                name="loading"
+                component={LoadingScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="profile"
+                component={Profile}
+                options={{ headerShown: false }}
+              />
+            </>
+          ) : null}
+          {userData.verified == false ? (
             <Stack.Screen
-              name="profile"
-              component={Profile}
-              options={{ headerShown: false }}
+              name="verification"
+              screenOptions={{ headerShown: false }}
+              component={PhoneVerification}
             />
-          )}
-          <Stack.Screen
-            name="home"
-            options={{
-              title: "Orramo",
-
-              headerRight: () => (Platform.OS == "android" ? <Header /> : null),
-            }}
-            component={Home}
-          />
-          <Stack.Screen
-            name="Channel"
-            options={{ title: "Brodai" }}
-            component={ChannelScreen}
-          />
-          <Stack.Screen
-            name="Charges Calculator"
-            options={{ headerShown: false }}
-            component={HomeCalculator}
-          />
-          <Stack.Screen
-            name="Currency Converter"
-            options={{ headerShown: false }}
-            component={CurrencyConverter}
-          />
-          <Stack.Screen
-            name="History"
-            options={{ headerShown: false }}
-            component={History}
-          />
-
-          {Platform.OS == "android" && (
-            <Stack.Screen
-              name="settings"
-              options={{ title: "Settings", headerShown: true }}
-              component={Setting}
-            />
+          ) : (
+            <>
+              <Stack.Screen
+                name="home"
+                options={{
+                  title: "Orramo",
+                  headerRight: () =>
+                    Platform.OS == "android" ? (
+                      <Header />
+                    ) : (
+                      <StatusBar
+                        animated={true}
+                        backgroundColor="#14213D"
+                        barStyle="light-content"
+                      />
+                    ),
+                  headerStyle: {
+                    backgroundColor: "#14213D",
+                  },
+                  headerTintColor: "#fff",
+                }}
+                component={Home}
+              />
+              <Stack.Screen
+                name="Channel"
+                options={{
+                  title: channel?.data?.name,
+                  headerBackTitle: "Back",
+                  headerStyle: { backgroundColor: "#14213D" },
+                  headerTintColor: "#fff",
+                }}
+                component={ChannelScreen}
+              />
+              <Stack.Screen
+                name="Charges Calculator"
+                options={{ headerShown: false }}
+                component={HomeCalculator}
+              />
+              <Stack.Screen
+                name="Currency Converter"
+                options={{ headerShown: false }}
+                component={CurrencyConverter}
+              />
+              <Stack.Screen
+                name="contacts"
+                options={{ headerShown: false }}
+                component={Contactss}
+              />
+              <Stack.Screen
+                name="mycontacts"
+                options={{ headerShown: false }}
+                component={ConnectedContacts}
+              />
+              {Platform.OS == "android" && (
+                <Stack.Screen
+                  name="settings"
+                  options={{ title: "Settings", headerShown: true }}
+                  component={Setting}
+                />
+              )}
+            </>
           )}
         </Stack.Navigator>
       )}
@@ -171,29 +239,28 @@ function App() {
 function Home({ navigation }) {
   const {
     theme: { colors },
+    userData,
   } = useContext(GlobalContext);
-
   useEffect(() => {
-    const connectUser = async (username, fullname) => {
+    const connectUser = async () => {
       await client.connectUser(
         {
-          id: username,
-          name: fullname,
-          AccountBalance: 500000,
-          image:
-            "https://scontent.fatl1-2.fna.fbcdn.net/v/t1.6435-9/93803824_2688316481388052_6414058165041627136_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=9sPn15HwOd8AX8iM-T_&_nc_ht=scontent.fatl1-2.fna&oh=00_AT99d0tB2a4TyXr7c0llid2yD1m0WQ5wR3lsEes6VXmtCw&oe=6279576B",
+          id: userData.uid,
+          name: userData.displayName,
+          phoneNumber: userData.phoneNumber,
+          email: userData.email,
+          token: userData.token,
+          image: userData.photoURL,
         },
-        client.devToken(username)
+        userData.token
       );
-      console.log("user connected");
 
-      const channel = client.channel("messaging", "global", {
-        name: "Global Room",
-      });
-      await channel.watch();
+      //  await channel.watch();
     };
-    connectUser("Bradley", "Ade");
-  }, []);
+    if (!client.userID) {
+      connectUser();
+    }
+  }, [userData]);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => {
@@ -202,13 +269,25 @@ function Home({ navigation }) {
             let iconName;
 
             if (route.name === "account" || route.name === "Compte") {
-              color = focused ? "#14213D" : "grey";
+              if (Platform.OS == "ios") {
+                color = focused ? "#000" : "#75787E";
+              } else {
+                color = focused ? "#fff" : "#D3D3D3";
+              }
             }
             if (route.name === "chats" || route.name === "Compte") {
-              color = focused ? "#14213D" : "grey";
+              if (Platform.OS == "ios") {
+                color = focused ? "#000" : "#75787E";
+              } else {
+                color = focused ? "#fff" : "#D3D3D3";
+              }
             }
             if (route.name === "settings" || route.name === "Compte") {
-              color = focused ? "#14213D" : "grey";
+              if (Platform.OS == "ios") {
+                color = focused ? "#000" : "#75787E";
+              } else {
+                color = focused ? "#fff" : "#D3D3D3";
+              }
             }
             return (
               <Text
@@ -228,10 +307,11 @@ function Home({ navigation }) {
             color: colors.foreground,
           },
           tabBarIndicatorStyle: {
-            backgroundColor: colors.foreground,
+            backgroundColor: colors.white,
           },
           tabBarStyle: {
-            backgroundColor: Platform.OS == "ios" ? colors.white : colors.white,
+            backgroundColor:
+              Platform.OS == "ios" ? colors.white : colors.foreground,
           },
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -285,7 +365,8 @@ function Main() {
     require("./assets/icon-square.png"),
     require("./assets/chatbg.png"),
     require("./assets/user-icon.png"),
-    require("./assets/welcome-img.png")
+    require("./assets/welcome-img.png"),
+    require("./assets/icon-square.png")
   );
   if (!assets) {
     return (
@@ -302,14 +383,18 @@ function Main() {
     );
   }
   return (
-    <GlobalProvider>
-      <StatusBar />
-      <OverlayProvider>
-        <Chat client={client}>
-          <App />
-        </Chat>
-      </OverlayProvider>
-    </GlobalProvider>
+    <SafeAreaProvider>
+      <GlobalProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <StatusBar />
+          <OverlayProvider>
+            <Chat client={client}>
+              <App />
+            </Chat>
+          </OverlayProvider>
+        </GestureHandlerRootView>
+      </GlobalProvider>
+    </SafeAreaProvider>
   );
 }
 

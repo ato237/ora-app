@@ -1,12 +1,25 @@
 import React, { createContext, useState } from "react";
+import { StreamChat } from "stream-chat";
+import * as Contact from "expo-contacts";
 
 import { theme } from "../../../utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const GlobalContext = createContext({
   theme,
-  channel:null,
-  setChannel:() =>{},
-  userData: null, setUserData:()=>{},
+  channel: null,
+  setChannel: () => {},
+  userData: [],
+  setUserData: () => {},
+  loadingData: false,
+  setLoadingData: () => {},
+  setModalVisible: () => {},
+  modalVisible: false,
+  loadContacts: () => {},
+  contacts:[],
+  setContacts: () => {},
+  inMemoryContacts:[],
+  setMemoryContacts: () => {},
 });
 
 const GlobalProvider = (props) => {
@@ -22,8 +35,10 @@ const GlobalProvider = (props) => {
     currencyName: "Franc",
     flag: "iVBORw0KGgoAAAANSUhEUgAAAB4AAAAUCAIAAAAVyRqTAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpBNkJDNTBGNTE3NzMxMUUyODY3Q0FBOTFCQzlGNjlDRiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpBNkJDNTBGNjE3NzMxMUUyODY3Q0FBOTFCQzlGNjlDRiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkE2QkM1MEYzMTc3MzExRTI4NjdDQUE5MUJDOUY2OUNGIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkE2QkM1MEY0MTc3MzExRTI4NjdDQUE5MUJDOUY2OUNGIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+KAzx3QAAAHJJREFUeNpiZKiKY8ANTneexCNreO49HlkmBpqBUaNHjaaO0X/+Mkpmf5cq/vbnL7FaWIhUp9T4VTT2BwMzA6sQw8NqLmq6+sMxFkb5v4xyfz6dZqayq5nZGJ5k8zL8IyFyiDX6/Ta20cQ3avSQMRogwADcmBpIZYNhTQAAAABJRU5ErkJggg==",
   });
-  const[id,setId] = useState("")
-  const[channel,setChannel] = useState(null)
+  const [loadingData, setLoadingData] = useState(false);
+
+  const [id, setId] = useState("");
+  const [channel, setChannel] = useState(null);
   const [tempCode, setTempCode] = useState({});
   const [from, setFrom] = useState(true);
   const [udatedCount, setUpdatedCount] = useState(0);
@@ -42,8 +57,25 @@ const GlobalProvider = (props) => {
   const [userData, setUserData] = useState(null);
   const [isImageLoading, setImageLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [rooms, setRooms] = useState([]);
-  const [unfilteredRooms, setUnfilteredRooms] = useState([]);
+  const [loadingContacts, isLoadingContacts] = useState(true);
+  const [contacts, setContacts] = useState([]);
+  const [inMemoryContacts, setMemoryContacts] = useState([]);
+  const loadContacts = async () => {
+    const permission = await Contact.getPermissionsAsync();
+
+    if (permission.status !== "granted") {
+      return;
+    }
+
+    const { data } = await Contact.getContactsAsync({
+      fields: [Contact.Fields.PhoneNumbers],
+    });
+   // setContacts(data);
+    isLoadingContacts(false);
+   // setMemoryContacts(data);
+    await AsyncStorage.setItem('userContacts', JSON.stringify(data))
+    
+  };
 
   return (
     <GlobalContext.Provider
@@ -89,7 +121,15 @@ const GlobalProvider = (props) => {
         apploading,
         setAppLoading,
         theme,
-        channel,setChannel
+        channel,
+        setChannel,
+        loadingData,
+        setLoadingData,
+        loadContacts,
+        contacts,
+        setContacts,
+        inMemoryContacts,
+        setMemoryContacts,
       }}
     >
       {props.children}

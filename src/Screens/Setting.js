@@ -6,71 +6,386 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
+import { StreamChat } from "stream-chat";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
+import { ScrollView } from "react-native-gesture-handler";
 
-const Setting = ({navigation}) => {
+const API_KEY = "n7duuv99yqcx";
+const client = StreamChat.getInstance(API_KEY);
+const Setting = ({ navigation }) => {
   const { setId, userData, setUserData } = useContext(GlobalContext);
 
-  const SignOut = async() => {
+  const SignOut = async () => {
+    await AsyncStorage.removeItem("userData");
     await signOut(auth)
       .then(() => {
         console.log("signed out");
-        navigation.navigate('signIn')
+        navigation.navigate("welcome");
+        client.disconnectUser();
       })
       .catch((err) => {
         console.log(err);
       });
   };
   return (
-    <SafeAreaView style={{backgroundColor:'white',flex:1}}>
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "row",
-        }}
-      >
+    <ScrollView>
+      <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
         <TouchableOpacity>
-          <Image
+          <View
             style={{
-              right: 30,
-              width: 120,
-              height: 120,
-              borderRadius: 100,
-              marginHorizontal: 10,
-            }}
-            source={{ uri:userData == null?"Nothing to Show": userData.photoURL }}
-          />
-        </TouchableOpacity>
-        <View style={{ flexDirection: "column" }}>
-          <Text style={{ fontSize: 30, marginBottom: 25 }}>
-            {userData == null? "Nothing to show":userData.displayName}
-          </Text>
-          <TouchableOpacity
-            style={{
-              padding: 15,
-              backgroundColor: "#0053C5",
-              borderRadius: 25,
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+              backgroundColor: "#fff",
+              paddingVertical: 15,
+              bottom: 20,
             }}
           >
-            <Text style={{ color: "white", fontSize: 15 }}>Edit Profile</Text>
+            <Image
+              style={{
+                width: 150,
+                height: 150,
+                borderRadius: 100,
+                marginHorizontal: 10,
+              }}
+              source={{
+                uri: userData == null ? "Nothing to Show" : userData.photoURL,
+              }}
+            />
+          </View>
+        </TouchableOpacity>
+        <View style={{ paddingHorizontal: 20, marginTop: 5 }}>
+          <Text style={{ color: "#0053C5", fontWeight: "bold", fontSize: 18 }}>
+            Account
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="person-outline"
+              size={20}
+            />
+
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              {userData.displayName}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                marginTop: 10,
+                marginBottom: 10,
+                color: "#0053C5",
+                marginHorizontal: 0,
+              }}
+            >
+              Online
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="call-outline"
+              size={20}
+            />
+
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              {userData.phoneNumber}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                marginTop: 10,
+                marginBottom: 10,
+                color: userData.verified ? "green" : "red",
+                marginHorizontal: 0,
+              }}
+            >
+              {userData.verified ? "verified" : "Not Verified"}
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="mail-outline"
+              size={20}
+            />
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              {userData.email}
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                marginTop: 10,
+                marginBottom: 10,
+                color: !userData.verified ? "green" : "red",
+                marginHorizontal: 0,
+              }}
+            >
+              {!userData.verified ? "verified" : "Not Verified"}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <View style={{ paddingHorizontal: 20, marginTop: 25 }}>
+          <Text style={{ color: "#0053C5", fontWeight: "bold", fontSize: 18 }}>
+            Settings
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="alert-outline"
+              size={20}
+            />
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              Display Mode
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="notifications-outline"
+              size={20}
+            />
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              Notifications and Sounds
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="chatbox-outline"
+              size={20}
+            />
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              Chat Settings
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="laptop-outline"
+              size={20}
+            />
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              Devices
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <View style={{ paddingHorizontal: 20, marginTop: 25 }}>
+          <Text style={{ color: "#0053C5", fontWeight: "bold", fontSize: 18 }}>
+            Contact us
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="alert-outline"
+              size={20}
+            />
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              Contact Support
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="book-outline"
+              size={20}
+            />
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              Terms and Conditions
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="logo-facebook"
+              size={20}
+            />
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              facebook
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#F1F2F3",
+            marginTop: 5,
+            paddingVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 20,
+              marginTop: 5,
+            }}
+          >
+            <Ionicons
+              style={{ marginTop: 10, marginHorizontal: 10 }}
+              name="logo-twitter"
+              size={20}
+            />
+            <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
+              Twitter
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <View style={{ paddingHorizontal: 102, marginVertical: 10 }}>
+          <TouchableOpacity
+            onPress={SignOut}
+            style={{
+              backgroundColor: "#fff",
+              padding: 20,
+              borderRadius: 20,
+              borderWidth: 1,
+            }}
+          >
+            <Text style={{ textAlign: "center" }}>Sign Out</Text>
           </TouchableOpacity>
         </View>
-      </View>
-      <View style={{paddingHorizontal:100,marginTop:100}}>
-      <TouchableOpacity
-      onPress={SignOut}
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 10,
-          backgroundColor: "#0053C5",
-
-        }}
-      >
-        <Text style={{color:'white'}}>Sign Out</Text>
-      </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 

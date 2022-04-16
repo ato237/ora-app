@@ -50,7 +50,7 @@ const WelcomeScreen = ({ navigation }) => {
           style={{ backgroundColor: "#14213D", paddingVertical: 10 }}
           onPress={() => navigation.navigate("signIn")}
         >
-          <Text style={{ color: "white", fontSize: 25, textAlign: "center" }}>
+          <Text style={{ color: "white", fontSize: 18, textAlign: "center" }}>
             Agree and Continue
           </Text>
         </TouchableOpacity>

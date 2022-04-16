@@ -7,31 +7,34 @@ import {
   Image,
   TextInput,
   Button,
+  ActivityIndicator,
 } from "react-native";
 import Constants from "expo-constants";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { pickImage, askForPermission, uploadImage } from "../../utils";
 import { auth, db } from "../../firebase";
-import { updateProfile,signOut } from "@firebase/auth";
-import { doc, setDoc } from "@firebase/firestore";
+import { updateProfile, signOut } from "@firebase/auth";
+import { doc, setDoc, getDoc } from "@firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { GlobalContext } from "../context/reducers/Provider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Profile() {
   const [displayName, setDisplayName] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [permissionStatus, setPermissionStatus] = useState(null);
+  const [AccountBalance, setAccountBalance] = useState(0);
+  const [verified, setVerified] = useState(false);
+  const [verifiedAt, setVerifiedAt] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const navigation = useNavigation();
-  const {
-
-   userData,setUserData,
-  } = useContext(GlobalContext);
+  const [submit, setSubmit] = useState(false);
+  const { userData, setUserData,setLoadingData,loadingData } = useContext(GlobalContext);
   useEffect(() => {
     (async () => {
       const status = await askForPermission();
       setPermissionStatus(status);
     })();
-    
   }, []);
 
   const {
@@ -50,7 +53,11 @@ export default function Profile() {
       photoURL = url;
     }
     const userData = {
+      AccountBalance,
       displayName,
+      phoneNumber,
+      verified,
+      verifiedAt,
       email: user.email,
     };
     if (photoURL) {
@@ -61,7 +68,16 @@ export default function Profile() {
       updateProfile(user, userData),
       setDoc(doc(db, "users", user.uid), { ...userData, uid: user.uid }),
     ]);
-    navigation.navigate("home");
+    navigation.navigate("verification");
+    if (user) {
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        await AsyncStorage.setItem("userData", JSON.stringify(userSnap.data()));
+        setUserData(userSnap.data());
+        setLoadingData(true);
+      }
+    }
   }
 
   async function handleProfilePicture() {
@@ -72,7 +88,18 @@ export default function Profile() {
   }
 
   if (!permissionStatus) {
-    return <Text>Loading</Text>;
+    return (
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#fff",
+          flex: 1,
+        }}
+      >
+        <ActivityIndicator size="large" color="#FFA500" />
+      </View>
+    );
   }
   if (permissionStatus !== "granted") {
     return <Text>You need to allow this permission</Text>;
@@ -131,11 +158,29 @@ export default function Profile() {
             width: "100%",
           }}
         />
+        {submit == true ? (
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#fff",
+              borderRadius: 30,
+              marginTop: 10,
+              width: 50,
+              height: 50,
+            }}
+          >
+            <ActivityIndicator size="large" color="#FFA500" />
+          </View>
+        ) : null}
         <View style={{ marginTop: "auto", width: 80 }}>
           <Button
             title="Next"
             color={colors.secondary}
-            onPress={handlePress}
+            onPress={() => {
+              handlePress();
+              setSubmit(true);
+            }}
             disabled={!displayName}
           />
         </View>

@@ -27,7 +27,8 @@
       },
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app uses localization to check the users country and device language in order to give the proper available translations in-app.",
-        "NSUserTrackingUsageDescription": "This app uses tracking inorder to set the language either authomatically or manually and to serve ads"
+        "NSUserTrackingUsageDescription": "This app uses tracking inorder to set the language either authomatically or manually and to serve ads",
+        "NSContactsUsageDescription ":"Allow Orramo to Access your contacts"
       }
       
     },

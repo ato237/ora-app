@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 import { setUserDataAsync } from "expo-facebook";
+import { multiFactor } from "firebase/auth";
   
   const MainAccount = () => {
     navigation = useNavigation();
@@ -48,7 +49,7 @@ import { setUserDataAsync } from "expo-facebook";
   
               <View style={styles.amountContent}>
                 <Text style={{ fontSize: 25, fontWeight: "bold", width: "75%" }}>
-                  {numbro(userData.AccountBalance).format({
+                  {numbro(userData?userData.AccountBalance: 0).format({
                   thousandSeparated: true,
                   mantissa: 0, // number of decimals displayed
                 })} XAF
