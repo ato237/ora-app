@@ -1,7 +1,13 @@
 import { async } from "@firebase/util";
 import axios from "axios";
 import { updateProfile } from "firebase/auth";
-import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   StyleSheet,
@@ -28,13 +34,22 @@ const PhoneVerification = ({ navigation }) => {
   const [valid, setValid] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [otp, setOtp] = useState("");
-  const {
-    userData,
-  } = useContext(GlobalContext);
+  const { userData } = useContext(GlobalContext);
+  const[failCount,setFailCount] = useState(0)
   const user = auth.currentUser;
+  const [seconds, setSeconds] = React.useState(60);
+  const [minutes, setMinutes] = React.useState(Math.floor(seconds / 60));
 
-  const handlePhoneAuth = async() => {
-   
+  React.useEffect(() => {
+    if (seconds > 0) {
+      setTimeout(() => setSeconds(seconds - 1), 1000);
+        setMinutes(minutes)
+    } else {
+      setSeconds('I have reached 0');
+    }
+    
+  });
+  const handlePhoneAuth = async () => {
     axios
       .post(
         `http://10.0.0.225:8080/api/otp/sendotp/${
@@ -42,63 +57,66 @@ const PhoneVerification = ({ navigation }) => {
         }`
       )
       .catch((error) => console.log(error))
-      .then(async(response) => {
+      .then(async (response) => {
         console.log(response.status);
-        
-       // response.status == 200 ? (
-           
-      if(response.status==200) {
-        setPhone("+" + phoneInput.current.state.code + value);
-        let phoneNumber = "+"+phoneInput.current.state.code + value
-        const userData = {
-          email:user.email,
-          verified: false
+
+        // response.status == 200 ? (
+
+        if (response.status == 200) {
+          setPhone("+" + phoneInput.current.state.code + value);
+          let phoneNumber = "+" + phoneInput.current.state.code + value;
+          const userData = {
+            email: user.email,
+            verified: false,
+          };
+          if (phoneNumber) {
+            userData.phoneNumber = phoneNumber;
+          }
+          await Promise.all([
+            updateProfile(user, userData),
+            updateDoc(doc(db, "users", user.uid), {
+              ...userData,
+              uid: user.uid,
+            }),
+          ]);
+          setSubmitted(true);
+        } else {
+          return Alert.alert("Verification failed please try again later");
         }
-        if(phoneNumber){
-          userData.phoneNumber = phoneNumber;
-        }
-        await Promise.all([
-          updateProfile(user, userData),
-          updateDoc(doc(db, "users", user.uid), { ...userData, uid: user.uid }),
-        ]);
-        setSubmitted(true)
-       }
-        else{
-          return Alert.alert('Verification failed please try again later')
-        }
-      
       });
   };
 
-  const handleVerify = async() => {
+  const handleVerify = async () => {
     console.log(phone);
     console.log(otp);
     axios
       .post(`http://10.0.0.225:8080/api/otp/verifyotp/${phone}/${otp}`)
       .catch((error) => console.log(error))
-      .then(async(response) => {
-        if(response.status == 200) {
+      .then(async (response) => {
+        if (response.status == 200) {
           const userData = {
-            AccountBalance:0,
-            email:user.email,
+            AccountBalance: 0,
+            email: user.email,
             verified: true,
-            verifiedAt: serverTimestamp()
-          }
+            verifiedAt: serverTimestamp(),
+          };
           await Promise.all([
             updateProfile(user, userData),
-            updateDoc(doc(db, "users", user.uid), { ...userData, uid: user.uid }),
+            updateDoc(doc(db, "users", user.uid), {
+              ...userData,
+              uid: user.uid,
+            }),
           ]);
-          //navigation.navigate("home")
+          navigation.navigate("home")
         }
       });
   };
-  useEffect(()=>{
-    userData.verified == true?  navigation.navigate("home"):null
-  },[userData.verified])
+  useEffect(() => {
+    userData.verified == true ? navigation.navigate("home") : null;
+  }, [userData.verified]);
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
       <View>
         <SafeAreaView>
           <View>
@@ -186,7 +204,7 @@ const PhoneVerification = ({ navigation }) => {
               </View>
             )}
           </View>
-          <View style={{ paddingHorizontal: 130, marginTop: 100 }}>
+          <View style={{ paddingHorizontal: 130, marginTop: 30 }}>
             {!submitted && (
               <TouchableOpacity
                 style={{
@@ -223,6 +241,7 @@ const PhoneVerification = ({ navigation }) => {
               </TouchableOpacity>
             )}
           </View>
+          <Text>{seconds}, {minutes}</Text>
         </SafeAreaView>
       </View>
     </>

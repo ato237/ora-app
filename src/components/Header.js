@@ -22,7 +22,6 @@ const Header = () => {
   };
   return (
     <View style={{ flexDirection: "row" }}>
-      <StatusBar animated={true} backgroundColor="#14213D" barStyle="light-content" />
       <TouchableOpacity style={{ right: 35 }}>
         <Ionicons name="search-outline" size={30} color="#fff" />
       </TouchableOpacity>

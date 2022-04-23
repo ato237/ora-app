@@ -38,7 +38,7 @@
       "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#14213D"
+        "backgroundColor": "#fff"
       },
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-7148038859151468~4452246712"
@@ -47,6 +47,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ]
   }
 }

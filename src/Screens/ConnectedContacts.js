@@ -75,10 +75,7 @@ const ConnectedContacts = ({ navigation }) => {
   });
   return (
     <View style={{ flex: 1 }}>
-      <StatusBar
-        backgroundColor="#14213D"
-        barStyle={Platform.OS == "ios" ? "dark-content" : "light-content"}
-      />
+     
 
       <SafeAreaView style={{ backgroundColor: "#fff" }} />
       <View style={{ borderRadius: 20, paddingTop: 10, paddingHorizontal: 10 }}>

@@ -19,7 +19,12 @@ import { Ionicons } from "@expo/vector-icons";
 import Profile from "./src/Screens/Profile";
 import GlobalProvider, { GlobalContext } from "./src/context/reducers/Provider";
 import SignIn from "./src/Screens/SignIn";
-import { Chat, OverlayProvider } from "stream-chat-expo";
+import {
+  Chat,
+  OverlayProvider,
+  useChannelPreviewDisplayAvatar,
+  useChannelPreviewDisplayName,
+} from "stream-chat-expo";
 import { ChannelScreen } from "./src/Screens/ChannelScreen";
 import { ChannelListScreen } from "./src/Screens/ChannelListScreen";
 import { StreamChat } from "stream-chat";
@@ -27,7 +32,6 @@ import MainAccount from "./src/Screens/MainAccount";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeCalculator from "./src/Screens/Calculator/HomeCalculator";
 import CurrencyConverter from "./src/Screens/Calculator/CurrencyConverter";
-import History from "./src/Screens/History";
 import { Avatar } from "react-native-elements";
 import Setting from "./src/Screens/Setting";
 import Header from "./src/components/Header";
@@ -44,6 +48,11 @@ import {
 } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ConnectedContacts from "./src/Screens/ConnectedContacts";
+import Payments from "./src/Screens/Payments";
+import BuyAirtime from "./src/Screens/BuyAirtime";
+import History from "./src/Screens/History";
+import VirtualCards from "./src/Screens/VirtualCards";
+import ChatHeader from "./src/components/ChatHeader";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -61,6 +70,7 @@ const client = StreamChat.getInstance(API_KEY);
 function App() {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+
   const {
     theme: { colors },
     userData,
@@ -72,12 +82,13 @@ function App() {
     setMemoryContacts,
   } = useContext(GlobalContext);
   useEffect(() => {
-    //return ()  => client.disconnectUser();
+    return async () => await client?.disconnectUser();
   }, []);
   useEffect(async () => {
     const value = await AsyncStorage.getItem("userData");
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      // console.log(user);
       setUserData(JSON.stringify(value));
       setLoading(false);
       if (user) {
@@ -103,7 +114,6 @@ function App() {
     const value = await AsyncStorage.getItem("userContacts");
     setContacts(JSON.parse(value));
     setMemoryContacts(JSON.parse(value));
-
   }, []);
   if (loading) {
     return (
@@ -176,29 +186,22 @@ function App() {
                 options={{
                   title: "Orramo",
                   headerRight: () =>
-                    Platform.OS == "android" ? (
-                      <Header />
-                    ) : (
-                      <StatusBar
-                        animated={true}
-                        backgroundColor="#14213D"
-                        barStyle="light-content"
-                      />
-                    ),
+                    Platform.OS == "android" ? <Header /> : null,
                   headerStyle: {
-                    backgroundColor: "#14213D",
+                    backgroundColor: Platform.OS == "ios" ? "#fff" : "#14213D",
                   },
-                  headerTintColor: "#fff",
+                  headerTintColor: Platform.OS == "ios" ? "#000" : "#fff",
                 }}
                 component={Home}
               />
               <Stack.Screen
                 name="Channel"
                 options={{
-                  title: channel?.data?.name,
-                  headerBackTitle: "Back",
+                  header: () => <ChatHeader />,
+                  //headerBackTitle: "Back",
                   headerStyle: { backgroundColor: "#14213D" },
                   headerTintColor: "#fff",
+                  headerShown: channel == null ? false : true,
                 }}
                 component={ChannelScreen}
               />
@@ -216,6 +219,26 @@ function App() {
                 name="contacts"
                 options={{ headerShown: false }}
                 component={Contactss}
+              />
+              <Stack.Screen
+                name="history"
+                options={{ headerShown: true, title: "History" }}
+                component={History}
+              />
+              <Stack.Screen
+                name="airtime"
+                options={{ headerShown: true, title: "Airtime" }}
+                component={BuyAirtime}
+              />
+              <Stack.Screen
+                name="payments"
+                options={{ headerShown: true, title: "payments" }}
+                component={Payments}
+              />
+              <Stack.Screen
+                name="virtualCards"
+                options={{ headerShown: true, title: "Virtual Cards" }}
+                component={VirtualCards}
               />
               <Stack.Screen
                 name="mycontacts"
@@ -241,6 +264,7 @@ function Home({ navigation }) {
     theme: { colors },
     userData,
   } = useContext(GlobalContext);
+
   useEffect(() => {
     const connectUser = async () => {
       await client.connectUser(
@@ -366,7 +390,8 @@ function Main() {
     require("./assets/chatbg.png"),
     require("./assets/user-icon.png"),
     require("./assets/welcome-img.png"),
-    require("./assets/icon-square.png")
+    require("./assets/icon-square.png"),
+    require("./assets/adaptive-icon.png")
   );
   if (!assets) {
     return (
@@ -385,8 +410,20 @@ function Main() {
   return (
     <SafeAreaProvider>
       <GlobalProvider>
+        {Platform.OS == "ios" ? (
+          <StatusBar
+            animated={true}
+            backgroundColor="#fff"
+            barStyle="dark-content"
+          />
+        ) : (
+          <StatusBar
+            animated={true}
+            backgroundColor="#14213D"
+            barStyle="light-content"
+          />
+        )}
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <StatusBar />
           <OverlayProvider>
             <Chat client={client}>
               <App />

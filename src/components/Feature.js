@@ -4,6 +4,7 @@ import { TouchableOpacity } from "react-native";
 import { Ionicons } from "react-native-vector-icons";
 import { MaterialIcons } from "react-native-vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 const Feature = ({ title, icon, sizes, link, top,color }) => {
   navigation = useNavigation();

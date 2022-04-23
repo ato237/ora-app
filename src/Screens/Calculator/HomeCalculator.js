@@ -14,9 +14,9 @@ import { TextInput } from "react-native-paper";
 import { Dropdown } from "sharingan-rn-modal-dropdown";
 import axios from "axios";
 import * as Haptics from "expo-haptics";
-import i18n from "../../Data/translation"
+import i18n from "../../Data/translation";
 import { AdMobBanner, AdMobInterstitial } from "expo-ads-admob";
-import { GlobalContext } from "../../context/reducers/Provider"
+import { GlobalContext } from "../../context/reducers/Provider";
 import numbro from "numbro";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Details from "./Modals/Details";
@@ -185,14 +185,11 @@ const HomeCalculator = ({ navigation }) => {
   //loadAd();
 
   useEffect(() => {
-   // AdMobInterstitial.showAdAsync() 
-
+    // AdMobInterstitial.showAdAsync()
   }, []);
   return (
     <View style={styles.container}>
       {/**Status Bar */}
-      <StatusBar backgroundColor="#14213D" barStyle="light-content" />
-
       <View style={styles.amountBox}>
         <Text style={styles.amountStyle}>
           {i18n.t("charge")}{" "}
@@ -265,12 +262,11 @@ const HomeCalculator = ({ navigation }) => {
           style={styles.input}
           value={values}
           onChangeText={(values) => {
-            const validated = values.match(/^(\d*\.{0,1}\d{0,2}$)/)
-    if (validated) {
-      setValues(String(values));
-      datas.setValues(values);
-    }
-           
+            const validated = values.match(/^(\d*\.{0,1}\d{0,2}$)/);
+            if (validated) {
+              setValues(String(values));
+              datas.setValues(values);
+            }
           }}
           placeholder={i18n.t("enter")}
           placeholderStyle={{ fontSize: 20 }}
@@ -367,8 +363,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#14213D",
-    paddingTop:50
-   
+    paddingTop: 50,
   },
   amountStyle: {
     fontSize: 15,

@@ -1,10 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 const WelcomeScreen = ({ navigation }) => {
   return (
-    <SafeAreaView style={{ marginTop: 50 }}>
+    <SafeAreaView style={{backgroundColor:'white',flex:1 }}>
+      <StatusBar/>
       <Text
         style={{
           justifyContent: "center",
@@ -17,6 +19,12 @@ const WelcomeScreen = ({ navigation }) => {
       >
         WELCOME TO ORRAMO
       </Text>
+      <Text style={{
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          color: "#14213D",
+        }}>Chat & Send</Text>
       <View
         style={{
           justifyContent: "center",

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "694438925625",
+    "firebase_url": "https://orramo-app-default-rtdb.firebaseio.com",
+    "project_id": "orramo-app",
+    "storage_bucket": "orramo-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694438925625:android:b5d9fa91f81cb7daacc4e8",
+        "android_client_info": {
+          "package_name": "com.atoproduction.orramo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "694438925625-dansks44n8p82tolrdqre7k6db92ph5f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVwzbrA3gWoHrl6wPakgnj50895OgIv5w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "694438925625-aqdpofmh7nlbj079nkls336mmhsm95ur.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "694438925625-b5v04ko6osbsqsereccv5pllqatgbsnv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.atoproduction.orramo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

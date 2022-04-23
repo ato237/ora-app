@@ -7,6 +7,16 @@ export async function pickImage() {
   let result = ImagePicker.launchCameraAsync();
   return result;
 }
+
+export async function selectImage(){
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+  return result;
+}
 export async function askForPermission() {
   const { status } = await ImagePicker.requestCameraPermissionsAsync();
   return status;

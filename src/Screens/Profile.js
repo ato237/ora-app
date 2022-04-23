@@ -11,13 +11,19 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { pickImage, askForPermission, uploadImage } from "../../utils";
+import {
+  pickImage,
+  askForPermission,
+  uploadImage,
+  selectImage,
+} from "../../utils";
 import { auth, db } from "../../firebase";
 import { updateProfile, signOut } from "@firebase/auth";
 import { doc, setDoc, getDoc } from "@firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { GlobalContext } from "../context/reducers/Provider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PictureSelectModal from "../components/PictureSelectModal";
 
 export default function Profile() {
   const [displayName, setDisplayName] = useState("");
@@ -29,7 +35,15 @@ export default function Profile() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const navigation = useNavigation();
   const [submit, setSubmit] = useState(false);
-  const { userData, setUserData,setLoadingData,loadingData } = useContext(GlobalContext);
+  const {
+    userData,
+    setUserData,
+    setLoadingData,
+    loadingData,
+    modalVisible,
+    setModalVisible,
+  } = useContext(GlobalContext);
+
   useEffect(() => {
     (async () => {
       const status = await askForPermission();
@@ -41,6 +55,16 @@ export default function Profile() {
     theme: { colors },
   } = useContext(GlobalContext);
 
+  const generateAccountNumber = (length) => {
+    var result = '';
+    var characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return `flw_tx_ref_${result}`;
+  };
   async function handlePress() {
     const user = auth.currentUser;
     let photoURL;
@@ -53,7 +77,10 @@ export default function Profile() {
       photoURL = url;
     }
     const userData = {
-      AccountBalance,
+      Account:{
+        AccountNumber: generateAccountNumber(15),
+        AccountBalance
+      },
       displayName,
       phoneNumber,
       verified,
@@ -71,6 +98,7 @@ export default function Profile() {
     navigation.navigate("verification");
     if (user) {
       const userRef = doc(db, "users", user.uid);
+      
       const userSnap = await getDoc(userRef);
       if (userSnap.exists()) {
         await AsyncStorage.setItem("userData", JSON.stringify(userSnap.data()));
@@ -82,6 +110,13 @@ export default function Profile() {
 
   async function handleProfilePicture() {
     const result = await pickImage();
+    if (!result.cancelled) {
+      setSelectedImage(result.uri);
+    }
+  }
+
+  async function selectProfilePicture() {
+    const result = await selectImage();
     if (!result.cancelled) {
       setSelectedImage(result.uri);
     }
@@ -106,7 +141,6 @@ export default function Profile() {
   }
   return (
     <React.Fragment>
-      <StatusBar style="auto" />
       <View
         style={{
           alignItems: "center",
@@ -123,7 +157,7 @@ export default function Profile() {
           Please provide your name and an optional profile photo
         </Text>
         <TouchableOpacity
-          onPress={handleProfilePicture}
+          onPress={() => setModalVisible(true)}
           style={{
             marginTop: 30,
             borderRadius: 120,
@@ -173,6 +207,11 @@ export default function Profile() {
             <ActivityIndicator size="large" color="#FFA500" />
           </View>
         ) : null}
+        <PictureSelectModal
+          cameraSubmit={handleProfilePicture}
+          imageSubmit={selectProfilePicture}
+        />
+
         <View style={{ marginTop: "auto", width: 80 }}>
           <Button
             title="Next"

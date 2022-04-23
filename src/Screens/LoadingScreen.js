@@ -1,7 +1,14 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { GlobalContext } from "../context/reducers/Provider";
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ navigation }) => {
+  const { userData } = useContext(GlobalContext);
+  useEffect(() => {
+    userData.displayName == null
+      ? null
+      : navigation.navigate("home");
+  }, []);
   return (
     <View
       style={{

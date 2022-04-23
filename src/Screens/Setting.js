@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/reducers/Provider";
 import { Avatar } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,6 +16,28 @@ const client = StreamChat.getInstance(API_KEY);
 const Setting = ({ navigation }) => {
   const { setId, userData, setUserData } = useContext(GlobalContext);
 
+  const [user, setUser] = useState({
+    Account: {
+      AccountBalance:0,
+      AccountNumber:""
+    },
+    displayName: "",
+    email: "",
+    phoneNumber: "",
+    photoURL:
+      "https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png",
+    token: "",
+    uid: "",
+    verified: true,
+    verifiedAt: {
+      nanoseconds: 453000000,
+      seconds: 1649837251,
+    },
+  });
+
+  useEffect(() => {
+    setUser(userData);
+  }, []);
   const SignOut = async () => {
     await AsyncStorage.removeItem("userData");
     await signOut(auth)
@@ -50,7 +72,7 @@ const Setting = ({ navigation }) => {
                 marginHorizontal: 10,
               }}
               source={{
-                uri: userData == null ? "Nothing to Show" : userData.photoURL,
+                uri: userData == null ? "Nothing to Show" : user.photoURL,
               }}
             />
           </View>
@@ -81,7 +103,7 @@ const Setting = ({ navigation }) => {
             />
 
             <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
-              {userData.displayName}
+              {user.displayName}
             </Text>
             <Text
               style={{
@@ -118,18 +140,18 @@ const Setting = ({ navigation }) => {
             />
 
             <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
-              {userData.phoneNumber}
+              {user.phoneNumber}
             </Text>
             <Text
               style={{
                 fontSize: 12,
                 marginTop: 10,
                 marginBottom: 10,
-                color: userData.verified ? "green" : "red",
+                color: user.verified ? "green" : "red",
                 marginHorizontal: 0,
               }}
             >
-              {userData.verified ? "verified" : "Not Verified"}
+              {user.verified ? "verified" : "Not Verified"}
             </Text>
           </View>
         </TouchableOpacity>
@@ -154,18 +176,18 @@ const Setting = ({ navigation }) => {
               size={20}
             />
             <Text style={{ fontSize: 17, marginTop: 10, marginBottom: 10 }}>
-              {userData.email}
+              {user.email}
             </Text>
             <Text
               style={{
                 fontSize: 12,
                 marginTop: 10,
                 marginBottom: 10,
-                color: !userData.verified ? "green" : "red",
+                color: !user.verified ? "green" : "red",
                 marginHorizontal: 0,
               }}
             >
-              {!userData.verified ? "verified" : "Not Verified"}
+              {!user.verified ? "verified" : "Not Verified"}
             </Text>
           </View>
         </TouchableOpacity>
