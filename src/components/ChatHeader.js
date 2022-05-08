@@ -19,10 +19,11 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Avatar } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import SendMoneyModal from "./SendMoneyModal";
 
 const ChatHeader = () => {
   const navigation = useNavigation();
-  const { channel } = useContext(GlobalContext);
+  const { channel,setModalVisible, modalVisible } = useContext(GlobalContext);
   const [displayName, setDisplayName] = useState(
     channel != null ? useChannelPreviewDisplayName(channel) : "name"
   );
@@ -91,7 +92,9 @@ const ChatHeader = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity style={{ right: 60, top: 5 }}>
+
+     { /**Send Button */}
+      <TouchableOpacity style={{ right: 60, top: 5 }} >
         <MaterialIcons
           name="request-quote"
           color={Platform.OS == "android" ? "#fff" : "#14213D"}
@@ -107,6 +110,7 @@ const ChatHeader = () => {
           Send
         </Text>
       </TouchableOpacity>
+      <SendMoneyModal/>
     </SafeAreaView>
   );
 };

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { LogBox, StyleSheet, Text, View } from "react-native";
 import {PayWithFlutterwave} from "flutterwave-react-native";
 import { TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -24,7 +24,11 @@ const Payments = () => {
     transaction_id?: string;
     tx_ref: string;
   }
-
+  LogBox.ignoreLogs([
+    "Setting a timer",
+    "AsyncStorage has been extracted from react-native core and will be removed in a future release.",
+    "Failed prop type: Invalid prop `options.currency` of value `XAF` supplied to `PayWithFlutterwave`, expected"
+  ]);
  /* An example function called when transaction is completed successfully or canceled */
   const handleOnRedirect = async(data: RedirectParams) => {
     var generate = generateHistoryId(9).toString()

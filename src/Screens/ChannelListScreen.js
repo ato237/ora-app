@@ -36,7 +36,7 @@ export const ChannelListScreen = ({ navigation }) => {
         <View style={{ borderRadius: 1 }}>
           <TextInput
             onChangeText={(value) => searchContacts(value)}
-            placeholder="Search Contact"
+            placeholder="Search Chat"
             placeholderTextColor="grey"
             style={{
               backgroundColor: "#fff",
