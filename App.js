@@ -1,58 +1,45 @@
-import React, { useState, useEffect, useContext, Suspense } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Text,
   View,
   LogBox,
   ActivityIndicator,
   Platform,
-  TouchableOpacity,
-  Settings,
   StatusBar,
 } from "react-native";
 import { useAssets } from "expo-asset";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import Profile from "./src/Screens/Profile";
 import GlobalProvider, { GlobalContext } from "./src/context/reducers/Provider";
-import SignIn from "./src/Screens/SignIn";
-import {
-  Chat,
-  OverlayProvider,
-  useChannelPreviewDisplayAvatar,
-  useChannelPreviewDisplayName,
-} from "stream-chat-expo";
-import { ChannelScreen } from "./src/Screens/ChannelScreen";
-import { ChannelListScreen } from "./src/Screens/ChannelListScreen";
+
 import { StreamChat } from "stream-chat";
 import MainAccount from "./src/Screens/MainAccount";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeCalculator from "./src/Screens/Calculator/HomeCalculator";
 import CurrencyConverter from "./src/Screens/Calculator/CurrencyConverter";
-import { Avatar } from "react-native-elements";
 import Setting from "./src/Screens/Setting";
-import Header from "./src/components/Header";
-import WelcomeScreen from "./src/Screens/WelcomeScreen";
 import PhoneVerification from "./src/Screens/PhoneVerification";
 import { doc, getDoc } from "firebase/firestore";
-import OptionModal from "./src/components/OptionModal";
 import Contactss from "./src/Screens/Contacts";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoadingScreen from "./src/Screens/LoadingScreen";
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import ConnectedContacts from "./src/Screens/ConnectedContacts";
 import Payments from "./src/Screens/Payments";
 import BuyAirtime from "./src/Screens/BuyAirtime";
 import History from "./src/Screens/History";
 import VirtualCards from "./src/Screens/VirtualCards";
-import ChatHeader from "./src/components/ChatHeader";
+import NewWelcome from "./src/Screens/NewWelcome";
+import Signup from "./src/Screens/Signup";
+import Login from "./src/Screens/Login";
+import HomeCrypto from "./src/Screens/HomeCrypto";
+import Services from "./src/Screens/Services";
+import SendMoneyModal from "./src/components/SendMoney/SendMoneyModal";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -60,17 +47,10 @@ LogBox.ignoreLogs([
 ]);
 
 const Stack = createStackNavigator();
-const Tab =
-  Platform.OS == "ios"
-    ? createBottomTabNavigator()
-    : createMaterialTopTabNavigator();
-const API_KEY = "n7duuv99yqcx";
-const client = StreamChat.getInstance(API_KEY);
+const Tab = createBottomTabNavigator();
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
-
   const {
     theme: { colors },
     userData,
@@ -81,9 +61,7 @@ function App() {
     setContacts,
     setMemoryContacts,
   } = useContext(GlobalContext);
-  useEffect(() => {
-    return async () => await client?.disconnectUser();
-  }, []);
+
   useEffect(async () => {
     const value = await AsyncStorage.getItem("userData");
 
@@ -137,12 +115,17 @@ function App() {
           <Stack.Screen
             name="welcome"
             screenOptions={{ headerShown: false }}
-            component={WelcomeScreen}
+            component={NewWelcome}
           />
           <Stack.Screen
             screenOptions={{ headerShown: false }}
-            name="signIn"
-            component={SignIn}
+            name="login"
+            component={Login}
+          />
+          <Stack.Screen
+            screenOptions={{ headerShown: false }}
+            name="signup"
+            component={Signup}
           />
         </Stack.Navigator>
       ) : (
@@ -150,13 +133,10 @@ function App() {
           screenOptions={{
             //animationEnabled: false,
             headerStyle: {
-              backgroundColor:
-                Platform.OS == "ios" ? colors.white : colors.white,
+              backgroundColor: colors.white,
               shadowOpacity: 0,
               elevation: 0,
             },
-            headerTintColor:
-              Platform.OS == "ios" ? colors.foreground : colors.foreground,
           }}
         >
           {userData.displayName == null ? (
@@ -183,28 +163,10 @@ function App() {
             <>
               <Stack.Screen
                 name="home"
-                options={{
-                  title: "Orramo",
-                  headerRight: () =>
-                    Platform.OS == "android" ? <Header /> : null,
-                  headerStyle: {
-                    backgroundColor: Platform.OS == "ios" ? "#fff" : "#14213D",
-                  },
-                  headerTintColor: Platform.OS == "ios" ? "#000" : "#fff",
-                }}
+                options={{ headerShown: false }}
                 component={Home}
               />
-              <Stack.Screen
-                name="Channel"
-                options={{
-                  header: () => <ChatHeader />,
-                  //headerBackTitle: "Back",
-                  headerStyle: { backgroundColor: "#14213D" },
-                  headerTintColor: "#fff",
-                  headerShown: channel == null ? false : true,
-                }}
-                component={ChannelScreen}
-              />
+
               <Stack.Screen
                 name="Charges Calculator"
                 options={{ headerShown: false }}
@@ -245,13 +207,6 @@ function App() {
                 options={{ headerShown: false }}
                 component={ConnectedContacts}
               />
-              {Platform.OS == "android" && (
-                <Stack.Screen
-                  name="settings"
-                  options={{ title: "Settings", headerShown: true }}
-                  component={Setting}
-                />
-              )}
             </>
           )}
         </Stack.Navigator>
@@ -259,131 +214,112 @@ function App() {
     </NavigationContainer>
   );
 }
-function Home({ navigation }) {
+function Home() {
   const {
     theme: { colors },
-    userData,
   } = useContext(GlobalContext);
 
-  useEffect(() => {
-    const connectUser = async () => {
-      await client.connectUser(
-        {
-          id: userData.uid,
-          name: userData.displayName,
-          phoneNumber: userData.phoneNumber,
-          email: userData.email,
-          token: userData.token,
-          image: userData.photoURL,
-        },
-        userData.token
-      );
-
-      //  await channel.watch();
-    };
-    if (!client.userID) {
-      connectUser();
-    }
-  }, [userData]);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => {
         return {
           tabBarLabel: ({ focused, color, size }) => {
             let iconName;
+            color = focused ? "#0053C5" : "#000";
 
-            if (route.name === "account" || route.name === "Compte") {
-              if (Platform.OS == "ios") {
-                color = focused ? "#000" : "#75787E";
-              } else {
-                color = focused ? "#fff" : "#D3D3D3";
-              }
-            }
-            if (route.name === "chats" || route.name === "Compte") {
-              if (Platform.OS == "ios") {
-                color = focused ? "#000" : "#75787E";
-              } else {
-                color = focused ? "#fff" : "#D3D3D3";
-              }
-            }
-            if (route.name === "settings" || route.name === "Compte") {
-              if (Platform.OS == "ios") {
-                color = focused ? "#000" : "#75787E";
-              } else {
-                color = focused ? "#fff" : "#D3D3D3";
-              }
-            }
             return (
-              <Text
-                style={
-                  Platform.OS == "ios"
-                    ? { color: color, fontSize: 10 }
-                    : { color: color, fontSize: 13 }
-                }
-              >
-                {route.name.toLocaleUpperCase()}
+              <Text style={{ color: color, fontSize: 11, bottom: 12 }}>
+                {route.name}
               </Text>
             );
           },
-
-          tabBarShowIcon: false,
-          tabBarLabelStyle: {
-            color: colors.foreground,
-          },
-          tabBarIndicatorStyle: {
-            backgroundColor: colors.white,
-          },
           tabBarStyle: {
-            backgroundColor:
-              Platform.OS == "ios" ? colors.white : colors.foreground,
+            backgroundColor: colors.white,
+            height: 65,
           },
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === "account" || route.name === "Compte") {
-              iconName = focused ? "wallet" : "wallet-outline";
-              color = focused ? "#14213D" : "grey";
+            if (route.name === "Home" || route.name === "Compte") {
+              iconName = focused ? "home" : "home-outline";
+              color = focused ? "#0053C5" : "#000";
             } else if (
-              route.name === "chats" ||
+              route.name === "Service" ||
               route.name === "Discutez & Envoyez"
             ) {
-              iconName = focused ? "chatbubbles" : "chatbubbles-outline";
-              color = focused ? "#14213D" : "grey";
+              iconName = focused ? "server" : "server-outline";
+              color = focused ? "#0053C5" : "#000";
+            } else if (route.name === "History" || route.name === "parametre") {
+              iconName = focused ? "list" : "list-outline";
+              color = focused ? "#0053C5" : "#000";
             } else if (
-              route.name === "settings" ||
+              route.name === "Settings" ||
               route.name === "parametre"
             ) {
               iconName = focused ? "cog" : "cog-outline";
-              color = focused ? "#14213D" : "grey";
+              color = focused ? "#0053C5" : "#000";
             }
-            return <Ionicons name={iconName} size={31} color={color} />;
+            return <Ionicons name={iconName} size={24} color={color} />;
           },
         };
       }}
       initialRouteName="chats"
     >
       <Tab.Screen
-        name="chats"
+        name="Home"
         options={{ headerShown: false }}
-        component={ChannelListScreen}
+        component={HomeCrypto}
+      />
+      <Tab.Screen
+        name="Service"
+        options={{ headerShown: true }}
+        component={Services}
+      />
+      <Tab.Screen
+        name="Pay"
+        component={PlusComponent}
+        options={{
+          tabBarButton: () => (
+            <View
+              style={{
+                borderRadius: 50,
+                padding: 12,
+                justifyContent: "center",
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#14213D",
+                  height: 55,
+                  width: 55,
+                  borderRadius: 50,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Ionicons name="add-outline" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+        }}
       />
 
       <Tab.Screen
-        options={{ headerShown: false }}
-        name="account"
-        component={MainAccount}
+        options={{ headerShown: true }}
+        name="History"
+        component={History}
       />
-      {Platform.OS == "ios" && (
-        <Tab.Screen
-          name="settings"
-          options={{ headerShown: false }}
-          component={Setting}
-        />
-      )}
+      <Tab.Screen
+        name="Settings"
+        options={{ headerShown: true }}
+        component={Setting}
+      />
     </Tab.Navigator>
   );
 }
-
+const PlusComponent = () => {
+  return null;
+};
 function Main() {
   const [assets] = useAssets(
     require("./assets/icon-square.png"),
@@ -391,7 +327,9 @@ function Main() {
     require("./assets/user-icon.png"),
     require("./assets/welcome-img.png"),
     require("./assets/icon-square.png"),
-    require("./assets/adaptive-icon.png")
+    require("./assets/adaptive-icon.png"),
+    require("./assets/BTC.png"),
+    require("./assets/opengraph.png")
   );
   if (!assets) {
     return (
@@ -419,17 +357,11 @@ function Main() {
         ) : (
           <StatusBar
             animated={true}
-            backgroundColor="#14213D"
-            barStyle="light-content"
+            backgroundColor="#fff"
+            barStyle="dark-content"
           />
         )}
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <OverlayProvider>
-            <Chat client={client}>
-              <App />
-            </Chat>
-          </OverlayProvider>
-        </GestureHandlerRootView>
+        <App />
       </GlobalProvider>
     </SafeAreaProvider>
   );

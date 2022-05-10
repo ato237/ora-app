@@ -1,5 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import React, { useContext } from 'react'
+import { GlobalContext } from '../../context/reducers/Provider';
+import { Modal } from 'react-native-paper';
 
 const SendMoneyModal = () => {
     const { setModalVisible, modalVisible } = useContext(GlobalContext);

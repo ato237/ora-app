@@ -51,17 +51,18 @@ const Setting = ({ navigation }) => {
       });
   };
   return (
-    <ScrollView>
-      <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
+    <ScrollView >
+      <SafeAreaView style={{ backgroundColor: "#F8F8FF", flex: 1 }}>
         <TouchableOpacity>
           <View
             style={{
               justifyContent: "center",
               alignItems: "center",
               flexDirection: "row",
-              backgroundColor: "#fff",
+              backgroundColor: "#F8F8FF",
               paddingVertical: 15,
               bottom: 20,
+              marginTop:30
             }}
           >
             <Image
@@ -84,7 +85,7 @@ const Setting = ({ navigation }) => {
         </View>
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
@@ -121,7 +122,7 @@ const Setting = ({ navigation }) => {
 
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
@@ -158,7 +159,7 @@ const Setting = ({ navigation }) => {
 
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
@@ -198,7 +199,7 @@ const Setting = ({ navigation }) => {
         </View>
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
@@ -222,7 +223,7 @@ const Setting = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
@@ -246,7 +247,7 @@ const Setting = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
@@ -270,7 +271,7 @@ const Setting = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
@@ -299,7 +300,7 @@ const Setting = ({ navigation }) => {
         </View>
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
@@ -323,7 +324,7 @@ const Setting = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
@@ -347,7 +348,7 @@ const Setting = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
@@ -371,7 +372,7 @@ const Setting = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            backgroundColor: "#F1F2F3",
+            backgroundColor: "#fff",
             marginTop: 5,
             paddingVertical: 10,
           }}
