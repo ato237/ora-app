@@ -12,79 +12,21 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { color } from "react-native-reanimated";
 import Coins from "./Coins";
 import { GlobalContext } from "../context/reducers/Provider";
+import { Ionicons } from "@expo/vector-icons";
 
-const data = [
-  {
-    key: 1,
-    coin: "Bitcoin",
-    symbol: "BTC",
-    wallet: "$5,000",
-    image: require("../../assets/opengraph.png"),
-  },
-  {
-    key: 2,
-
-    coin: "Ethereum",
-    symbol: "ETH",
-    wallet: "$2,100",
-    image: require("../../assets/etherum.jpg"),
-  },
-  {
-    key: 3,
-
-    coin: "USDTTether",
-    symbol: "BTC",
-    wallet: "$1,000",
-    image: require("../../assets/825.png"),
-  },
-];
-
-const HomeCrypto = () => {
+const HomeCrypto = ({navigation}) => {
   const { userData } = useContext(GlobalContext);
   const [displayName, setDisplayName] = useState("");
   useEffect(() => {
     setDisplayName(userData.displayName);
   }, []);
-  const renderItem = ({ item }) => (
-    <TouchableOpacity>
-      <View
-        style={{
-          marginTop: 15,
-          flexDirection: "row",
-          backgroundColor: "white",
-          borderRadius: 20,
-          paddingVertical: 23,
-          paddingHorizontal: 15,
-          width: 160,
-          marginRight: 10,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 0.5 },
-          shadowOpacity: 0.1,
-          shadowRadius: 0.5,
-        }}
-      >
-        <View>
-          <Text style={{ fontSize: 17, fontWeight: "bold" }}>{item.coin}</Text>
-          <Text style={{ fontSize: 15, color: "grey" }}>{item.symbol}</Text>
-          <Text style={{ marginTop: 18, fontSize: 18 }}>{item.wallet}</Text>
-        </View>
-        <View
-          style={{
-            marginHorizontal:
-              item.coin == "Bitcoin" ? 35 : item.coin == "Ethereum" ? 20 : 7,
-          }}
-        >
-          <Image style={{ width: 33, height: 33 }} source={item.image} />
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
+  
   return (
     <SafeAreaView
       style={{
         paddingHorizontal: 20,
         paddingTop: 10,
-        backgroundColor: "#F8F8FF",
+        backgroundColor: "#F4F7FD",
         flex: 1,
       }}
     >
@@ -106,7 +48,7 @@ const HomeCrypto = () => {
           <Text style={{ color: "white", textAlign: "center" }}>
             Total Crypto Balance
           </Text>
-          <Text style={{ color: "white", fontSize: 25 }}>XAF 250,000,000</Text>
+          <Text style={{ color: "white", fontSize: 25 }}>XAF 250,000</Text>
         </View>
         <View style={{ flexDirection: "row", marginTop: 30 }}>
           <TouchableOpacity
@@ -117,7 +59,7 @@ const HomeCrypto = () => {
               marginHorizontal: 8,
             }}
           >
-            <Text style={{ color: "black" }}>Buy</Text>
+            <Text style={{ color: "black" }}>Send</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -128,19 +70,29 @@ const HomeCrypto = () => {
               marginHorizontal: 8,
             }}
           >
-            <Text style={{ color: "black" }}>Sell</Text>
+            <Text style={{ color: "black" }}>Recieve</Text>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity onPress={()=>navigation.navigate('history')}>
+          <Text style={{color:'#eee',fontSize:15,marginTop:10}} >View Transactions</Text>
+        </TouchableOpacity>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={{ marginTop: 20 }}>My Portfolio</Text>
-
-        <FlatList
-          horizontal={true}
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.key}
-        />
+        <Text style={{ marginTop: 20 }}>My Wallets</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate('wallets')}>
+            <View style={{backgroundColor:'white', borderRadius:10,height:80,justifyContent:'space-between',flexDirection:'row',alignItems:'center',paddingHorizontal:10,marginTop:10 }}>
+                <View style={{flexDirection:'row'}}>
+                <Image style={{width:40,height:40}} source={require('../../assets/etherum.jpg')}/>
+                  <Image style={{width:40,height:40,right:20}} source={require('../../assets/opengraph.png')}/>
+                  <Image style={{width:40,height:40,right:29}} source={require('../../assets/825.png')}/>
+                </View>
+                <View style={{flexDirection:'column',right:25}}>
+                  <Text style={{fontSize:20}}>XAF 250,000</Text>
+                  <Text style={{textAlign:'right',color:'grey'}}>$455</Text>
+                </View>
+            </View>
+            </TouchableOpacity>
+       
 
         <Text style={{ marginTop: 20 }}>Available Crypto Currencies</Text>
 

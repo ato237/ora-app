@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 
 const data2 = [
   {
@@ -33,10 +34,16 @@ const data2 = [
   },
 ];
 const Coins = () => {
+  const navigation = useNavigation();
   return (
     <>
       {data2.map((item) => (
-        <TouchableOpacity key={item.key}>
+        <TouchableOpacity key={item.key} onPress={()=>navigation.navigate('Available Currency Page',{
+          coin: item.coin,
+          symbol: item.symbol,
+          wallet: item.wallet,
+          image:item.image
+        })}>
           <View
             style={{
               backgroundColor: "white",

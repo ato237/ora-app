@@ -109,12 +109,13 @@ const History = () => {
                 shadowOffset: { width: 0, height: 0.5 },
                 shadowOpacity: 0.1,
                 shadowRadius: 0.5,
+                
               }}
             >
               <View>
                 <Image style={{ width: 33, height: 33 }} source={item.image} />
               </View>
-              <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
+              <View style={{ flexDirection: "row", marginHorizontal: 10}}>
                 <View style={{ flexDirection: "column" }}>
                   <Text style={{ fontSize: 15, fontWeight: "bold" }}>
                     {item.coin}

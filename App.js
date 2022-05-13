@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Platform,
   StatusBar,
+  Dimensions,
 } from "react-native";
 import { useAssets } from "expo-asset";
 import { onAuthStateChanged } from "firebase/auth";
@@ -40,6 +41,10 @@ import HomeCrypto from "./src/Screens/HomeCrypto";
 import Services from "./src/Screens/Services";
 import SendMoneyModal from "./src/components/SendMoney/SendMoneyModal";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import CurrencyPage from "./src/Screens/CurrencyPage";
+import AvailableCurrencypage from "./src/Screens/AvailableCurrencypage";
+import Cards from "./src/Screens/Cards";
+import Wallets from "./src/Screens/Wallets";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -172,6 +177,11 @@ function App() {
                 options={{ headerShown: false }}
                 component={HomeCalculator}
               />
+               <Stack.Screen
+                name="Available Currency Page"
+                options={{ headerShown: false }}
+                component={AvailableCurrencypage}
+              />
               <Stack.Screen
                 name="Currency Converter"
                 options={{ headerShown: false }}
@@ -186,6 +196,17 @@ function App() {
                 name="history"
                 options={{ headerShown: true, title: "History" }}
                 component={History}
+              />
+              <Stack.Screen
+                name="wallets"
+                options={{ headerShown: true, title: "Wallets" }}
+                component={Wallets}
+              />
+             
+                     <Stack.Screen
+                name="Currency Page"
+                options={{ headerShown: true, title: "Wallet" }}
+                component={CurrencyPage}
               />
               <Stack.Screen
                 name="airtime"
@@ -218,7 +239,24 @@ function Home() {
   const {
     theme: { colors },
   } = useContext(GlobalContext);
-
+  function isIphoneWithNotch() {
+    const dimen = Dimensions.get('window');
+    return (
+      Platform.OS === 'ios' &&
+      !Platform.isPad &&
+      !Platform.isTVOS &&
+      (dimen.height === 780 ||
+        dimen.width === 780 ||
+        dimen.height === 812 ||
+        dimen.width === 812 ||
+        dimen.height === 844 ||
+        dimen.width === 844 ||
+        dimen.height === 896 ||
+        dimen.width === 896 ||
+        dimen.height === 926 ||
+        dimen.width === 926)
+    );
+  }
   return (
     <Tab.Navigator
       screenOptions={({ route }) => {
@@ -235,7 +273,8 @@ function Home() {
           },
           tabBarStyle: {
             backgroundColor: colors.white,
-            height: 65,
+            height: isIphoneWithNotch()? 95: 70,
+            //position: "absolute"
           },
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -249,8 +288,8 @@ function Home() {
             ) {
               iconName = focused ? "server" : "server-outline";
               color = focused ? "#0053C5" : "#000";
-            } else if (route.name === "History" || route.name === "parametre") {
-              iconName = focused ? "list" : "list-outline";
+            } else if (route.name === "Cards" || route.name === "parametre") {
+              iconName = focused ? "card" : "card-outline";
               color = focused ? "#0053C5" : "#000";
             } else if (
               route.name === "Settings" ||
@@ -306,8 +345,8 @@ function Home() {
 
       <Tab.Screen
         options={{ headerShown: true }}
-        name="History"
-        component={History}
+        name="Cards"
+        component={Cards}
       />
       <Tab.Screen
         name="Settings"

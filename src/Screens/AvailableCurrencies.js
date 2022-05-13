@@ -4,7 +4,7 @@ import React from 'react'
 const AvailableCurrencies = () => {
   return (
     <View>
-      <Text>AvailableCurrencies</Text>
+      <Text>Yo tony is the best of the world</Text>
     </View>
   )
 }
