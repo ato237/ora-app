@@ -45,10 +45,10 @@ const HomeCrypto = ({navigation}) => {
         }}
       >
         <View>
-          <Text style={{ color: "white", textAlign: "center" }}>
-            Total Crypto Balance
+          <Text style={{ color: "white", textAlign: "center",top:5 }}>
+            My Portfolio Balance
           </Text>
-          <Text style={{ color: "white", fontSize: 25 }}>XAF 250,000</Text>
+          <Text style={{ color: "white", fontSize: 25,top:15 }}>XAF 250,000</Text>
         </View>
         <View style={{ flexDirection: "row", marginTop: 30 }}>
           <TouchableOpacity
@@ -74,7 +74,7 @@ const HomeCrypto = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={()=>navigation.navigate('history')}>
-          <Text style={{color:'#eee',fontSize:15,marginTop:10}} >View Transactions</Text>
+          <Text style={{color:'#eee',fontSize:13,marginTop:10}} >View Transactions</Text>
         </TouchableOpacity>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>

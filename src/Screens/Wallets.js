@@ -20,7 +20,6 @@ const data = [
     },
     {
       key: 3,
-  
       coin: "USDTTether",
       symbol: "USDT",
       wallet: "XAF 50,000",
@@ -79,7 +78,7 @@ const Wallets = ({navigation}) => {
       <View style={{justifyContent:'center', alignItems:'center',backgroundColor:'#F4F7FD',height:300}}>
         <Text style={{color:'#000'}}>@ato237</Text>
         <Text style={{fontSize:30,color:'#000',fontWeight:'bold',paddingTop:10}}>XAF 250,000</Text>
-        <Text style={{color:'#000'}}>$456</Text>
+        <Text style={{color:'#000',fontSize:18}}>$456</Text>
       </View>
       <View style={{padding:20}}>
       <FlatList
@@ -87,6 +86,7 @@ const Wallets = ({navigation}) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.key}
         />
+        
       </View>
       
     </View>

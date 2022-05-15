@@ -45,6 +45,10 @@ import CurrencyPage from "./src/Screens/CurrencyPage";
 import AvailableCurrencypage from "./src/Screens/AvailableCurrencypage";
 import Cards from "./src/Screens/Cards";
 import Wallets from "./src/Screens/Wallets";
+import Withdraw from "./src/Screens/Withdraw";
+import SendCrypto from "./src/Screens/SendCrypto";
+import Recieve from "./src/Screens/Recieve";
+import BuyCrypto from "./src/Screens/BuyCrypto";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -202,6 +206,26 @@ function App() {
                 options={{ headerShown: true, title: "Wallets" }}
                 component={Wallets}
               />
+               <Stack.Screen
+                name="withdraw"
+                options={{ headerShown: true, title: "Withdraw" }}
+                component={Withdraw}
+              /> 
+              <Stack.Screen
+              name="sendcrypto"
+              options={{ headerShown: true, title: "Send" }}
+              component={SendCrypto}
+            /> 
+            <Stack.Screen
+            name="recieve"
+            options={{ headerShown: true, title: "Recieve" }}
+            component={Recieve}
+          /> 
+          <Stack.Screen
+          name="buy"
+          options={{ headerShown: true, title: "Buy" }}
+          component={BuyCrypto}
+        />
              
                      <Stack.Screen
                 name="Currency Page"

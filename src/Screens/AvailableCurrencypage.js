@@ -58,6 +58,7 @@ data={{
         Math.random() * 100,
         Math.random() * 100,
         Math.random() * 100,
+        
       ]
     }
   ]
@@ -104,17 +105,14 @@ style={{
     </View>
     <View style={{flexDirection:'row', justifyContent:'space-between'}}>
     <Text style={{paddingTop:25}}>Max Supply</Text>
-    <Text style={{paddingTop:25}}>$2,232,242,424</Text>
+    <Text style={{paddingTop:25}}>$2,232,242,424</Text> 
     </View>
 
 
-    <View style={{paddingTop:20, flexDirection:'row', justifyContent:'space-between'}}>
-        <TouchableOpacity style={{backgroundColor:'#3D5BD7',justifyContent:'center',alignItems:'center',paddingHorizontal:71, paddingVertical:15,borderRadius: 10}}>
-            <Text style={{color:'white',textAlign:'center',fontSize:15}}>Buy</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{backgroundColor:'#E6CBD0',justifyContent:'center',alignItems:'center',paddingHorizontal:71, paddingVertical:15,borderRadius:10}}>
-            <Text style={{color:'red',textAlign:'center',fontSize:15}}>Sell</Text>
-        </TouchableOpacity>
+    <View style={{paddingTop:20, justifyContent:'center'}}>
+        <TouchableOpacity style={{backgroundColor:'#3D5BD7',justifyContent:'center',alignItems:'center',paddingHorizontal:150, paddingVertical:15,borderRadius: 10}}>
+         <Text style={{color:'white',fontSize:18,width:100,textAlign:'center',fontWeight:'bold'}}>Buy {route.params.symbol}</Text>
+    </TouchableOpacity>   
     </View>
 
 

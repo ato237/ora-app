@@ -1,51 +1,83 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
-import React, { useContext } from 'react'
-import { GlobalContext } from '../../context/reducers/Provider';
-import { Modal } from 'react-native-paper';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Alert,
+  Dimensions,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { GlobalContext } from "../../context/reducers/Provider";
+import { useNavigation } from "@react-navigation/native";
 
-const SendMoneyModal = () => {
-    const { setModalVisible, modalVisible } = useContext(GlobalContext);
+const Details = () => {
+  const [data, setData] = useState([]);
+  const datas = useContext(GlobalContext);
+  const [click, setClick] = useState(false);
+  const navigation = useNavigation()
+
+  const handleClick = () => {
+    setClick(true);
+    console.log("Clicked on empty");
+  };
 
   return (
     <View style={styles.container}>
-    <Modal
-      animationType="fade"
-      presentationStyle="overFullScreen"
-      visible={true}
-      onRequestClose={() => {
-        setModalVisible(modalVisible);
-      }}
-    >
-      <View
-        style={{
-          //padding: 50,
-          zIndex: 9999,
-          position: "absolute",
-          bottom: 45,
-          right: 35,
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={datas.modalVisible}
+        onRequestClose={() => {
+          datas.setModalVisible(!datas.modalVisible);
         }}
+        presentationStyle="overFullScreen"
       >
-        
-      </View>
-    </Modal>
-  </View>
-  )
-}
+        <TouchableOpacity
+        onPress={() => datas.setModalVisible(false)}
+          style={{ top: Dimensions.get("window").height - 480 , justifyContent:"center", alignItems:"center"}}
+        >
+          <Ionicons name="close-circle-outline" size={55} color="black" />
+        </TouchableOpacity>
+          <View style={styles.modalView}>
+           <TouchableOpacity onPress={()=>{navigation.navigate('sendcrypto');datas.setModalVisible(false);}} style={{justifyContent:'center',alignItems:'center',borderColor:'blue',paddingVertical:40, borderRadius:20, borderWidth:1}}>
+             <Text style={{color:'black', fontSize:18, fontWeight:'bold'}}>Send To Orramo Wallet</Text>
+           </TouchableOpacity>
+           <TouchableOpacity onPress={()=>{navigation.navigate('sendcrypto');datas.setModalVisible(false)}}  style={{justifyContent:'center',alignItems:'center',borderColor:'blue',paddingVertical:40, borderRadius:20, borderWidth:1, marginTop:15}}>
+             <Text style={{color:'black', fontSize:18, fontWeight:'bold'}}>Send To Different Wallet</Text>
+           </TouchableOpacity>
+          </View>
+      </Modal>
+    </View>
+  );
+};
 
-export default SendMoneyModal
+export default Details;
 
 const styles = StyleSheet.create({
-    container: {
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 20,
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  modalView: {
+    height: "100%",
+    marginTop: 20,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 35,
+    top: Dimensions.get("window").height - 500,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    modalView: {
-      paddingHorizontal: 25,
-      paddingVertical: 15,
-      top: Dimensions.get("window").height - 670,
-      right: 20,
-      justifyContent: "flex-start",
-      alignItems: "flex-start",
-    },
-  });
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+});
