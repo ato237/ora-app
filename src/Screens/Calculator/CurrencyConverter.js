@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   calculatorArea: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#14213D",
+    backgroundColor: "#F4F7FD",
     paddingTop:
       Platform.OS == "ios" && Dimensions.get("window").height > 895 ? 5 : 5,
   },
@@ -339,9 +339,9 @@ const styles = StyleSheet.create({
   },
   amountFrom: {
     fontSize: 15,
-    color: "#fff",
+    color: "#000",
     fontWeight: "bold",
-    backgroundColor: "#14213D",
+    backgroundColor: "#F4F7FD",
     paddingTop:50
 
   },
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     minHeight: 85,
     maxHeight: 250,
-    backgroundColor: "#14213D",
+    backgroundColor: "#F4F7FD",
     marginBottom: 5,
     paddingTop: 25,
     paddingBottom: 15,
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
   result: {
     fontSize: 45,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
     bottom: 15,
     left: 10,
   },
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button: {
-    backgroundColor: "#0053C5",
+    backgroundColor: "#5662F6",
     alignItems: "center",
     alignContent: "center",
     marginTop: 30,

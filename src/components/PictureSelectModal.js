@@ -3,21 +3,18 @@ import {
   Text,
   View,
   Modal,
-  Alert,
   Dimensions,
   TouchableOpacity,
-  TouchableWithoutFeedback,
 } from "react-native";
-import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import i18n from "../Data/translation";
 import { GlobalContext } from "../context/reducers/Provider";
 
-const PictureSelectModal = ({ cameraSubmit, imageSubmit }) => {
+const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
   const [data, setData] = useState([]);
   const datas = useContext(GlobalContext);
   const [click, setClick] = useState(false);
+  const [selected, setSelected] = useState(false);
 
   const handleClick = () => {
     setClick(true);
@@ -26,35 +23,72 @@ const PictureSelectModal = ({ cameraSubmit, imageSubmit }) => {
 
   return (
     <View style={styles.container}>
-      <Modal
-        transparent={true}
-        animationType="slide"
-        visible={datas.modalVisible}
-        onRequestClose={() => {
-          datas.setModalVisible(!datas.modalVisible);
-        }}
-        presentationStyle="overFullScreen"
-      >
-        <TouchableOpacity
-          onPress={() => datas.setModalVisible(false)}
-          style={{
-            top: Dimensions.get("window").height - 300,
-            justifyContent: "center",
-            alignItems: "center",
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
           }}
+          presentationStyle="overFullScreen"
         >
-          <Ionicons name="close-circle-outline" size={55} color="black" />
-        </TouchableOpacity>
-        <View style={styles.modalView}>
-          <TouchableOpacity style={styles.pics} onPress={cameraSubmit}>
-            <Ionicons name="camera-outline" size={40} color="#0053C5" />
+          <TouchableOpacity
+            onPress={() => setModalVisible(false)}
+            style={{
+              top: Dimensions.get("window").height - 350,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Ionicons name="close-circle-outline" size={55} color="black" />
           </TouchableOpacity>
-          <Text>       </Text>
-          <TouchableOpacity style={styles.pics} onPress={imageSubmit}>
-            <Ionicons name="image-outline" size={40} color="#0053C5" />
-          </TouchableOpacity>
-        </View>
-      </Modal>
+          <View style={styles.modalView}>
+            <Text
+              style={{ textAlign: "center", fontSize: 20, fontWeight: "bold" }}
+            >
+              Transfer Money
+            </Text>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#14213D",
+                padding: 20,
+                borderRadius: 12,
+                marginTop: 15,
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 18,
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                ORANGE MONEY
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#14213D",
+                padding: 20,
+                borderRadius: 12,
+                marginTop: 15,
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 18,
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                MTN MOBILE MONEY
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+       
     </View>
   );
 };
@@ -69,12 +103,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   modalView: {
-    height: "100%",
-    marginTop: 20,
+    height: "40%",
     backgroundColor: "#fff",
     borderRadius: 20,
-    padding: 35,
-    top: Dimensions.get("window").height - 320,
+    padding: 30,
+    top: Dimensions.get("window").height - 330,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -83,8 +116,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    flexDirection: "row",
-    justifyContent: "center",
   },
   pics: {
     borderWidth: 3,

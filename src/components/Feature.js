@@ -2,12 +2,8 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "react-native-vector-icons";
-import { MaterialIcons } from "react-native-vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
 
-const Feature = ({ title, icon, sizes, link, top,color }) => {
-  navigation = useNavigation();
+const Feature = ({ title, icon, sizes, link, top,color,navigation }) => {
   return (
     <View style={{ justifyContent: "center", bottom: top }}>
       <TouchableOpacity
@@ -50,7 +46,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     flexDirection: "row",
-    backgroundColor: "#DDDEE2",
+    backgroundColor: "#fff",
     padding: 12,
     width: Dimensions.get("window").height <= 667 ? 65 : 72,
     height: Dimensions.get("window").height <= 667 ? 65 : 72,

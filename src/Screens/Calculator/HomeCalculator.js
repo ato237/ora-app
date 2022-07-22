@@ -362,19 +362,19 @@ const styles = StyleSheet.create({
   amountBox: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#14213D",
+    backgroundColor: "#F8F8FF",
     paddingTop: 50,
   },
   amountStyle: {
     fontSize: 15,
-    color: "#fff",
+    color: "#000",
     fontWeight: "bold",
-    backgroundColor: "#14213D",
+    backgroundColor: "#F8F8FF",
   },
   resultBox: {
     marginTop: 15,
     height: 85,
-    backgroundColor: "#14213D",
+    backgroundColor: "#F8F8FF",
     marginBottom: 5,
     paddingTop: 15,
     paddingBottom: 15,
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
   result: {
     fontSize: 45,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#000",
     bottom: 15,
     left: 10,
   },
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: "#0053C5",
+    backgroundColor: "#5662F6",
     alignItems: "center",
     alignContent: "center",
     marginTop: 15,

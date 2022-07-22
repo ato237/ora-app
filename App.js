@@ -16,9 +16,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
 import Profile from "./src/Screens/Profile";
 import GlobalProvider, { GlobalContext } from "./src/context/reducers/Provider";
-
-import { StreamChat } from "stream-chat";
-import MainAccount from "./src/Screens/MainAccount";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeCalculator from "./src/Screens/Calculator/HomeCalculator";
 import CurrencyConverter from "./src/Screens/Calculator/CurrencyConverter";
@@ -39,7 +36,6 @@ import Signup from "./src/Screens/Signup";
 import Login from "./src/Screens/Login";
 import HomeCrypto from "./src/Screens/HomeCrypto";
 import Services from "./src/Screens/Services";
-import SendMoneyModal from "./src/components/SendMoney/SendMoneyModal";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CurrencyPage from "./src/Screens/CurrencyPage";
 import AvailableCurrencypage from "./src/Screens/AvailableCurrencypage";
@@ -49,6 +45,7 @@ import Withdraw from "./src/Screens/Withdraw";
 import SendCrypto from "./src/Screens/SendCrypto";
 import Recieve from "./src/Screens/Recieve";
 import BuyCrypto from "./src/Screens/BuyCrypto";
+import CurrencyList from "./src/components/CurrencyList";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -181,7 +178,7 @@ function App() {
                 options={{ headerShown: false }}
                 component={HomeCalculator}
               />
-               <Stack.Screen
+              <Stack.Screen
                 name="Available Currency Page"
                 options={{ headerShown: false }}
                 component={AvailableCurrencypage}
@@ -206,28 +203,28 @@ function App() {
                 options={{ headerShown: true, title: "Wallets" }}
                 component={Wallets}
               />
-               <Stack.Screen
+              <Stack.Screen
                 name="withdraw"
                 options={{ headerShown: true, title: "Withdraw" }}
                 component={Withdraw}
-              /> 
+              />
               <Stack.Screen
-              name="sendcrypto"
-              options={{ headerShown: true, title: "Send" }}
-              component={SendCrypto}
-            /> 
-            <Stack.Screen
-            name="recieve"
-            options={{ headerShown: true, title: "Recieve" }}
-            component={Recieve}
-          /> 
-          <Stack.Screen
-          name="buy"
-          options={{ headerShown: true, title: "Buy" }}
-          component={BuyCrypto}
-        />
-             
-                     <Stack.Screen
+                name="sendcrypto"
+                options={{ headerShown: true, title: "Send" }}
+                component={SendCrypto}
+              />
+              <Stack.Screen
+                name="recieve"
+                options={{ headerShown: true, title: "Recieve" }}
+                component={Recieve}
+              />
+              <Stack.Screen
+                name="buy"
+                options={{ headerShown: true, title: "Buy" }}
+                component={BuyCrypto}
+              />
+
+              <Stack.Screen
                 name="Currency Page"
                 options={{ headerShown: true, title: "Wallet" }}
                 component={CurrencyPage}
@@ -252,6 +249,17 @@ function App() {
                 options={{ headerShown: false }}
                 component={ConnectedContacts}
               />
+             <Stack.Screen
+          options={{
+            title:'Currency',
+            headerStyle: {
+              backgroundColor: "#F4F7FD",
+            },
+            headerTintColor: "#000",
+          }}
+          name="currency"
+          component={CurrencyList}
+        />
             </>
           )}
         </Stack.Navigator>
@@ -264,9 +272,9 @@ function Home() {
     theme: { colors },
   } = useContext(GlobalContext);
   function isIphoneWithNotch() {
-    const dimen = Dimensions.get('window');
+    const dimen = Dimensions.get("window");
     return (
-      Platform.OS === 'ios' &&
+      Platform.OS === "ios" &&
       !Platform.isPad &&
       !Platform.isTVOS &&
       (dimen.height === 780 ||
@@ -297,7 +305,7 @@ function Home() {
           },
           tabBarStyle: {
             backgroundColor: colors.white,
-            height: isIphoneWithNotch()? 95: 70,
+            height: isIphoneWithNotch() ? 95 : 70,
             //position: "absolute"
           },
           tabBarIcon: ({ focused, color, size }) => {
@@ -414,13 +422,13 @@ function Main() {
         {Platform.OS == "ios" ? (
           <StatusBar
             animated={true}
-            backgroundColor="#fff"
+            backgroundColor="#F4F7FD"
             barStyle="dark-content"
           />
         ) : (
           <StatusBar
             animated={true}
-            backgroundColor="#fff"
+            backgroundColor="#F4F7FD"
             barStyle="dark-content"
           />
         )}

@@ -1,10 +1,12 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import Payments from './Payments'
 
 const Cards = () => {
 
   return (
       <>
+      <ScrollView>
       <TouchableOpacity>
     <View style={{padding:10, justifyContent:'center'}}>
         
@@ -36,6 +38,8 @@ const Cards = () => {
   
     </View>
     </TouchableOpacity>
+    <Payments/>
+    </ScrollView>
      </>
   )
 }
