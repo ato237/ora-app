@@ -23,7 +23,7 @@ import { doc, setDoc, getDoc } from "@firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { GlobalContext } from "../context/reducers/Provider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import PictureSelectModal from "../components/PictureSelectModal";
+import PictureSelectModal from "../components/MoneyTransferModal";
 
 export default function Profile() {
   const [displayName, setDisplayName] = useState("");

@@ -8,27 +8,14 @@ import {
   Platform,
 } from "react-native";
 import React, {
-  memo,
-  useCallback,
   useContext,
-  useEffect,
-  useMemo,
   useState,
 } from "react";
 import { TextInput } from "react-native";
-import {
-  DataProvider,
-  LayoutProvider,
-  RecyclerListView,
-} from "recyclerlistview";
-import { FlatList } from "react-native-gesture-handler";
-import { Avatar } from "react-native-elements";
 import { GlobalContext } from "../context/reducers/Provider";
 import { OptimizedFlatList } from "react-native-optimized-flatlist";
-import { StatusBar } from "expo-status-bar";
 import MyList from "../components/MyList";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Contactss = () => {
   const [loading, isLoading] = useState(false);

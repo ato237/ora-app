@@ -1,7 +1,5 @@
 import {
-  Dimensions,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,16 +7,12 @@ import {
 } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { TouchableOpacity } from "react-native";
-import { Avatar } from "react-native-elements";
 import Feature from "../components/Feature";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import numbro from "numbro";
 import { GlobalContext } from "../context/reducers/Provider";
 import { useNavigation } from "@react-navigation/native";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
-import { setUserDataAsync } from "expo-facebook";
-import { multiFactor } from "firebase/auth";
 
 const MainAccount = () => {
   navigation = useNavigation();
@@ -27,7 +21,6 @@ const MainAccount = () => {
     theme: { colors },
     userData,
     setUserData,
-    id,
   } = useContext(GlobalContext);
 
   useEffect(async () => {

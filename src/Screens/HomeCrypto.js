@@ -12,12 +12,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { GlobalContext } from "../context/reducers/Provider";
 import { Ionicons } from "@expo/vector-icons";
-import PictureSelectModal from "../components/PictureSelectModal";
+import MoneyTransferModal from "../components/MoneyTransferModal";
 
 const HomeCrypto = ({ navigation }) => {
   const { userData } = useContext(GlobalContext);
   const [displayName, setDisplayName] = useState("");
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
+
   useEffect(() => {
     setDisplayName(userData.displayName);
   }, []);
@@ -146,7 +147,7 @@ const HomeCrypto = ({ navigation }) => {
         </View>
       </TouchableOpacity>
       </View>
-      <PictureSelectModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+      <MoneyTransferModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
     </SafeAreaView>
   );
 };

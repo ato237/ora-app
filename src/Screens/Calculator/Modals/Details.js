@@ -36,28 +36,35 @@ const Details = () => {
         presentationStyle="overFullScreen"
       >
         <TouchableOpacity
-        onPress={() => datas.setModalVisible(false)}
-          style={{ top: Dimensions.get("window").height - 300 , justifyContent:"center", alignItems:"center"}}
+          onPress={() => datas.setModalVisible(false)}
+          style={{
+            top: Dimensions.get("window").height - 300,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <Ionicons name="close-circle-outline" size={55} color="black" />
         </TouchableOpacity>
         <TouchableWithoutFeedback onPress={() => datas.setModalVisible(false)}>
           <View style={styles.modalView}>
             {datas.data.map((item) => (
-              <Text key={5} style={{ fontSize: 22, color: "#fff", fontWeight: "bold" }}>
+              <Text
+                key={5}
+                style={{ fontSize: 22, color: "#fff", fontWeight: "bold" }}
+              >
                 {datas.service == "orange"
-                  ? i18n.t('orangeWithdrawal') + item.orangeCharge
+                  ? i18n.t("orangeWithdrawal") + item.orangeCharge
                   : datas.service == "mtn"
-                  ? i18n.t('mtnWithdrawal') + item.mtnCharge
+                  ? i18n.t("mtnWithdrawal") + item.mtnCharge
                   : datas.service == "eumoney"
-                  ? i18n.t('eumoneyWithdrawal') + item.euCharge
+                  ? i18n.t("eumoneyWithdrawal") + item.euCharge
                   : null}
                 {" XAF "}
               </Text>
             ))}
             {datas.data.map((item) => (
               <Text
-              key={5}
+                key={5}
                 style={{
                   fontSize: 18,
                   color: "#C36FAB",
@@ -65,8 +72,7 @@ const Details = () => {
                   marginTop: 15,
                 }}
               >
-                
-                {i18n.t('totalToHave')}
+                {i18n.t("totalToHave")}
                 {datas.service == "orange"
                   ? item.orangeTotal
                   : datas.service == "mtn"
@@ -79,7 +85,7 @@ const Details = () => {
             ))}
             {datas.data.map((item) => (
               <Text
-              key={5}
+                key={5}
                 style={{
                   fontSize: 18,
                   color: "#C36FAB",

@@ -46,6 +46,7 @@ import SendCrypto from "./src/Screens/SendCrypto";
 import Recieve from "./src/Screens/Recieve";
 import BuyCrypto from "./src/Screens/BuyCrypto";
 import CurrencyList from "./src/components/CurrencyList";
+import Transfer from "./src/Screens/Transfer";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -172,7 +173,11 @@ function App() {
                 options={{ headerShown: false }}
                 component={Home}
               />
-
+              <Stack.Screen
+              name="Transfer Money"
+              options={{headerShown: true}}
+              component={Transfer}
+              />
               <Stack.Screen
                 name="Charges Calculator"
                 options={{ headerShown: false }}

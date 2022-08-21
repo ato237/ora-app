@@ -9,6 +9,7 @@ import {
 import React, { useState, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { GlobalContext } from "../context/reducers/Provider";
+import { useNavigation } from "@react-navigation/native";
 
 const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
   const [data, setData] = useState([]);
@@ -21,6 +22,8 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
     console.log("Clicked on empty");
   };
 
+  const navigation = useNavigation();
+  
   return (
     <View style={styles.container}>
       <Modal
@@ -107,7 +110,7 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                 <Ionicons name="arrow-back" size={25} />
               </TouchableOpacity>
               <Text style={{ left: 70, fontSize: 20, fontWeight: "bold" }}>
-                Orange Money
+                ORANGE MONEY
               </Text>
             </View>
 
@@ -118,6 +121,7 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                 borderRadius: 12,
                 marginTop: 15,
               }}
+              onPress={()=> {navigation.navigate("Transfer Money"), setModalVisible(false)}}
             >
               <Text
                 style={{
