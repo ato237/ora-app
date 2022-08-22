@@ -23,7 +23,7 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
   };
 
   const navigation = useNavigation();
-  
+
   return (
     <View style={styles.container}>
       <Modal
@@ -121,7 +121,11 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                 borderRadius: 12,
                 marginTop: 15,
               }}
-              onPress={()=> {navigation.navigate("Transfer Money"), setModalVisible(false)}}
+              onPress={() => {
+                navigation.navigate("Transfer Money",{
+                  operation:"versClientOrange"
+                }), setModalVisible(false);
+              }}
             >
               <Text
                 style={{
@@ -141,6 +145,11 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                 borderRadius: 12,
                 marginTop: 15,
               }}
+              onPress={() => {
+                navigation.navigate("Transfer Money", {
+                  operation:"versClientNonOrange"
+                }), setModalVisible(false);
+              }}
             >
               <Text
                 style={{
@@ -149,6 +158,7 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                   textAlign: "center",
                   fontWeight: "bold",
                 }}
+              
               >
                 Vers Client Non-Orange
               </Text>
@@ -159,6 +169,11 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                 padding: 20,
                 borderRadius: 12,
                 marginTop: 15,
+              }}
+              onPress={() => {
+                navigation.navigate("Transfer Money",{
+                  operation:'versAutreClient'
+                }), setModalVisible(false);
               }}
             >
               <Text

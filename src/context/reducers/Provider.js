@@ -20,6 +20,8 @@ export const GlobalContext = createContext({
   setContacts: () => {},
   inMemoryContacts:[],
   setMemoryContacts: () => {},
+  number:"",
+  setNumber: () => {},
 });
 
 const GlobalProvider = (props) => {
@@ -60,6 +62,8 @@ const GlobalProvider = (props) => {
   const [loadingContacts, isLoadingContacts] = useState(true);
   const [contacts, setContacts] = useState([]);
   const [inMemoryContacts, setMemoryContacts] = useState([]);
+  const [number, setNumber] = useState("")
+
   const loadContacts = async () => {
     const permission = await Contact.getPermissionsAsync();
 
@@ -74,7 +78,6 @@ const GlobalProvider = (props) => {
     isLoadingContacts(false);
    // setMemoryContacts(data);
     await AsyncStorage.setItem('userContacts', JSON.stringify(data))
-    
   };
 
   return (
@@ -129,7 +132,7 @@ const GlobalProvider = (props) => {
         contacts,
         setContacts,
         inMemoryContacts,
-        setMemoryContacts,
+        setMemoryContacts,number, setNumber
       }}
     >
       {props.children}

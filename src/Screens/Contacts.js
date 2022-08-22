@@ -1,32 +1,25 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  Dimensions,
-  TouchableOpacity,
-  Platform,
-} from "react-native";
-import React, {
-  useContext,
-  useState,
-} from "react";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import { TextInput } from "react-native";
 import { GlobalContext } from "../context/reducers/Provider";
 import { OptimizedFlatList } from "react-native-optimized-flatlist";
 import MyList from "../components/MyList";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Contacts from 'expo-contacts';
 
-const Contactss = () => {
+const Contactss = ({ navigation }) => {
   const [loading, isLoading] = useState(false);
 
   const { loadContacts, contacts, inMemoryContacts, setContacts } =
     useContext(GlobalContext);
 
-
   const renderItem = ({ item }) => {
     return <MyList item={item} />;
   };
+
+  useEffect(() => {
+    loadContacts();
+  }, []);
 
   const searchContacts = (value) => {
     const filteredConacts = inMemoryContacts.filter((contact) => {
@@ -43,29 +36,25 @@ const Contactss = () => {
 
     setContacts(filteredConacts);
   };
-  const getItemLayout = (data, index) => ({
-    length: 50,
-    offset: 20 * index,
-    index,
-  });
+ 
   return (
     <View style={{ flex: 1 }}>
-
       <SafeAreaView style={{ backgroundColor: "#fff" }} />
-      <View style={{borderRadius:20, paddingTop: 10, paddingHorizontal:10}}>
-      <TextInput
-        onChangeText={(value) => searchContacts(value)}
-        placeholder="Search Contact"
-        placeholderTextColor="grey"
-        style={{
-          backgroundColor: "#fff",
-          height: 50,
-          fontSize: 15,
-          padding: 10,
-          color: "black",borderRadius:20
-        }}
-      /> 
-      </View>     
+      <View style={{ borderRadius: 20, paddingTop: 10, paddingHorizontal: 10 }}>
+        <TextInput
+          onChangeText={(value) => searchContacts(value)}
+          placeholder="Search Contact"
+          placeholderTextColor="grey"
+          style={{
+            backgroundColor: "#fff",
+            height: 50,
+            fontSize: 15,
+            padding: 10,
+            color: "black",
+            borderRadius: 20,
+          }}
+        />
+      </View>
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
         {loading ? (
           <View
@@ -83,7 +72,6 @@ const Contactss = () => {
           data={contacts}
           initialNumToRender={50}
           renderItem={renderItem}
-        
           ListEmptyComponent={() => (
             <View
               style={{

@@ -31,7 +31,7 @@ const NewWelcome = ({ navigation }) => {
           Welcome To Orramo
         </Text>
         <Text style={{ marginTop: 20 }}>
-          Buy, Sell and Spend your crypto today with Orramo.
+          Your finances in one place with Orramo
         </Text>
       </View>
       <View

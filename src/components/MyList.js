@@ -1,11 +1,23 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { Avatar } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
+import { GlobalContext } from "../context/reducers/Provider";
 
 const MyList = ({ item }) => {
+  navigation = useNavigation();
+  const {setNumber} = useContext(GlobalContext)
   const handleChannel = () => {
-    console.log("clicked");
+   item.phoneNumbers.map(num => {
+    if(Platform.OS === "ios")
+    setNumber(num.digits);
+    else
+    setNumber(num.number);
+   })
+   navigation.goBack("Transfer Money");
+
   };
+
   return (
     <View>
       <TouchableOpacity

@@ -51,7 +51,7 @@ import {
               <Text
                 style={{ textAlign: "center", fontSize: 20, fontWeight: "bold" }}
               >
-                Transfer Money
+               Buy Airtime
               </Text>
               <TouchableOpacity
                 onPress={() => setSelected(true)}

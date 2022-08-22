@@ -39,7 +39,7 @@ const HomeCrypto = ({ navigation }) => {
 
         }}
       >
-        <Ionicons name={icon} color={color} size={35} />
+        <Ionicons name={icon} color={color} size={30} />
         <Text
           style={{
             fontWeight: "bold",
