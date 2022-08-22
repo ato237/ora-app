@@ -11,11 +11,13 @@ import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { signIn } from "../../firebase";
+import { Ionicons } from "@expo/vector-icons";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [show, isShown] = useState(false);
 
   async function handlePress() {
     setLoading(true);
@@ -32,12 +34,6 @@ const Login = ({ navigation }) => {
         <Text style={{ fontSize: 35, fontWeight: "bold", color: "#14213D" }}>
           Lets Sign you in
         </Text>
-        <Text style={{ fontSize: 30, marginTop: 10, color: "#14213D" }}>
-          Welcome Back ,
-        </Text>
-        <Text style={{ fontSize: 30, color: "#14213D" }}>
-          You have been missed
-        </Text>
       </View>
       <View style={{ marginTop: 40 }}>
         <View style={{ borderWidth: 1, padding: 15, borderRadius: 10 }}>
@@ -49,13 +45,17 @@ const Login = ({ navigation }) => {
         </View>
       </View>
       <View style={{ marginTop: 35, bottom: 25 }}>
-        <View style={{ borderWidth: 1, padding: 15, borderRadius: 10 }}>
+        <View style={{ borderWidth: 1, padding: 15, borderRadius: 10, flexDirection:'row' }}>
           <TextInput
             value={password}
-            secureTextEntry={true}
+            secureTextEntry={show? false: true}
             onChangeText={setPassword}
             placeholder="Enter Password"
+            style={{flex:1}}
           />
+          <TouchableOpacity onPress={()=> isShown(!show)}>
+          <Ionicons name ={show? "eye-outline" : "eye-off-outline"}size={25}/> 
+          </TouchableOpacity>
         </View>
       </View>
       <View style={{ alignItems: "flex-end", bottom: 10 }}>

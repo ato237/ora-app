@@ -351,34 +351,6 @@ function Home() {
         options={{ headerShown: true }}
         component={Services}
       />
-      <Tab.Screen
-        name="Pay"
-        component={PlusComponent}
-        options={{
-          tabBarButton: () => (
-            <View
-              style={{
-                borderRadius: 50,
-                padding: 12,
-                justifyContent: "center",
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "#14213D",
-                  height: 55,
-                  width: 55,
-                  borderRadius: 50,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Ionicons name="add-outline" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
-          ),
-        }}
-      />
 
       <Tab.Screen
         options={{ headerShown: true }}

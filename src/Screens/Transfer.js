@@ -30,12 +30,12 @@ const Transfer = ({ route, navigation }) => {
       Alert.alert("Please enter a valid phoneNumber");
     } else {
       if (operation === "versClientOrange")
-        Linking.openURL(`tel:#150*1*1*${phoneNumber}#*${amount}#`);
+        Linking.openURL(`tel:${encodeURIComponent(`#150*1*1*${phoneNumber}#*${amount}#`)}`);
       else if (operation === "versClientNonOrange")
-        Linking.openURL(`tel:#150*1*2*${phoneNumber}#*${amount}#`);
+        Linking.openURL(`tel:${encodeURIComponent(`#150*1*2*${phoneNumber}#*${amount}#`)}`);
     }
     if (operation === "versAutreClient")
-      Linking.openURL(`tel:#150*1*3*${phoneNumber}#*${amount}#`);
+      Linking.openURL(`tel:${encodeURIComponent(`#150*1*3*${phoneNumber}#*${amount}#`)}`);
   };
   const { operation } = route.params;
   return (
