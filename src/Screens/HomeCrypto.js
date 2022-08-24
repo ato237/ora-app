@@ -1,12 +1,4 @@
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -15,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import MoneyTransferModal from "../components/MoneyTransferModal";
 import BuyAirtimeModal from "../components/BuyAirtimeModal";
 import AccountBalanceModal from "../components/AccountBalanceModal";
+import Payments from "./Payments";
 
 const HomeCrypto = ({ navigation }) => {
   const { userData } = useContext(GlobalContext);
@@ -37,22 +30,22 @@ const HomeCrypto = ({ navigation }) => {
               : "#fff",
           borderRadius: 20,
           alignItems: "center",
-          marginHorizontal: 5,
+          marginHorizontal: 15,
           paddingVertical: 15,
-          width: 110,
-          height: 160,
+          width: 90,
+          height: 110,
           justifyContent: "center",
         }}
       >
-        <Ionicons name={icon} color={color} size={30} />
+        <Ionicons name={icon} color={color} size={25} />
         <Text
           style={{
             fontWeight: "bold",
             textAlign: "center",
             color: color,
-            fontSize: 18,
+            fontSize: 14,
             marginTop: 10,
-            maxWidth: 80,
+            maxWidth: 60,
           }}
         >
           {title}
@@ -72,15 +65,49 @@ const HomeCrypto = ({ navigation }) => {
         flex: 1,
       }}
     >
-      <View>
+      <View style={{ marginBottom: 10 }}>
         <Text style={{ fontSize: 27, fontWeight: "bold" }}>{displayName}</Text>
-        <Text style={{ fontSize: 15, marginTop: 5 }}>Welcome Back</Text>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={{ fontSize: 15, marginTop: 5, color: "grey", flex: 1 }}>
+            Welcome Back
+          </Text>
+          <Payments />
+        </View>
+      </View>
+      <View
+        style={{
+          backgroundColor: "white",
+          borderRadius: 10,
+          alignItems: "center",
+          paddingVertical: 23,
+        }}
+      >
+        <Text style={{ fontSize: 25, marginBottom: 15, textAlign: "center" }}>
+          {userData.Account.AccountBalance}
+          <Text style={{ fontSize: 15, fontWeight: "bold" }}> XAF</Text>
+        </Text>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Cards")}
+            style={{ backgroundColor: "#DFFAFF", marginHorizontal: 10 }}
+          >
+            <Text style={{ color: "blue" }}>Virtual Cards</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ backgroundColor: "#DFFAFF" }}>
+            <Text style={{ color: "blue" }}>Buy Airtime</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View>
+        <Text style={{ fontSize: 15, fontWeight: "bold", marginTop: 13 }}>
+          Mobile Money Shortcuts
+        </Text>
       </View>
       <View
         style={{
           flexDirection: "row",
           justifyContent: "center",
-          marginTop: 30,
+          marginTop: 15,
         }}
       >
         <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -98,13 +125,13 @@ const HomeCrypto = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View>
-        <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 20 }}>
+        <Text style={{ fontSize: 15, fontWeight: "bold", marginTop: 15 }}>
           Features
         </Text>
       </View>
       <View
         style={{
-          paddingTop: 10,
+          paddingTop: 0,
           backgroundColor:
             modalVisible || modalVisible1 || modalVisible2
               ? "#797979"
@@ -121,9 +148,9 @@ const HomeCrypto = ({ navigation }) => {
                 modalVisible || modalVisible1 || modalVisible2
                   ? "rgba(0,0,0,0.2)"
                   : "#fff",
-              marginTop: 10,
+              marginTop: 8,
               flexDirection: "row",
-              padding: 20,
+              padding: 15,
               borderRadius: 20,
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 0.5 },
@@ -133,15 +160,15 @@ const HomeCrypto = ({ navigation }) => {
           >
             <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
               <View style={{ flexDirection: "column" }}>
-                <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                <Text style={{ fontSize: 14, fontWeight: "bold" }}>
                   Charges Calculator
                 </Text>
-                <Text style={{ color: "grey", paddingTop: 15 }}>
+                <Text style={{ color: "grey", fontSize: 12, paddingTop: 15 }}>
                   Mobile Money Charges Calculator
                 </Text>
               </View>
-              <View style={{ left: 40 }}>
-                <Ionicons name="calculator-outline" size={35} color="#14213D" />
+              <View style={{ left: 80 }}>
+                <Ionicons name="calculator-outline" size={25} color="#14213D" />
               </View>
             </View>
           </View>
@@ -155,9 +182,9 @@ const HomeCrypto = ({ navigation }) => {
                 modalVisible || modalVisible1 || modalVisible2
                   ? "rgba(0,0,0,0.2)"
                   : "#fff",
-              marginTop: 20,
+              marginTop: 8,
               flexDirection: "row",
-              padding: 20,
+              padding: 15,
               borderRadius: 20,
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 0.5 },
@@ -168,18 +195,16 @@ const HomeCrypto = ({ navigation }) => {
             <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
               <View style={{ flexDirection: "column" }}>
                 <Text
-                  style={{ fontSize: 18, fontWeight: "bold", color: "#14213D" }}
+                  style={{ fontSize: 14, fontWeight: "bold", color: "#14213D" }}
                 >
                   Currency Converter
                 </Text>
-                <Text
-                  style={{ color: "grey", paddingTop: 15, color: "#14213D" }}
-                >
+                <Text style={{ color: "grey", paddingTop: 15, fontSize: 12 }}>
                   Convert 150+ Currencies
                 </Text>
               </View>
-              <View style={{ left: 90 }}>
-                <Ionicons name="cash-outline" size={35} color="#14213D" />
+              <View style={{ left: 130 }}>
+                <Ionicons name="cash-outline" size={25} color="#14213D" />
               </View>
             </View>
           </View>

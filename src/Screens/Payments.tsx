@@ -2,13 +2,10 @@ import { LogBox, StyleSheet, Text, View } from "react-native";
 import {PayWithFlutterwave} from "flutterwave-react-native";
 import { TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
-import { TextInput } from "react-native";
 import { useContext, useState } from "react";
 import { GlobalContext } from "../context/reducers/Provider";
-import { auth, db, db1 } from "../../firebase";
-import { addDoc, collection, doc, DocumentReference, getDocs, getFirestore, query, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
-import { updateProfile } from "firebase/auth";
+import { auth, db } from "../../firebase";
+import { doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
 const Payments = () => {
@@ -97,31 +94,6 @@ const Payments = () => {
     };
   return (
     <SafeAreaView>
-      <View style={{padding: 20}}>
-        <Text style={{fontSize: 23, marginBottom:15, fontWeight:'bold'}}>Top Up Account</Text>
-        <Text style={{marginBottom: 10}}>Amount: </Text>
-        <View style={{ justifyContent:'flex-start'}}>
-          
-        <TextInput
-        value={amount}
-        onChangeText={setAmount}
-        keyboardType="numeric"
-        placeholder="Enter Amount" 
-       // placeholderStyle={{}}
-         style={{paddingVertical:15, paddingHorizontal:10, borderWidth:1, borderRadius:5,fontSize:18}}/>
-        </View>
-        <Text style={{marginBottom: 10}}>Phone Number: </Text>
-        <View style={{ justifyContent:'flex-start'}}>
-          
-        <TextInput
-        value={phoneNumber}
-        onChangeText={setPhoneNumber}
-        keyboardType="numeric"
-        placeholder="Enter Phone Number" 
-       // placeholderStyle={{}}
-         style={{paddingVertical:15, paddingHorizontal:10, borderWidth:1, borderRadius:5,fontSize:18}}/>
-        </View>
-      </View>
     <PayWithFlutterwave
   
      onRedirect={handleOnRedirect}
@@ -136,10 +108,10 @@ const Payments = () => {
       },
       amount: parseInt(amount),
       currency: 'XAF',
-      payment_options: 'card, mobilemoneyfranco',
+      payment_options: 'mobilemoneyfranco',
       customizations:{
         title:"Charge Your Orramo Account",
-        description:"Chat and Send", 
+        description:"Your Money in one place", 
         logo:"https://www.orramo.com/static/media/adaptive-icon.393c08ec.png"
       }
       
@@ -147,11 +119,10 @@ const Payments = () => {
     customButton={(props) => (
       <View style={{paddingHorizontal: 20}}>
       <TouchableOpacity
-        style={styles.paymentButton}
-        onPress={props.onPress}
+      style={{ backgroundColor: "#DFFAFF", borderRadius:20, width:70, justifyContent:'center' }}        onPress={props.onPress}
         isBusy={props.isInitializing}
         disabled={props.disabled}>
-          <Text style={styles.paymentButtonText}>Deposit {amount} XAF</Text>
+          <Text style={{color:'blue',textAlign:'center'}}>Top up+</Text>
       </TouchableOpacity>
       </View>
     )}
