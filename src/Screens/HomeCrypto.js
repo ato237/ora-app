@@ -103,7 +103,7 @@ const HomeCrypto = ({ navigation }) => {
           >
             <Text style={{ color: "blue" }}>Virtual Cards</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ backgroundColor: modalVisible || modalVisible1 || modalVisible2
+          <TouchableOpacity onPress={()=>navigation.navigate("BuyAirtimeNetwork")} style={{ backgroundColor: modalVisible || modalVisible1 || modalVisible2
         ? "rgba(0,0,0,0.2)"
         : "#DFFAFF" }}>
             <Text style={{ color: "blue" }}>Buy Airtime</Text>

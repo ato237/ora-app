@@ -47,6 +47,8 @@ import Recieve from "./src/Screens/Recieve";
 import BuyCrypto from "./src/Screens/BuyCrypto";
 import CurrencyList from "./src/components/CurrencyList";
 import Transfer from "./src/Screens/Transfer";
+import BuyAirtimeNetwork from "./src/Screens/BuyAirtimeNetwork";
+import Recharge from "./src/Screens/Recharge";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -253,6 +255,16 @@ function App() {
                 name="mycontacts"
                 options={{ headerShown: false }}
                 component={ConnectedContacts}
+              />
+               <Stack.Screen
+                name="BuyAirtimeNetwork"
+                options={{ headerShown: true,title:"Buy Airtime" }}
+                component={BuyAirtimeNetwork}
+              />
+              <Stack.Screen
+                name="Recharge"
+                options={{ headerShown: true,title:"Recharge" }}
+                component={Recharge}
               />
              <Stack.Screen
           options={{
