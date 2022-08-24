@@ -71,12 +71,20 @@ const HomeCrypto = ({ navigation }) => {
           <Text style={{ fontSize: 15, marginTop: 5, color: "grey", flex: 1 }}>
             Welcome Back
           </Text>
-          <Payments />
+          <TouchableOpacity
+          onPress={()=>navigation.navigate("payments")}
+      style={{ backgroundColor:  modalVisible || modalVisible1 || modalVisible2
+        ? "rgba(0,0,0,0.2)"
+        : "#DFFAFF" , borderRadius:20, width:70, justifyContent:'center' }} >
+          <Text style={{color:'blue',textAlign:'center'}}>Top up+</Text>
+      </TouchableOpacity>
         </View>
       </View>
       <View
         style={{
-          backgroundColor: "white",
+          backgroundColor: modalVisible || modalVisible1 || modalVisible2
+          ? "rgba(0,0,0,0.2)"
+          : "#fff",
           borderRadius: 10,
           alignItems: "center",
           paddingVertical: 23,
@@ -89,11 +97,15 @@ const HomeCrypto = ({ navigation }) => {
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Cards")}
-            style={{ backgroundColor: "#DFFAFF", marginHorizontal: 10 }}
+            style={{ backgroundColor:  modalVisible || modalVisible1 || modalVisible2
+              ? "rgba(0,0,0,0.2)"
+              : "#DFFAFF", marginHorizontal: 10 }}
           >
             <Text style={{ color: "blue" }}>Virtual Cards</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ backgroundColor: "#DFFAFF" }}>
+          <TouchableOpacity style={{ backgroundColor: modalVisible || modalVisible1 || modalVisible2
+        ? "rgba(0,0,0,0.2)"
+        : "#DFFAFF" }}>
             <Text style={{ color: "blue" }}>Buy Airtime</Text>
           </TouchableOpacity>
         </View>
@@ -116,7 +128,7 @@ const HomeCrypto = ({ navigation }) => {
         <TouchableOpacity onPress={() => setModalVisible1(true)}>
           <Option
             icon="phone-portrait-outline"
-            title="Buy Airtime"
+            title="Buy Airtime "
             color="#14213D"
           />
         </TouchableOpacity>

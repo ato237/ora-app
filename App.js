@@ -241,7 +241,7 @@ function App() {
               />
               <Stack.Screen
                 name="payments"
-                options={{ headerShown: true, title: "payments" }}
+                options={{ headerShown: true, title: "Deposit" }}
                 component={Payments}
               />
               <Stack.Screen

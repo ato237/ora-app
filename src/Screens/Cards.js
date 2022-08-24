@@ -6,7 +6,7 @@ const Cards = () => {
 
   return (
       <>
-      <ScrollView>
+      <ScrollView style={{flex:1, backgroundColor:"#fff"}}>
       <TouchableOpacity>
     <View style={{padding:10, justifyContent:'center'}}>
         
@@ -38,7 +38,6 @@ const Cards = () => {
   
     </View>
     </TouchableOpacity>
-    <Payments/>
     </ScrollView>
      </>
   )

@@ -1,4 +1,4 @@
-import { LogBox, StyleSheet, Text, View } from "react-native";
+import { Alert, LogBox, StyleSheet, Text, TextInput, View } from "react-native";
 import {PayWithFlutterwave} from "flutterwave-react-native";
 import { TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,8 +9,9 @@ import { doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
 const Payments = () => {
-  const[amount,setAmount] = useState();
-  const[phoneNumber,setPhoneNumber] = useState()
+  const[amount,setAmount] = useState("");
+  const[phoneNumber,setPhoneNumber] = useState("")
+  const[modalVisible,setModalVisible] = useState(false);
   const {
     userData,
   } = useContext(GlobalContext);
@@ -93,9 +94,35 @@ const Payments = () => {
       return `${result}`;
     };
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ padding: 20, backgroundColor: "white", flex: 1 }}>
+      <View style={{ marginTop: 20}}>
+        <Text style={{ fontSize: 25, fontWeight: "bold", color: "#14213D" }}>
+          How much do you want to Deposit?
+        </Text>
+      </View>
+      <View style={{ marginTop: 40 }}>
+        <View style={{ borderWidth: 1, padding: 10, borderRadius: 10 }}>
+          <TextInput
+          keyboardType="numeric"
+            value={amount}
+            onChangeText={setAmount}
+            placeholder="Enter Amount"
+          />
+        </View>
+      </View>
+      <View style={{ marginTop: 35, bottom: 25 }}>
+        <View style={{ borderWidth: 1, padding: 10, borderRadius: 10, flexDirection:'row' }}>
+          <TextInput
+           keyboardType="numeric"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            placeholder="Enter Phone Number"
+            style={{flex:1}}
+          />
+          
+        </View>
+      </View>
     <PayWithFlutterwave
-  
      onRedirect={handleOnRedirect}
        options={{
       tx_ref: generateTransactionRef(10),
@@ -117,12 +144,17 @@ const Payments = () => {
       
     }}
     customButton={(props) => (
-      <View style={{paddingHorizontal: 20}}>
+      <View style={{paddingHorizontal: 0}}>
       <TouchableOpacity
-      style={{ backgroundColor: "#DFFAFF", borderRadius:20, width:70, justifyContent:'center' }}        onPress={props.onPress}
+      style={{    backgroundColor: "#14213D",
+      padding: 14,
+      borderRadius: 10,
+      justifyContent: "center",
+      alignItems: "center", }}  
+            onPress={amount == ""? Alert.alert("Please fill out the necessary info") : props.onPress}
         isBusy={props.isInitializing}
         disabled={props.disabled}>
-          <Text style={{color:'blue',textAlign:'center'}}>Top up+</Text>
+          <Text style={{color:'white',textAlign:'center', fontSize:15}}>Deposit {amount} XAF</Text>
       </TouchableOpacity>
       </View>
     )}
