@@ -16,6 +16,7 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
   const datas = useContext(GlobalContext);
   const [click, setClick] = useState(false);
   const [selected, setSelected] = useState(false);
+  const [selectedMtn, setSelectedMtn] = useState(false);
 
   const handleClick = () => {
     setClick(true);
@@ -75,6 +76,9 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => {
+                setSelected(true), setSelectedMtn(true);
+              }}
               style={{
                 backgroundColor: "#14213D",
                 padding: 20,
@@ -106,11 +110,21 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
             ]}
           >
             <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity onPress={() => setSelected(false)}>
+              <TouchableOpacity
+                onPress={() => {
+                  setSelected(false), setSelectedMtn(false);
+                }}
+              >
                 <Ionicons name="arrow-back" size={25} />
               </TouchableOpacity>
-              <Text style={{ left: 70, fontSize: 20, fontWeight: "bold" }}>
-                ORANGE MONEY
+              <Text
+                style={{
+                  left: selected && selectedMtn ? 90 : 70,
+                  fontSize: 20,
+                  fontWeight: "bold",
+                }}
+              >
+                {selected && selectedMtn ? "MTN MOMO" : "ORANGE MONEY"}
               </Text>
             </View>
 
@@ -122,9 +136,10 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                 marginTop: 15,
               }}
               onPress={() => {
-                navigation.navigate("Transfer Money",{
-                  operation:"versClientOrange"
-                }), setModalVisible(false);
+                navigation.navigate("Transfer Money", {
+                  operation: selected && selectedMtn ? "versClientMTN" : "versClientOrange",
+                }),
+                  setModalVisible(false);
               }}
             >
               <Text
@@ -135,7 +150,9 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                   fontWeight: "bold",
                 }}
               >
-                Vers Client Orange
+                {selected && selectedMtn
+                  ? "Vers Client MTN"
+                  : "Vers Client Orange"}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -147,8 +164,9 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
               }}
               onPress={() => {
                 navigation.navigate("Transfer Money", {
-                  operation:"versClientNonOrange"
-                }), setModalVisible(false);
+                  operation: selected && selectedMtn ? "versNonClientMTN" : "versNonClientOrange",
+                }),
+                  setModalVisible(false);
               }}
             >
               <Text
@@ -158,9 +176,10 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                   textAlign: "center",
                   fontWeight: "bold",
                 }}
-              
               >
-                Vers Client Non-Orange
+                {selected && selectedMtn
+                  ? "Vers Client Non-MTN"
+                  : "Vers Client Non-Orange"}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -171,9 +190,10 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                 marginTop: 15,
               }}
               onPress={() => {
-                navigation.navigate("Transfer Money",{
-                  operation:'versAutreClient'
-                }), setModalVisible(false);
+                navigation.navigate("Transfer Money", {
+                  operation:selected && selectedMtn ? "versAutresClientMTN" : "VersAutresClientOrange",
+                }),
+                  setModalVisible(false);
               }}
             >
               <Text

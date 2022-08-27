@@ -49,6 +49,7 @@ import CurrencyList from "./src/components/CurrencyList";
 import Transfer from "./src/Screens/Transfer";
 import BuyAirtimeNetwork from "./src/Screens/BuyAirtimeNetwork";
 import Recharge from "./src/Screens/Recharge";
+import TransferMTN from "./src/Screens/TransferMTN";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -176,9 +177,14 @@ function App() {
                 component={Home}
               />
               <Stack.Screen
-              name="Transfer Money"
-              options={{headerShown: true}}
-              component={Transfer}
+                name="Transfer Money"
+                options={{ headerShown: true }}
+                component={Transfer}
+              />
+              <Stack.Screen
+                name="Transfer Money MTN"
+                options={{ headerShown: true }}
+                component={TransferMTN}
               />
               <Stack.Screen
                 name="Charges Calculator"
@@ -256,27 +262,27 @@ function App() {
                 options={{ headerShown: false }}
                 component={ConnectedContacts}
               />
-               <Stack.Screen
+              <Stack.Screen
                 name="BuyAirtimeNetwork"
-                options={{ headerShown: true,title:"Buy Airtime" }}
+                options={{ headerShown: true, title: "Buy Airtime" }}
                 component={BuyAirtimeNetwork}
               />
               <Stack.Screen
                 name="Recharge"
-                options={{ headerShown: true,title:"Recharge" }}
+                options={{ headerShown: true, title: "Recharge" }}
                 component={Recharge}
               />
-             <Stack.Screen
-          options={{
-            title:'Currency',
-            headerStyle: {
-              backgroundColor: "#F4F7FD",
-            },
-            headerTintColor: "#000",
-          }}
-          name="currency"
-          component={CurrencyList}
-        />
+              <Stack.Screen
+                options={{
+                  title: "Currency",
+                  headerStyle: {
+                    backgroundColor: "#F4F7FD",
+                  },
+                  headerTintColor: "#000",
+                }}
+                name="currency"
+                component={CurrencyList}
+              />
             </>
           )}
         </Stack.Navigator>

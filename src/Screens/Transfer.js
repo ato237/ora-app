@@ -15,7 +15,7 @@ import { useIsFocused } from "@react-navigation/native";
 
 const Transfer = ({ route, navigation }) => {
   const isFocused = useIsFocused();
-
+  const [secretCode, setSecretCode] = useState("");
   const { number } = useContext(GlobalContext);
   const [amount, setAmount] = useState("");
   const [phoneNumber, setphoneNumber] = useState("");
@@ -30,12 +30,32 @@ const Transfer = ({ route, navigation }) => {
       Alert.alert("Please enter a valid phoneNumber");
     } else {
       if (operation === "versClientOrange")
-        Linking.openURL(`tel:${encodeURIComponent(`#150*1*1*${phoneNumber}#*${amount}#`)}`);
+        Linking.openURL(
+          `tel:${encodeURIComponent(`#150*1*1*${phoneNumber}#*${amount}#`)}`
+        );
       else if (operation === "versClientNonOrange")
-        Linking.openURL(`tel:${encodeURIComponent(`#150*1*2*${phoneNumber}#*${amount}#`)}`);
+        Linking.openURL(
+          `tel:${encodeURIComponent(`#150*1*2*${phoneNumber}#*${amount}#`)}`
+        );
+      else if (operation === "versAutreClientOrange")
+        Linking.openURL(
+          `tel:${encodeURIComponent(`#150*1*3*${phoneNumber}#*${amount}#`)}`
+        );
+      if (operation === "versClientMTN")
+        Linking.openURL(
+          `tel:${encodeURIComponent(
+            `*126*1*1*${phoneNumber}#*${amount}*${secretCode}#`
+          )}`
+        );
+      if (operation === "versNonClientMTN")
+        Linking.openURL(
+          `tel:${encodeURIComponent(`#150*1*1*${phoneNumber}#*${amount}#`)}`
+        );
+      if (operation === "versAutresClientMTN")
+        Linking.openURL(
+          `tel:${encodeURIComponent(`#150*1*1*${phoneNumber}#*${amount}#`)}`
+        );
     }
-    if (operation === "versAutreClient")
-      Linking.openURL(`tel:${encodeURIComponent(`#150*1*3*${phoneNumber}#*${amount}#`)}`);
   };
   const { operation } = route.params;
   return (
@@ -44,9 +64,16 @@ const Transfer = ({ route, navigation }) => {
       <Text style={{ fontSize: 18, fontWeight: "bold" }}>
         {operation === "versClientOrange"
           ? "ORANGE MONEY TRANSFER"
-          : operation === "versClientNonOrange"
+          : operation === "versNonClientOrange"
           ? "ORANGE TO NON-ORANGE TRANSFER"
-          : "TRANSFER TO OTHER NETWORK"}
+          : operation === "versClientMTN"
+          ? "MTN TO MTN TRANSFER"
+          : operation === "versNonClientMTN"
+          ? "MTN TO Non-MTN TRANSFER"
+          : operation === "versAutresClientMTN"
+          ? "MTN TO OTHER NETWORK"
+          : operation === "VersAutresClientOrange"
+          ? "ORANGE TO OTHER NETWORK" : null}
       </Text>
       <View style={{ marginTop: 25 }}>
         <View
