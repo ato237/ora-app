@@ -75,7 +75,7 @@ export default function SignIn({ navigation }) {
           }}
         />
       </Animatable.View>
-
+      
       <View style={{ marginBottom: 150 }}>
         <View style={{ bottom: 20 }}>
           <TextInput

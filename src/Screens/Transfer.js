@@ -37,7 +37,7 @@ const Transfer = ({ route, navigation }) => {
         Linking.openURL(
           `tel:${encodeURIComponent(`#150*1*2*${phoneNumber}#*${amount}#`)}`
         );
-      else if (operation === "versAutreClientOrange")
+      else if (operation === "versAutresClientOrange")
         Linking.openURL(
           `tel:${encodeURIComponent(`#150*1*3*${phoneNumber}#*${amount}#`)}`
         );

@@ -35,8 +35,6 @@ import NewWelcome from "./src/Screens/NewWelcome";
 import Signup from "./src/Screens/Signup";
 import Login from "./src/Screens/Login";
 import HomeCrypto from "./src/Screens/HomeCrypto";
-import Services from "./src/Screens/Services";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import CurrencyPage from "./src/Screens/CurrencyPage";
 import AvailableCurrencypage from "./src/Screens/AvailableCurrencypage";
 import Cards from "./src/Screens/Cards";
@@ -50,6 +48,7 @@ import Transfer from "./src/Screens/Transfer";
 import BuyAirtimeNetwork from "./src/Screens/BuyAirtimeNetwork";
 import Recharge from "./src/Screens/Recharge";
 import TransferMTN from "./src/Screens/TransferMTN";
+import Djangi from "./src/Screens/Djangi";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -338,10 +337,10 @@ function Home() {
               iconName = focused ? "home" : "home-outline";
               color = focused ? "#0053C5" : "#000";
             } else if (
-              route.name === "Service" ||
+              route.name === "Djangi" ||
               route.name === "Discutez & Envoyez"
             ) {
-              iconName = focused ? "server" : "server-outline";
+              iconName = focused ? "wallet" : "wallet-outline";
               color = focused ? "#0053C5" : "#000";
             } else if (route.name === "Cards" || route.name === "parametre") {
               iconName = focused ? "card" : "card-outline";
@@ -365,9 +364,9 @@ function Home() {
         component={HomeCrypto}
       />
       <Tab.Screen
-        name="Service"
+        name="Djangi"
         options={{ headerShown: true }}
-        component={Services}
+        component={Djangi}
       />
 
       <Tab.Screen

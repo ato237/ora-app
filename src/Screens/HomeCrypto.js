@@ -130,7 +130,7 @@ const HomeCrypto = ({ navigation }) => {
       </View>
       <View>
         <Text style={{ fontSize: 15, fontWeight: "bold", marginTop: 13 }}>
-          Mobile Money Shortcuts
+          USSD Shortcuts
         </Text>
       </View>
       <View

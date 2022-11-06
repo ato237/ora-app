@@ -136,9 +136,12 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                 marginTop: 15,
               }}
               onPress={() => {
-                navigation.navigate("Transfer Money", {
-                  operation: selected && selectedMtn ? "versClientMTN" : "versClientOrange",
-                }),
+                selected && selectedMtn ? 
+                navigation.navigate("Transfer Money MTN", {
+                  operation: "versClientMTN" 
+                }) :navigation.navigate("Transfer Money", {
+                  operation:"versClientOrange" 
+                }) ,
                   setModalVisible(false);
               }}
             >
@@ -163,8 +166,11 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                 marginTop: 15,
               }}
               onPress={() => {
-                navigation.navigate("Transfer Money", {
-                  operation: selected && selectedMtn ? "versNonClientMTN" : "versNonClientOrange",
+                selected && selectedMtn ? 
+                navigation.navigate("Transfer Money MTN", {
+                  operation: "versNonClientMTN" 
+                }) :navigation.navigate("Transfer Money", {
+                  operation:"versNonClientOrange" 
                 }),
                   setModalVisible(false);
               }}
@@ -190,8 +196,11 @@ const PictureSelectModal = ({ modalVisible, setModalVisible }) => {
                 marginTop: 15,
               }}
               onPress={() => {
-                navigation.navigate("Transfer Money", {
-                  operation:selected && selectedMtn ? "versAutresClientMTN" : "VersAutresClientOrange",
+                selected && selectedMtn ? 
+                navigation.navigate("Transfer Money MTN", {
+                  operation: "versAutresClientMTN" 
+                }) :navigation.navigate("Transfer Money", {
+                  operation:"versAutresClientOrange" 
                 }),
                   setModalVisible(false);
               }}
