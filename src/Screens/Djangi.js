@@ -14,7 +14,7 @@ const Djangi = ({ navigation }) => {
      <Text> Welcome to Djangi</Text>
   
     </View>
-  );
+  )
 };
 
 export default Djangi;

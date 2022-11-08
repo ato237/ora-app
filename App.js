@@ -337,10 +337,10 @@ function Home() {
               iconName = focused ? "home" : "home-outline";
               color = focused ? "#0053C5" : "#000";
             } else if (
-              route.name === "Djangi" ||
+              route.name === "Learn" ||
               route.name === "Discutez & Envoyez"
             ) {
-              iconName = focused ? "wallet" : "wallet-outline";
+              iconName = focused ? "book" : "book-outline";
               color = focused ? "#0053C5" : "#000";
             } else if (route.name === "Cards" || route.name === "parametre") {
               iconName = focused ? "card" : "card-outline";
@@ -364,7 +364,7 @@ function Home() {
         component={HomeCrypto}
       />
       <Tab.Screen
-        name="Djangi"
+        name="Learn"
         options={{ headerShown: true }}
         component={Djangi}
       />
