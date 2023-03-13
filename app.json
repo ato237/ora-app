@@ -42,8 +42,7 @@
       },
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-7148038859151468~4452246712"
-      },
-      "useNextNotificationsApi": true
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -54,6 +53,7 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
+    
       ]
     ]
   }

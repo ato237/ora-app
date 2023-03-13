@@ -1,4 +1,11 @@
-import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -8,10 +15,8 @@ import MoneyTransferModal from "../components/MoneyTransferModal";
 import BuyAirtimeModal from "../components/BuyAirtimeModal";
 import AccountBalanceModal from "../components/AccountBalanceModal";
 import Payments from "./Payments";
-import { A } from '@expo/html-elements';
-import * as Linking from 'expo-linking';
+import * as Linking from "expo-linking";
 import numbro from "numbro";
-
 
 const HomeCrypto = ({ navigation }) => {
   const { userData } = useContext(GlobalContext);
@@ -27,39 +32,38 @@ const HomeCrypto = ({ navigation }) => {
   const Option = ({ icon, title, color }) => {
     return (
       <View>
-      <View
-        style={{
-          backgroundColor:
-            modalVisible || modalVisible1 || modalVisible2
-              ? "rgba(0,0,0,0.2)"
-              : "#fff",
-          borderRadius: 20,
-          alignItems: "center",
-          marginHorizontal: 15,
-          paddingVertical: 15,
-          width: 80,
-          height: 80,
-          justifyContent: "center",
-        }}
-      >
-        <Ionicons name={icon} color={color} size={25} />
-        
+        <View
+          style={{
+            backgroundColor:
+              modalVisible || modalVisible1 || modalVisible2
+                ? "rgba(0,0,0,0.2)"
+                : "#fff",
+            borderRadius: 20,
+            alignItems: "center",
+            marginHorizontal: 15,
+            paddingVertical: 15,
+            width: 80,
+            height: 80,
+            justifyContent: "center",
+          }}
+        >
+          <Ionicons name={icon} color={color} size={25} />
+        </View>
+        <Text
+          style={{
+            textAlign: "center",
+            color: color,
+            fontSize: 12,
+            marginTop: 10,
+          }}
+        >
+          {title}
+        </Text>
       </View>
-      <Text
-      style={{
-        textAlign: "center",
-        color: color,
-        fontSize: 12,
-        marginTop: 10,
-      }}
-    >
-      {title}
-    </Text>
-    </View>
     );
   };
   return (
-    <SafeAreaView
+    <ScrollView
       style={{
         paddingHorizontal: 20,
         paddingTop: 10,
@@ -104,10 +108,10 @@ const HomeCrypto = ({ navigation }) => {
         }}
       >
         <Text style={{ fontSize: 25, marginBottom: 15, textAlign: "center" }}>
-        {numbro(userData.Account.AccountBalance).format({
-                thousandSeparated: true,
-                mantissa: 2, // number of decimals displayed
-              })}
+          {numbro(userData.Account.AccountBalance).format({
+            thousandSeparated: true,
+            mantissa: 2, // number of decimals displayed
+          })}
           <Text style={{ fontSize: 15, fontWeight: "bold" }}> XAF</Text>
         </Text>
         <View style={{ flexDirection: "row" }}>
@@ -152,11 +156,7 @@ const HomeCrypto = ({ navigation }) => {
           <Option icon="send" title="Money Transfer" color="#14213D" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setModalVisible1(true)}>
-          <Option
-            icon="phone-portrait"
-            title="Buy Airtime "
-            color="#14213D"
-          />
+          <Option icon="phone-portrait" title="Buy Airtime " color="#14213D" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setModalVisible2(true)}>
           <Option icon="cash" title="Account Balance" color="#14213D" />
@@ -175,7 +175,8 @@ const HomeCrypto = ({ navigation }) => {
               ? "#797979"
               : "#F4F7FD",
           flex: 1,
-          flexDirection:"row", justifyContent:'center'
+          flexDirection: "row",
+          justifyContent: "center",
         }}
       >
         <TouchableOpacity
@@ -195,21 +196,21 @@ const HomeCrypto = ({ navigation }) => {
               shadowOffset: { width: 0, height: 0.5 },
               shadowOpacity: 0.1,
               shadowRadius: 0.5,
-              marginHorizontal:10
+              marginHorizontal: 10,
             }}
           >
             <View style={{ marginHorizontal: 0 }}>
               <View style={{ flexDirection: "column" }}>
-                <Text style={{ fontSize: 14, maxWidth:200, textAlign:"center" }}>
+                <Text
+                  style={{ fontSize: 14, maxWidth: 200, textAlign: "center" }}
+                >
                   Charges Calculator
                 </Text>
-                </View>
+              </View>
 
-                 <Text style={{ color: "grey", fontSize: 12, paddingTop: 25 }}>
-                  Mobile Money Charges
-                </Text>
-             
-            
+              <Text style={{ color: "grey", fontSize: 12, paddingTop: 25 }}>
+                Mobile Money Charges
+              </Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -229,37 +230,45 @@ const HomeCrypto = ({ navigation }) => {
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 0.5 },
               shadowOpacity: 0.1,
-              shadowRadius: 0.5,              marginHorizontal:10
-
+              shadowRadius: 0.5,
+              marginHorizontal: 10,
             }}
           >
             <View style={{ marginHorizontal: 0 }}>
               <View style={{ flexDirection: "column" }}>
-                <Text
-                  style={{ fontSize: 14, maxWidth:200, color: "#14213D" }}
-                >
+                <Text style={{ fontSize: 14, maxWidth: 200, color: "#14213D" }}>
                   Currency Converter
                 </Text>
-                </View>
+              </View>
 
-                <Text style={{ color: "grey", paddingTop: 25, fontSize: 12 }}>
-                  Convert 150+ Currencies
-                </Text>
-             
-            
+              <Text style={{ color: "grey", paddingTop: 25, fontSize: 12 }}>
+                Convert 150+ Currencies
+              </Text>
             </View>
           </View>
         </TouchableOpacity>
       </View>
       {!modalVisible && !modalVisible1 && !modalVisible2 ? (
-        
-      <TouchableOpacity onPress={()=>Linking.openURL('https://orralearn.com')    } style={{marginBottom:Platform.OS == "android"? 30 : 0}}>
-      <View style={{backgroundColor:"#14213D", paddingVertical:35, paddingHorizontal:10, borderRadius:20}}>
-        <Text style={{color:"white"}}>Want to learn how to code?</Text>
-  <Text style={{color:'white', fontSize:20}}>Join </Text>
-  <Text style={{color:'white', fontSize:25, maxWidth:240}}>The Programmer's University</Text>
-</View>
-      </TouchableOpacity>):null}
+        <TouchableOpacity
+          onPress={() => Linking.openURL("https://orralearn.com")}
+          style={{ marginBottom: Platform.OS == "android" ? 30 : 0 }}
+        >
+          <View
+            style={{
+              backgroundColor: "#14213D",
+              paddingVertical: 35,
+              paddingHorizontal: 10,
+              borderRadius: 20,
+            }}
+          >
+            <Text style={{ color: "white" }}>Want to learn how to code?</Text>
+            <Text style={{ color: "white", fontSize: 20 }}>Join </Text>
+            <Text style={{ color: "white", fontSize: 25, maxWidth: 240 }}>
+              The Programmer's University
+            </Text>
+          </View>
+        </TouchableOpacity>
+      ) : null}
 
       {modalVisible || modalVisible1 || modalVisible2 ? (
         <>
@@ -277,7 +286,7 @@ const HomeCrypto = ({ navigation }) => {
           />
         </>
       ) : null}
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
